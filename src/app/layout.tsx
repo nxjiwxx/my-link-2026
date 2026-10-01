@@ -1,29 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "나지우 | Visual & Brand Designer",
-  description: "시각적 질서와 감각적인 디테일로 본질을 전달하는 시각 디자이너 나지우의 마이링크 프로필입니다.",
+  title: "나지우 🌱 픽셀 포레스트 마이링크",
+  description: "픽셀 아트 & 자연 감성의 카오틱 비주얼 디자이너 프로필",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="ko" className="h-full">
+      <body className="min-h-full flex flex-col font-pixel pixel-grid-bg text-[#1b2612] selection:bg-[#b8f038] selection:text-[#1b2612]">
+        {children}
+      </body>
     </html>
   );
 }
