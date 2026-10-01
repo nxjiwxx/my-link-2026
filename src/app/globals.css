@@ -1,135 +1,129 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Gaegu:wght@400;700&family=Nanum+Pen+Script&display=swap');
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-@font-face {
-  font-family: 'DungGeunMo';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
+@custom-variant dark (&:is(.dark *));
 
 :root {
-  --font-pixel: 'DungGeunMo', 'Press Start 2P', monospace;
-  --font-hand: 'Gaegu', 'Nanum Pen Script', cursive;
-  --c-dark: #1b2612;
-  --c-moss: #3a4d25;
-  --c-lime: #b8f038;
-  --c-sand: #f5eedb;
-  --c-earth: #cbb994;
+  /* Pretendard Font Stack */
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  
+  /* Toss Design System (TDS) Canonical Color Tokens */
+  --tds-blue-500: #3182F6;
+  --tds-blue-600: #1B64DA;
+  --tds-blue-50: #E8F3FF;
+  
+  --tds-grey-900: #191F28;
+  --tds-grey-800: #333D4B;
+  --tds-grey-700: #4E5968;
+  --tds-grey-600: #6B7684;
+  --tds-grey-500: #8B95A1;
+  --tds-grey-400: #B0B8C1;
+  --tds-grey-300: #D1D6DB;
+  --tds-grey-200: #E5E8EB;
+  --tds-grey-100: #F2F4F6;
+  --tds-grey-50: #F9FAFB;
+  
+  --tds-red-500: #F04452;
+  --tds-orange-500: #FF8F1F;
+  --tds-orange-50: #FFF4E6;
+  --tds-green-500: #04C05E;
+  --tds-green-50: #EAFBF2;
+
+  /* shadcn/ui mapped to TDS */
+  --background: #F2F4F6;
+  --foreground: #191F28;
+  --card: #FFFFFF;
+  --card-foreground: #191F28;
+  --popover: #FFFFFF;
+  --popover-foreground: #191F28;
+  --primary: #3182F6;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F2F4F6;
+  --secondary-foreground: #191F28;
+  --muted: #F2F4F6;
+  --muted-foreground: #4E5968;
+  --accent: #E8F3FF;
+  --accent-foreground: #3182F6;
+  --destructive: #F04452;
+  --destructive-foreground: #FFFFFF;
+  --border: #E5E8EB;
+  --input: #E5E8EB;
+  --ring: #3182F6;
+  --radius: 1rem;
 }
 
-/* 폰트 패밀리 유틸리티 */
-.font-pixel {
-  font-family: var(--font-pixel), monospace;
-  letter-spacing: -0.02em;
+@theme inline {
+  --font-sans: var(--font-sans);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* TDS colors */
+  --color-toss-blue: var(--tds-blue-500);
+  --color-toss-blue-light: var(--tds-blue-50);
+  --color-grey-900: var(--tds-grey-900);
+  --color-grey-800: var(--tds-grey-800);
+  --color-grey-700: var(--tds-grey-700);
+  --color-grey-600: var(--tds-grey-600);
+  --color-grey-500: var(--tds-grey-500);
+  --color-grey-400: var(--tds-grey-400);
+  --color-grey-300: var(--tds-grey-300);
+  --color-grey-200: var(--tds-grey-200);
+  --color-grey-100: var(--tds-grey-100);
+  --color-grey-50: var(--tds-grey-50);
 }
 
-.font-hand {
-  font-family: var(--font-hand), cursive;
+@layer base {
+  * {
+    @apply border-border;
+    letter-spacing: -0.02em;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  html, body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+  }
 }
 
-/* 픽셀 렌더링 */
-.pixelated {
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
+/* Tailwind CSS v4 Utilities for TDS Touch & Elevation */
+@utility tds-press-scale {
+  transition: transform 0.15s cubic-bezier(0.22, 0.61, 0.36, 1), background-color 0.15s ease;
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
-/* 픽셀 하드 그림자 */
-.pixel-shadow {
-  box-shadow: 4px 4px 0px var(--c-dark);
+@utility tds-shadow-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
-.pixel-shadow-sm {
-  box-shadow: 2px 2px 0px var(--c-dark);
+@utility tds-shadow-hover {
+  &:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.03);
+  }
 }
 
-.pixel-shadow-lg {
-  box-shadow: 6px 6px 0px var(--c-dark);
-}
-
-.pixel-shadow-xl {
-  box-shadow: 8px 8px 0px var(--c-dark);
-}
-
-.pixel-shadow-lime {
-  box-shadow: 5px 5px 0px #b8f038;
-}
-
-/* 픽셀 보더 */
-.pixel-border {
-  border: 3px solid var(--c-dark);
-}
-
-.pixel-border-thick {
-  border: 4px solid var(--c-dark);
-}
-
-/* 배경 픽셀 그리드 패턴 (자연 흙 & 잔디 격자) */
-.pixel-grid-bg {
-  background-color: #f3edd9;
-  background-image: 
-    radial-gradient(#d3c6a3 15%, transparent 16%),
-    radial-gradient(#b2c99a 15%, transparent 16%);
-  background-size: 24px 24px;
-  background-position: 0 0, 12px 12px;
-}
-
-/* 픽셀 텍스처 스캔라인 & 노이즈 효과 */
-.scanlines {
-  background: linear-gradient(
-    to bottom,
-    rgba(255,255,255,0),
-    rgba(255,255,255,0) 50%,
-    rgba(27, 38, 18, 0.04) 50%,
-    rgba(27, 38, 18, 0.04)
-  );
-  background-size: 100% 4px;
-}
-
-/* 텍스트 스트로크 / 외곽선 */
-.pixel-stroke {
-  text-shadow: 
-    -2px -2px 0 #1b2612,
-     2px -2px 0 #1b2612,
-    -2px  2px 0 #1b2612,
-     2px  2px 0 #1b2612,
-     3px  3px 0 #1b2612;
-}
-
-.pixel-stroke-sm {
-  text-shadow: 
-    -1px -1px 0 #1b2612,
-     1px -1px 0 #1b2612,
-    -1px  1px 0 #1b2612,
-     1px  1px 0 #1b2612;
-}
-
-/* 깜빡임 애니메이션 */
-@keyframes pixel-blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-
-.animate-pixel-blink {
-  animation: pixel-blink 0.8s infinite;
-}
-
-/* 통통 튀는 애니메이션 */
-@keyframes pixel-bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-}
-
-.animate-pixel-bounce {
-  animation: pixel-bounce 1.2s ease-in-out infinite;
-}
-
-/* 살랑살랑 흔들림 */
-@keyframes pixel-wiggle {
-  0%, 100% { transform: rotate(-3deg); }
-  50% { transform: rotate(3deg); }
-}
-
-.animate-pixel-wiggle {
-  animation: pixel-wiggle 1.5s ease-in-out infinite;
+@utility tds-shadow-modal {
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
 }
