@@ -2,23 +2,11 @@
 
 import React from "react";
 import { LayoutGrid, List } from "lucide-react";
-import { ProjectCategory, ViewMode } from "@/types/portfolio";
+import { ProjectCategory, ViewMode, CategoryItem, DEFAULT_CATEGORIES } from "@/types/portfolio";
 import { cn } from "@/lib/utils";
 
-interface CategoryTabItem {
-  id: ProjectCategory;
-  label: string;
-}
-
-const CATEGORIES: CategoryTabItem[] = [
-  { id: "all", label: "All" },
-  { id: "uiux", label: "UI/UX" },
-  { id: "branding", label: "Branding" },
-  { id: "graphic", label: "Graphic" },
-  { id: "motion", label: "3D/Motion" },
-];
-
 interface FilterAndToggleBarProps {
+  categories?: CategoryItem[];
   selectedCategory: ProjectCategory;
   onSelectCategory: (cat: ProjectCategory) => void;
   viewMode: ViewMode;
@@ -27,12 +15,18 @@ interface FilterAndToggleBarProps {
 }
 
 export function FilterAndToggleBar({
+  categories = DEFAULT_CATEGORIES,
   selectedCategory,
   onSelectCategory,
   viewMode,
   onToggleViewMode,
   className,
 }: FilterAndToggleBarProps) {
+  const allTabs = [
+    { id: "all", label: "All" },
+    ...categories,
+  ];
+
   return (
     <div
       className={cn(
@@ -45,7 +39,7 @@ export function FilterAndToggleBar({
         className="flex items-center gap-1 overflow-x-auto scrollbar-none py-1"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
-        {CATEGORIES.map((cat) => {
+        {allTabs.map((cat) => {
           const isActive = selectedCategory === cat.id;
           return (
             <button

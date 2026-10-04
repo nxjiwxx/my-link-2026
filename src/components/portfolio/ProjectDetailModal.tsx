@@ -9,6 +9,7 @@ import {
   ChevronDown,
   Users,
   User,
+  Trash2,
 } from "lucide-react";
 import { ProjectItem } from "@/types/portfolio";
 import { Badge } from "@/components/ui/badge";
@@ -24,12 +25,14 @@ interface ProjectDetailModalProps {
   project: ProjectItem | null;
   isOpen: boolean;
   onClose: () => void;
+  onDelete?: (projectId: string) => void;
 }
 
 export function ProjectDetailModal({
   project,
   isOpen,
   onClose,
+  onDelete,
 }: ProjectDetailModalProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollDown, setCanScrollDown] = useState(false);
@@ -217,6 +220,25 @@ export function ProjectDetailModal({
                     <ArrowUpRight className="w-4 h-4" />
                   </Button>
                 </a>
+              </div>
+            )}
+
+            {/* 삭제 버튼 (로컬 상태 관리) */}
+            {onDelete && (
+              <div className="pt-1 pb-1 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm(`'${project.title}' 작업물을 삭제하시겠습니까?`)) {
+                      onDelete(project.id);
+                      onClose();
+                    }
+                  }}
+                  className="inline-flex items-center gap-1.5 text-xs text-[#8B95A1] hover:text-[#E8344E] transition-colors py-1 px-3 rounded-lg hover:bg-[#FEECEF]"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>이 작업물 삭제하기</span>
+                </button>
               </div>
             )}
           </div>

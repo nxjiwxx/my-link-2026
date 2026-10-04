@@ -1,16 +1,19 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { Search, Sparkles, RefreshCw, Layers } from "lucide-react";
+import { Search, Sparkles, RefreshCw, Layers, Plus } from "lucide-react";
 import {
   DesignerProfileData,
   ProjectCategory,
   ViewMode,
   ProjectItem,
+  CategoryItem,
+  DEFAULT_CATEGORIES,
 } from "@/types/portfolio";
 import {
   getDesignerProfile,
   resetDesignerProfile,
+  saveDesignerProfile,
   INITIAL_DESIGNER_PROFILE,
 } from "@/lib/portfolioStorage";
 import { ProfileHeader } from "@/components/portfolio/ProfileHeader";
@@ -18,8 +21,10 @@ import { FilterAndToggleBar } from "@/components/portfolio/FilterAndToggleBar";
 import { ProjectCard } from "@/components/portfolio/ProjectCard";
 import { ToolProficiencyBars } from "@/components/portfolio/ToolProficiencyBars";
 import { ProjectDetailModal } from "@/components/portfolio/ProjectDetailModal";
+import { AddLinkModal } from "@/components/portfolio/AddLinkModal";
 import { CareerTimeline } from "@/components/portfolio/CareerTimeline";
 import { ShareModal } from "@/components/profile/ShareModal";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Toast } from "@/components/ui/toast";
 
@@ -35,6 +40,7 @@ export default function DesignerPortfolioPage() {
     null
   );
   const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState<boolean>(false);
 
@@ -65,6 +71,82 @@ export default function DesignerPortfolioPage() {
     } else {
       showToast("등록된 이력서 파일이 없습니다");
     }
+  };
+
+  // 이전에 사용했던 도구 목록 (프로젝트 도구 및 유저 등록 도구 통합)
+  const savedTools = useMemo(() => {
+    const projectTools = profile.projects.flatMap((p) => p.tools);
+    const customTools = profile.customTools || [];
+    return Array.from(new Set([...projectTools, ...customTools])).filter(Boolean);
+  }, [profile.projects, profile.customTools]);
+
+  const handleAddCategory = (newCategory: CategoryItem) => {
+    setProfile((prev) => {
+      const existingCats = prev.categories || DEFAULT_CATEGORIES;
+      if (
+        existingCats.some(
+          (c) => c.id === newCategory.id || c.label === newCategory.label
+        )
+      ) {
+        return prev;
+      }
+      const updated = {
+        ...prev,
+        categories: [...existingCats, newCategory],
+      };
+      saveDesignerProfile(updated);
+      return updated;
+    });
+    showToast(`'${newCategory.label}' 카테고리가 추가되었어요`);
+  };
+
+  const handleAddProject = (newProject: ProjectItem, newTools: string[]) => {
+    setProfile((prev) => {
+      const projectTools = newProject.tools || [];
+      const combinedTools = Array.from(
+        new Set([...(prev.customTools || []), ...projectTools, ...newTools])
+      ).filter(Boolean);
+
+      const existingCats = prev.categories || DEFAULT_CATEGORIES;
+      const catExists = existingCats.some((c) => c.id === newProject.category);
+      const updatedCats = catExists
+        ? existingCats
+        : [
+            ...existingCats,
+            { id: newProject.category, label: newProject.categoryLabel },
+          ];
+
+      const updated = {
+        ...prev,
+        categories: updatedCats,
+        customTools: combinedTools,
+        projects: [newProject, ...prev.projects],
+      };
+      saveDesignerProfile(updated);
+      return updated;
+    });
+
+    // 추가된 프로젝트가 바로 노출되도록 필터 및 검색어 조정
+    if (searchQuery.trim()) {
+      setSearchQuery("");
+    }
+    if (selectedCategory !== "all" && selectedCategory !== newProject.category) {
+      setSelectedCategory("all");
+    }
+
+    showToast("새 작업물 링크가 성공적으로 추가되었어요!");
+  };
+
+  const handleDeleteProject = (projectId: string) => {
+    setProfile((prev) => {
+      const updated = {
+        ...prev,
+        projects: prev.projects.filter((p) => p.id !== projectId),
+      };
+      saveDesignerProfile(updated);
+      return updated;
+    });
+    showToast("작업물이 삭제되었어요");
   };
 
   // 프로젝트 필터링 및 검색 로직
@@ -104,6 +186,7 @@ export default function DesignerPortfolioPage() {
         {/* 2. 프로젝트 카테고리 필터 & 뷰 모드 토글 바 (그리드 ⊞ ↔ 리스트 ☰) */}
         <section className="mt-1 sticky top-0 z-20 bg-[#F9FAFB]/95 backdrop-blur-xs">
           <FilterAndToggleBar
+            categories={profile.categories || DEFAULT_CATEGORIES}
             selectedCategory={selectedCategory}
             onSelectCategory={setSelectedCategory}
             viewMode={viewMode}
@@ -143,6 +226,17 @@ export default function DesignerPortfolioPage() {
                 ({filteredProjects.length})
               </span>
             </div>
+
+            {/* 링크 추가 버튼 */}
+            <Button
+              onClick={() => setIsAddModalOpen(true)}
+              variant="outline"
+              size="sm"
+              className="h-7 text-xs font-semibold gap-1 text-[#3182F6] border-[#3182F6]/30 hover:bg-[#E8F3FF] rounded-lg px-2.5 active:scale-95 transition-all cursor-pointer shadow-2xs"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>링크 추가</span>
+            </Button>
           </div>
 
           {filteredProjects.length > 0 ? (
@@ -168,20 +262,34 @@ export default function DesignerPortfolioPage() {
                 <Search className="w-5 h-5" />
               </div>
               <p className="text-sm font-bold text-[#191F28]">
-                조건에 맞는 프로젝트가 없어요
+                {profile.projects.length === 0
+                  ? "등록된 작업물이 없어요"
+                  : "조건에 맞는 프로젝트가 없어요"}
               </p>
               <p className="text-xs text-[#8B95A1] mt-1">
-                다른 검색어를 입력하거나 카테고리 필터를 변경해보세요.
+                {profile.projects.length === 0
+                  ? "새로운 작업물이나 외부 링크를 추가해보세요."
+                  : "다른 검색어를 입력하거나 카테고리 필터를 변경해보세요."}
               </p>
-              <button
-                onClick={() => {
-                  setSearchQuery("");
-                  setSelectedCategory("all");
-                }}
-                className="mt-3.5 text-xs font-semibold text-[#3182F6] hover:underline"
-              >
-                전체 프로젝트 다시보기
-              </button>
+              {profile.projects.length === 0 ? (
+                <Button
+                  onClick={() => setIsAddModalOpen(true)}
+                  className="mt-3.5 h-9 text-xs font-bold bg-[#3182F6] hover:bg-[#1B64DA] text-white rounded-xl gap-1.5 px-4 shadow-xs"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>첫 번째 링크 추가하기</span>
+                </Button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSelectedCategory("all");
+                  }}
+                  className="mt-3.5 text-xs font-semibold text-[#3182F6] hover:underline"
+                >
+                  전체 프로젝트 다시보기
+                </button>
+              )}
             </div>
           )}
         </section>
@@ -230,11 +338,22 @@ export default function DesignerPortfolioPage() {
         </footer>
       </main>
 
+      {/* 새 작업물 링크 추가 다이얼로그 모달 */}
+      <AddLinkModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        availableCategories={profile.categories || DEFAULT_CATEGORIES}
+        onAddCategory={handleAddCategory}
+        savedTools={savedTools}
+        onAdd={handleAddProject}
+      />
+
       {/* 프로젝트 상세 하이브리드 모달 */}
       <ProjectDetailModal
         project={selectedProject}
         isOpen={Boolean(selectedProject)}
         onClose={() => setSelectedProject(null)}
+        onDelete={handleDeleteProject}
       />
 
       {/* 포트폴리오 공유 모달 */}

@@ -1,6 +1,18 @@
-export type ProjectCategory = 'all' | 'uiux' | 'branding' | 'graphic' | 'motion';
+export type ProjectCategory = string;
 export type ViewMode = 'grid' | 'list';
 export type ProjectType = 'team' | 'solo';
+
+export interface CategoryItem {
+  id: string;
+  label: string;
+}
+
+export const DEFAULT_CATEGORIES: CategoryItem[] = [
+  { id: 'uiux', label: 'UI/UX' },
+  { id: 'branding', label: 'Branding' },
+  { id: 'graphic', label: 'Graphic' },
+  { id: 'motion', label: '3D/Motion' },
+];
 
 export interface SocialLinks {
   behance?: string;
@@ -59,4 +71,6 @@ export interface DesignerProfileData {
   toolProficiencies: ToolProficiency[]; // 프로그레스 바 전용 도구 숙련도
   projects: ProjectItem[];
   careers: CareerItem[];
+  categories?: CategoryItem[]; // 사용자가 추가한 커스텀 카테고리 포함
+  customTools?: string[]; // 사용자가 추가한 커스텀 도구 목록 (추천용)
 }

@@ -1,4 +1,9 @@
-import { DesignerProfileData } from '@/types/portfolio';
+import {
+  DesignerProfileData,
+  ProjectItem,
+  CategoryItem,
+  DEFAULT_CATEGORIES,
+} from '@/types/portfolio';
 
 export const STORAGE_KEY = 'mylink_designer_portfolio';
 
@@ -193,6 +198,8 @@ export const INITIAL_DESIGNER_PROFILE: DesignerProfileData = {
       description: '인터랙티브 웹 다큐멘터리 프로젝트 디자인 수상',
     },
   ],
+  categories: DEFAULT_CATEGORIES,
+  customTools: ['Figma', 'Protopie', 'Illustrator', 'Photoshop', 'Blender 3D', 'Spline', 'InDesign', 'React'],
 };
 
 export function getDesignerProfile(): DesignerProfileData {
@@ -210,6 +217,12 @@ export function getDesignerProfile(): DesignerProfileData {
     // ensure toolProficiencies and projectType exist even if old cache exists
     if (!parsed.toolProficiencies || parsed.toolProficiencies.length === 0) {
       parsed.toolProficiencies = INITIAL_DESIGNER_PROFILE.toolProficiencies;
+    }
+    if (!parsed.categories || parsed.categories.length === 0) {
+      parsed.categories = DEFAULT_CATEGORIES;
+    }
+    if (!parsed.customTools || parsed.customTools.length === 0) {
+      parsed.customTools = INITIAL_DESIGNER_PROFILE.customTools;
     }
     return parsed;
   } catch (error) {
@@ -236,3 +249,26 @@ export function resetDesignerProfile(): DesignerProfileData {
   }
   return INITIAL_DESIGNER_PROFILE;
 }
+
+export function addProjectToStorage(project: ProjectItem): DesignerProfileData {
+  const current = getDesignerProfile();
+  const updatedProjects = [project, ...current.projects];
+  const updated = {
+    ...current,
+    projects: updatedProjects,
+  };
+  saveDesignerProfile(updated);
+  return updated;
+}
+
+export function deleteProjectFromStorage(projectId: string): DesignerProfileData {
+  const current = getDesignerProfile();
+  const updatedProjects = current.projects.filter((p) => p.id !== projectId);
+  const updated = {
+    ...current,
+    projects: updatedProjects,
+  };
+  saveDesignerProfile(updated);
+  return updated;
+}
+
