@@ -2,7 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { LogOut, User, Copy, BarChart2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { LogOut, User, Copy, BarChart2, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { GoogleIcon } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
@@ -29,9 +30,13 @@ export function TopNavHeader({
   hideProfileMenu = false,
 }: TopNavHeaderProps) {
   const { user, userProfile, isLoading, signInWithGoogle, logout } = useAuth();
+  const searchParams = useSearchParams();
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // 내 페이지 보기(?from=mypage)를 통해 진입한 소유자에게만 뒤로가기 버튼 노출
+  const showBackButton = Boolean(isOwner && searchParams.get("from") === "mypage");
 
   // 드롭다운 외부 클릭 시 닫기
   useEffect(() => {
@@ -110,13 +115,25 @@ export function TopNavHeader({
       aria-label="상단 헤더 바"
       className="w-full flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-3.5 bg-white border-b border-[#E5E8EB] sticky top-0 z-30 select-none"
     >
-      {/* 좌측: My Link 페이지 명만 깔끔하게 유지 */}
-      <Link
-        href="/"
-        className="text-[17px] sm:text-lg font-bold text-[#191F28] tracking-tight hover:opacity-80 transition-opacity"
-      >
-        My Link
-      </Link>
+      {/* 좌측: My Link 및 소유자 미리보기 뒤로가기 버튼 */}
+      <div className="flex items-center gap-1.5">
+        {showBackButton && (
+          <Link
+            href="/"
+            title="수정 가능한 내 페이지로 돌아가기"
+            aria-label="수정 가능한 내 페이지로 돌아가기"
+            className="flex items-center justify-center p-1.5 -ml-1 rounded-lg text-[#4E5968] hover:text-[#191F28] hover:bg-[#F2F4F6] transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Link>
+        )}
+        <Link
+          href="/"
+          className="text-[17px] sm:text-lg font-bold text-[#191F28] tracking-tight hover:opacity-80 transition-opacity"
+        >
+          My Link
+        </Link>
+      </div>
 
       {/* 우측: 사용자 프로필 아바타 (드롭다운) 또는 비로그인 로그인 버튼 (라우팅 페이지 등에서 숨김 가능) */}
       {!hideProfileMenu ? (
@@ -154,9 +171,9 @@ export function TopNavHeader({
                     </p>
                   </div>
 
-                  {/* 내 공개 페이지 바로가기 */}
+                  {/* 1. 내 공개 페이지 바로가기 (from=mypage 쿼리로 복귀 버튼 활성화) */}
                   <Link
-                    href={`/${(userProfile?.username || userProfile?.handle || (user?.email ? user.email.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "") : "")).replace(/^@/, "")}`}
+                    href={`/${(userProfile?.username || userProfile?.handle || (user?.email ? user.email.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "") : "")).replace(/^@/, "")}?from=mypage`}
                     onClick={() => setIsDropdownOpen(false)}
                     className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-[#3182F6] hover:bg-[#F2F4F6] transition-colors"
                   >
@@ -166,17 +183,7 @@ export function TopNavHeader({
                     </span>
                   </Link>
 
-                  {/* 통계 대시보드 */}
-                  <Link
-                    href="/stats"
-                    onClick={() => setIsDropdownOpen(false)}
-                    className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-[#4E5968] hover:bg-[#F2F4F6] hover:text-[#191F28] transition-colors"
-                  >
-                    <BarChart2 className="w-3.5 h-3.5 text-[#3182F6]" />
-                    <span>통계 대시보드</span>
-                  </Link>
-
-                  {/* 프로필 편집 */}
+                  {/* 2. 프로필 편집 */}
                   <Link
                     href="/profile/edit"
                     onClick={() => setIsDropdownOpen(false)}
@@ -186,7 +193,17 @@ export function TopNavHeader({
                     <span>프로필 편집</span>
                   </Link>
 
-                  {/* 링크 복사 */}
+                  {/* 3. 통계 대시보드 */}
+                  <Link
+                    href="/stats"
+                    onClick={() => setIsDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-[#4E5968] hover:bg-[#F2F4F6] hover:text-[#191F28] transition-colors"
+                  >
+                    <BarChart2 className="w-3.5 h-3.5 text-[#3182F6]" />
+                    <span>통계 대시보드</span>
+                  </Link>
+
+                  {/* 4. 링크 복사 */}
                   <button
                     type="button"
                     onClick={handleCopyLink}

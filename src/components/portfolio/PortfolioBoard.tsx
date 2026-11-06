@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useRouter, notFound } from "next/navigation";
+import { useRouter, useSearchParams, notFound } from "next/navigation";
 import {
   Search,
   RefreshCw,
@@ -49,7 +49,6 @@ import { ToolProficiencyBars } from "@/components/portfolio/ToolProficiencyBars"
 import { AddLinkModal } from "@/components/portfolio/AddLinkModal";
 import { CareerTimeline } from "@/components/portfolio/CareerTimeline";
 import { ShareModal } from "@/components/profile/ShareModal";
-import { DeviceViewportBar, DeviceMode } from "@/components/common/DeviceViewportBar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Toast } from "@/components/ui/toast";
@@ -99,7 +98,10 @@ export function PortfolioBoard({
   onUserNotFound,
 }: PortfolioBoardProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user, userProfile, signInWithGoogle } = useAuth();
+
+  const fromMypage = searchParams.get("from") === "mypage";
 
   const [profile, setProfile] = useState<DesignerProfileData>(EMPTY_PROFILE);
   const [isNotFound, setIsNotFound] = useState<boolean>(false);
@@ -116,15 +118,6 @@ export function PortfolioBoard({
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const [isLoadingLinks, setIsLoadingLinks] = useState<boolean>(true);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
-
-  // 모바일 / 웹 리사이징 뷰포트 상태
-  const [deviceMode, setDeviceMode] = useState<DeviceMode>("responsive");
-  const [customWidth, setCustomWidth] = useState<number | undefined>(undefined);
-
-  const handleModeChange = (mode: DeviceMode) => {
-    setDeviceMode(mode);
-    setCustomWidth(undefined);
-  };
 
   // 현재 열람 중인 프로필의 UID 및 소유자 여부
   const [resolvedOwnerUid, setResolvedOwnerUid] = useState<string | null>(
@@ -599,14 +592,9 @@ export function PortfolioBoard({
     return list;
   }, [profile.projects, selectedCategory, searchQuery]);
 
-  // 뷰포트 모드에 따른 컨테이너 클래스: 웹 데스크톱에서도 태블릿 사이즈(680px)로 고정하여 회색 프레임 안에 배치
-  const containerClasses = customWidth
-    ? "w-full my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col pb-16 transition-all duration-300"
-    : deviceMode === "mobile"
-    ? "w-full max-w-[390px] my-0 sm:my-6 rounded-none sm:rounded-3xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-2xl bg-white flex flex-col pb-16 transition-all duration-300"
-    : "w-full max-w-[680px] my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col pb-16 transition-all duration-300";
-
-  const containerStyle = customWidth ? { maxWidth: `${customWidth}px` } : undefined;
+  // 반응형 컨테이너 클래스 (웹 데스크톱에서도 680px 고정 프레임)
+  const containerClasses =
+    "w-full max-w-[680px] my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col pb-16 transition-all duration-300";
 
   if (isNotFound) {
     notFound();
@@ -615,16 +603,11 @@ export function PortfolioBoard({
   // 동적 라우팅 된 공개 페이지에서는 클릭 수를 숨기고, 본인 관리 보드에서만 노출
   const showProjectClickCount = !isDynamicRoute && isOwner;
 
+  // 헤더 노출 여부: 비공개 뷰(관리 화면)이거나, 소유자가 '내 페이지 보기(?from=mypage)'로 진입한 경우
+  const shouldShowHeader = !isPublicView || (fromMypage && isOwner);
+
   return (
     <div className="min-h-screen w-full bg-[#F3F4F6] text-[#191F28] flex flex-col items-center">
-      {/* 0. 화면 크기 모바일/웹 리사이징 뷰포트 컨트롤 바 */}
-      <DeviceViewportBar
-        currentMode={deviceMode}
-        onModeChange={handleModeChange}
-        customWidth={customWidth}
-        onCustomWidthChange={setCustomWidth}
-      />
-
       {/* 갱신/업데이트 진행 중 플로팅 인디케이터 */}
       {isUpdating && (
         <aside
@@ -637,16 +620,16 @@ export function PortfolioBoard({
       )}
 
       {/* 모바일/웹 뷰포트 컨테이너 (웹 데스크톱에서도 태블릿 사이즈 680px 고정 프레임) */}
-      <main className={containerClasses} style={containerStyle}>
-        {/* 1. 상단 네비게이션 헤더 (다른 사람들이 페이지를 보는 경우 완전히 숨김) */}
-        {!isPublicView && (
+      <main className={containerClasses}>
+        {/* 1. 상단 네비게이션 헤더 (소유자 본인 또는 ?from=mypage 소유자 보기 시 노출) */}
+        {shouldShowHeader && (
           <TopNavHeader
             onShareClick={() => setIsShareModalOpen(true)}
             showToast={showToast}
             isPublicView={isPublicView}
             ownerName={profile.name}
             isOwner={isOwner}
-            hideProfileMenu={hideHeaderProfileMenu || isDynamicRoute}
+            hideProfileMenu={fromMypage ? false : (hideHeaderProfileMenu || isDynamicRoute)}
           />
         )}
 

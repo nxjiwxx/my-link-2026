@@ -32,7 +32,6 @@ import { Button } from "@/components/ui/button";
 import { Toast } from "@/components/ui/toast";
 import { ProjectInlineEditCard } from "@/components/portfolio/ProjectInlineEditCard";
 import { DeleteConfirmModal } from "@/components/portfolio/DeleteConfirmModal";
-import { DeviceViewportBar, DeviceMode } from "@/components/common/DeviceViewportBar";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 
@@ -63,15 +62,6 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-
-  // 모바일 / 웹 리사이징 뷰포트 상태
-  const [deviceMode, setDeviceMode] = useState<DeviceMode>("responsive");
-  const [customWidth, setCustomWidth] = useState<number | undefined>(undefined);
-
-  const handleModeChange = (mode: DeviceMode) => {
-    setDeviceMode(mode);
-    setCustomWidth(undefined);
-  };
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -260,13 +250,8 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
 
   const isTeam = project.projectType === "team";
 
-  const containerClasses = customWidth
-    ? "w-full my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col pb-16 transition-all duration-300"
-    : deviceMode === "mobile"
-    ? "w-full max-w-[390px] my-0 sm:my-6 rounded-none sm:rounded-3xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-2xl bg-white flex flex-col pb-16 transition-all duration-300"
-    : "w-full max-w-[680px] my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col pb-16 transition-all duration-300";
-
-  const containerStyle = customWidth ? { maxWidth: `${customWidth}px` } : undefined;
+  const containerClasses =
+    "w-full max-w-[680px] my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col pb-16 transition-all duration-300";
 
   const backHref = queryUsername
     ? `/@${queryUsername}`
@@ -276,15 +261,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
 
   return (
     <div className="min-h-screen w-full bg-[#F3F4F6] text-[#191F28] flex flex-col items-center">
-      {/* 0. 화면 크기 모바일/웹 리사이징 뷰포트 컨트롤 바 */}
-      <DeviceViewportBar
-        currentMode={deviceMode}
-        onModeChange={handleModeChange}
-        customWidth={customWidth}
-        onCustomWidthChange={setCustomWidth}
-      />
-
-      <main className={containerClasses} style={containerStyle}>
+      <main className={containerClasses}>
         {/* 상단 네비게이션 헤더 */}
         <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-md px-4 sm:px-6 py-3.5 border-b border-[#E5E8EB] flex items-center justify-between select-none">
           <Link

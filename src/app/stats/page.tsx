@@ -33,7 +33,6 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { DeviceViewportBar, DeviceMode } from "@/components/common/DeviceViewportBar";
 import { Button } from "@/components/ui/button";
 
 const CHART_COLORS = [
@@ -53,15 +52,6 @@ export default function StatsPage() {
 
   const [projects, setProjects] = useState<ProjectItem[]>([]);
   const [isLoadingData, setIsLoadingData] = useState<boolean>(true);
-
-  // 모바일 / 웹 리사이징 뷰포트 상태
-  const [deviceMode, setDeviceMode] = useState<DeviceMode>("responsive");
-  const [customWidth, setCustomWidth] = useState<number | undefined>(undefined);
-
-  const handleModeChange = (mode: DeviceMode) => {
-    setDeviceMode(mode);
-    setCustomWidth(undefined);
-  };
 
   // 1. 비로그인 접근 차단 및 리다이렉트 (로그인 필수)
   useEffect(() => {
@@ -167,44 +157,33 @@ export default function StatsPage() {
     );
   }
 
-  const containerClasses = customWidth
-    ? "w-full my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col pb-16 transition-all duration-300"
-    : deviceMode === "mobile"
-    ? "w-full max-w-[390px] my-0 sm:my-6 rounded-none sm:rounded-3xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-2xl bg-white flex flex-col pb-16 transition-all duration-300"
-    : "w-full max-w-[680px] my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col pb-16 transition-all duration-300";
-
-  const containerStyle = customWidth ? { maxWidth: `${customWidth}px` } : undefined;
+  const containerClasses =
+    "w-full max-w-[680px] my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col pb-16 transition-all duration-300";
 
   return (
     <div className="min-h-screen w-full bg-[#F3F4F6] text-[#191F28] flex flex-col items-center">
-      {/* 0. 디바이스 리사이징 컨트롤 바 */}
-      <DeviceViewportBar
-        currentMode={deviceMode}
-        onModeChange={handleModeChange}
-        customWidth={customWidth}
-        onCustomWidthChange={setCustomWidth}
-      />
-
-      <main className={containerClasses} style={containerStyle}>
-        {/* 상단 네비게이션 헤더 */}
-        <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-md px-4 sm:px-6 py-3.5 border-b border-[#E5E8EB] flex items-center justify-between select-none">
+      <main className={containerClasses}>
+        {/* 상단 네비게이션 헤더 (중앙 정렬 타이틀 & 아이콘 뒤로가기) */}
+        <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-md px-4 sm:px-6 py-3.5 border-b border-[#E5E8EB] flex items-center justify-between select-none relative">
           <Link
             href="/"
-            className="flex items-center gap-1.5 text-xs font-semibold text-[#4E5968] hover:text-[#191F28] transition-colors p-1.5 -ml-1.5 rounded-lg hover:bg-[#F2F4F6]"
+            aria-label="내 포트폴리오로 돌아가기"
+            title="내 포트폴리오로 돌아가기"
+            className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[#F2F4F6] text-[#4E5968] hover:text-[#191F28] transition-colors -ml-1"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>내 포트폴리오</span>
           </Link>
 
-          <span className="text-xs sm:text-sm font-bold text-[#191F28]">
+          <span className="absolute left-1/2 -translate-x-1/2 text-xs sm:text-sm font-bold text-[#191F28]">
             통계 대시보드
           </span>
 
           <button
             type="button"
             onClick={loadStatsData}
+            aria-label="새로고침"
             title="새로고침"
-            className="p-1.5 -mr-1.5 rounded-lg hover:bg-[#F2F4F6] text-[#6B7684] hover:text-[#191F28] transition-colors"
+            className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[#F2F4F6] text-[#6B7684] hover:text-[#191F28] transition-colors -mr-1"
           >
             <RefreshCw
               className={`w-4 h-4 ${isLoadingData ? "animate-spin text-[#3182F6]" : ""}`}

@@ -1,13 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GoogleIcon } from "@/components/ui/icons";
-import {
-  DeviceViewportBar,
-  DeviceMode,
-} from "@/components/common/DeviceViewportBar";
 
 interface LandingHeroProps {
   onGoogleLogin: () => Promise<void>;
@@ -18,34 +14,13 @@ export function LandingHero({
   onGoogleLogin,
   isLoggingIn = false,
 }: LandingHeroProps) {
-  const [deviceMode, setDeviceMode] = useState<DeviceMode>("responsive");
-  const [customWidth, setCustomWidth] = useState<number | undefined>(undefined);
-
-  const handleModeChange = (mode: DeviceMode) => {
-    setDeviceMode(mode);
-    setCustomWidth(undefined);
-  };
-
   // 컨테이너 클래스: 웹 데스크톱에서도 태블릿 사이즈(680px) 고정 프레임 적용
-  const containerClasses = customWidth
-    ? "w-full my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col items-center justify-between transition-all duration-300 min-h-[580px]"
-    : deviceMode === "mobile"
-    ? "w-full max-w-[390px] my-0 sm:my-6 rounded-none sm:rounded-3xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-2xl bg-white flex flex-col items-center justify-between overflow-hidden transition-all duration-300 min-h-[580px]"
-    : "w-full max-w-[680px] my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col items-center justify-between transition-all duration-300 min-h-[580px]";
-
-  const containerStyle = customWidth ? { maxWidth: `${customWidth}px` } : undefined;
+  const containerClasses =
+    "w-full max-w-[680px] my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col items-center justify-between transition-all duration-300 min-h-[580px]";
 
   return (
     <div className="min-h-screen w-full bg-[#F3F4F6] text-[#191F28] flex flex-col items-center">
-      {/* 0. 화면 크기 모바일/웹 리사이징 뷰포트 컨트롤 바 */}
-      <DeviceViewportBar
-        currentMode={deviceMode}
-        onModeChange={handleModeChange}
-        customWidth={customWidth}
-        onCustomWidthChange={setCustomWidth}
-      />
-
-      <div className={containerClasses} style={containerStyle}>
+      <div className={containerClasses}>
         {/* 상단 여백 (헤더 완전 삭제된 깔끔한 상태) */}
         <div className="w-full pt-12 sm:pt-16" />
 
