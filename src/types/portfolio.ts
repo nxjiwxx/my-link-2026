@@ -21,6 +21,7 @@ export interface SocialLinks {
   github?: string;
   email?: string;
   instagram?: string;
+  [key: string]: string | undefined;
 }
 
 export interface ProjectItem {
@@ -42,6 +43,7 @@ export interface ProjectItem {
     url: string;
   };
   orderIndex: number;
+  createdAt?: any;
 }
 
 export interface CareerItem {

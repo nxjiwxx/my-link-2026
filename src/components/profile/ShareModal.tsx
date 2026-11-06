@@ -28,10 +28,11 @@ export function ShareModal({
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
 
+  const cleanHandle = handle ? handle.replace(/^@/, "") : "designer";
   const currentUrl =
     typeof window !== "undefined"
-      ? window.location.href
-      : `https://mylink.io/@${handle}`;
+      ? `${window.location.origin}/@${cleanHandle}`
+      : `https://mylink.io/@${cleanHandle}`;
 
   const handleCopy = () => {
     if (navigator.clipboard) {

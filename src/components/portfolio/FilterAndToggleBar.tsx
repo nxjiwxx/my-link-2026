@@ -30,13 +30,13 @@ export function FilterAndToggleBar({
   return (
     <div
       className={cn(
-        "flex items-center justify-between gap-2 px-4 py-2 border-b border-[#E5E8EB] bg-[#F9FAFB] select-none",
+        "flex items-center justify-between gap-2 sm:gap-3 px-4 sm:px-6 lg:px-8 py-2.5 border-b border-[#E5E8EB] bg-[#F9FAFB] select-none w-full",
         className
       )}
     >
-      {/* 좌측 카테고리 탭 (가로 스크롤 가능) */}
+      {/* 좌측 카테고리 탭 (Auto Layout: min-w-0 flex-1로 모바일 가로 스크롤 시 우측 토글 밀림 방지) */}
       <div
-        className="flex items-center gap-1 overflow-x-auto scrollbar-none py-1"
+        className="flex items-center gap-1.5 overflow-x-auto min-w-0 flex-1 py-0.5 scrollbar-none"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {allTabs.map((cat) => {
@@ -47,7 +47,7 @@ export function FilterAndToggleBar({
               type="button"
               onClick={() => onSelectCategory(cat.id)}
               className={cn(
-                "h-8 shrink-0 rounded-full px-3 text-xs font-semibold tracking-tight transition-all",
+                "h-8 shrink-0 rounded-full px-3 text-xs font-semibold tracking-tight transition-all cursor-pointer whitespace-nowrap",
                 isActive
                   ? "bg-[#191F28] text-white shadow-xs"
                   : "bg-white text-[#4E5968] border border-[#E5E8EB] hover:border-[#D1D6DB] hover:text-[#191F28]"
@@ -67,7 +67,7 @@ export function FilterAndToggleBar({
           title="그리드 뷰로 보기"
           aria-label="그리드 뷰"
           className={cn(
-            "flex h-7 w-7 items-center justify-center rounded-lg transition-all",
+            "flex h-7 w-7 sm:h-7.5 sm:w-7.5 items-center justify-center rounded-lg transition-all cursor-pointer",
             viewMode === "grid"
               ? "bg-[#191F28] text-white shadow-xs"
               : "text-[#8B95A1] hover:text-[#191F28]"
@@ -81,7 +81,7 @@ export function FilterAndToggleBar({
           title="리스트 뷰로 보기"
           aria-label="리스트 뷰"
           className={cn(
-            "flex h-7 w-7 items-center justify-center rounded-lg transition-all",
+            "flex h-7 w-7 sm:h-7.5 sm:w-7.5 items-center justify-center rounded-lg transition-all cursor-pointer",
             viewMode === "list"
               ? "bg-[#191F28] text-white shadow-xs"
               : "text-[#8B95A1] hover:text-[#191F28]"

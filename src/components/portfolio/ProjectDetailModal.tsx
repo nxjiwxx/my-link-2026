@@ -25,7 +25,7 @@ interface ProjectDetailModalProps {
   project: ProjectItem | null;
   isOpen: boolean;
   onClose: () => void;
-  onDelete?: (projectId: string) => void;
+  onDelete?: (project: ProjectItem) => void;
 }
 
 export function ProjectDetailModal({
@@ -223,16 +223,13 @@ export function ProjectDetailModal({
               </div>
             )}
 
-            {/* 삭제 버튼 (로컬 상태 관리) */}
+            {/* 삭제 버튼 (삭제 확인 모달 연결) */}
             {onDelete && (
               <div className="pt-1 pb-1 flex justify-center">
                 <button
                   type="button"
                   onClick={() => {
-                    if (window.confirm(`'${project.title}' 작업물을 삭제하시겠습니까?`)) {
-                      onDelete(project.id);
-                      onClose();
-                    }
+                    onDelete(project);
                   }}
                   className="inline-flex items-center gap-1.5 text-xs text-[#8B95A1] hover:text-[#E8344E] transition-colors py-1 px-3 rounded-lg hover:bg-[#FEECEF]"
                 >

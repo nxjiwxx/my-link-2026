@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import {
   Link2,
   Users,
@@ -15,6 +15,7 @@ import {
   Check,
   Wrench,
   Tag,
+  RefreshCw,
 } from "lucide-react";
 import {
   ProjectItem,
@@ -36,6 +37,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { compressImageFile } from "@/lib/imageUtils";
+import { getMatchingToolSuggestions } from "@/lib/toolSuggestions";
 
 interface AddLinkModalProps {
   isOpen: boolean;
@@ -43,7 +45,8 @@ interface AddLinkModalProps {
   availableCategories?: CategoryItem[];
   onAddCategory?: (category: CategoryItem) => void;
   savedTools?: string[];
-  onAdd: (newProject: ProjectItem, newTools: string[]) => void;
+  onAdd: (newProject: ProjectItem, newTools: string[]) => void | Promise<void>;
+  isSubmitting?: boolean;
 }
 
 export function AddLinkModal({
@@ -53,6 +56,7 @@ export function AddLinkModal({
   onAddCategory,
   savedTools = [],
   onAdd,
+  isSubmitting = false,
 }: AddLinkModalProps) {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<ProjectCategory>(
@@ -256,8 +260,9 @@ export function AddLinkModal({
   };
 
   // 모달 제출
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     const newErrors: {
       title?: string;
@@ -341,28 +346,37 @@ export function AddLinkModal({
           }
         : undefined,
       orderIndex: 0,
+      createdAt: new Date().toISOString(),
     };
 
-    onAdd(newProject, selectedTools);
+    try {
+      await onAdd(newProject, selectedTools);
 
-    // 폼 초기화
-    setTitle("");
-    setSummary("");
-    setExternalUrl("");
-    setExternalLabel("");
-    setThumbnailUrl("");
-    setSelectedTools([]);
-    setPeriod("");
-    setRole("");
-    setDescription("");
-    setErrors({});
-    onClose();
+      // 폼 초기화
+      setTitle("");
+      setSummary("");
+      setExternalUrl("");
+      setExternalLabel("");
+      setThumbnailUrl("");
+      setSelectedTools([]);
+      setPeriod("");
+      setRole("");
+      setDescription("");
+      setErrors({});
+      onClose();
+    } catch {
+      // 상위 컴포넌트에서 에러 발생 시 모달 유지
+    }
   };
 
-  // 추천할 이전 도구 목록 (유저가 이미 추가했던 도구 중 현재 선택되지 않은 것)
-  const unselectedSuggestedTools = savedTools.filter(
-    (tool) => !selectedTools.includes(tool)
-  );
+  // 입력어에 따라 실시간 매칭되는 도구 추천 목록
+  const suggestedTools = useMemo(() => {
+    return getMatchingToolSuggestions(
+      customToolInput,
+      selectedTools,
+      savedTools
+    );
+  }, [customToolInput, selectedTools, savedTools]);
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -371,7 +385,7 @@ export function AddLinkModal({
         <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-md px-6 pt-6 pb-4 border-b border-[#F2F4F6]">
           <DialogHeader className="text-left space-y-1">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E8F3FF] text-[#3182F6]">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F2F4F6] text-[#191F28]">
                 <Link2 className="h-4 w-4" />
               </div>
               <DialogTitle className="text-base sm:text-lg font-bold text-[#191F28]">
@@ -414,14 +428,14 @@ export function AddLinkModal({
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-xs font-bold text-[#191F28] flex items-center gap-1">
-                  <Tag className="w-3.5 h-3.5 text-[#3182F6]" />
+                  <Tag className="w-3.5 h-3.5 text-[#191F28]" />
                   <span>카테고리 선택</span>
                   <span className="text-[#E8344E]">*</span>
                 </label>
                 <button
                   type="button"
                   onClick={() => setIsAddingCategory(!isAddingCategory)}
-                  className="text-[11px] text-[#3182F6] font-semibold hover:underline flex items-center gap-0.5"
+                  className="text-[11px] text-[#191F28] font-semibold hover:underline flex items-center gap-0.5"
                 >
                   <Plus className="w-3 h-3" />
                   <span>새 카테고리 추가</span>
@@ -448,7 +462,7 @@ export function AddLinkModal({
                     type="button"
                     size="sm"
                     onClick={() => handleAddNewCategory()}
-                    className="h-8 px-3 text-xs bg-[#3182F6] hover:bg-[#1B64DA] text-white"
+                    className="h-8 px-3 text-xs bg-[#191F28] hover:bg-[#333D4B] text-white"
                   >
                     추가
                   </Button>
@@ -475,7 +489,7 @@ export function AddLinkModal({
                     className={cn(
                       "py-1.5 px-3 text-xs font-bold rounded-xl border text-center transition-all",
                       category === cat.id
-                        ? "bg-[#3182F6] text-white border-[#3182F6] shadow-xs"
+                        ? "bg-[#191F28] text-white border-[#191F28] shadow-xs"
                         : "bg-[#F9FAFB] text-[#4E5968] border-[#E5E8EB] hover:bg-[#F2F4F6]"
                     )}
                   >
@@ -510,7 +524,7 @@ export function AddLinkModal({
                   className={cn(
                     "flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border text-xs font-bold transition-all",
                     projectType === "team"
-                      ? "bg-[#3182F6] text-white border-[#3182F6] shadow-xs"
+                      ? "bg-[#191F28] text-white border-[#191F28] shadow-xs"
                       : "bg-[#F9FAFB] text-[#6B7684] border-[#E5E8EB] hover:bg-[#F2F4F6]"
                   )}
                 >
@@ -548,7 +562,7 @@ export function AddLinkModal({
           <div className="rounded-2xl border border-[#E5E8EB] bg-[#F9FAFB] p-3.5 space-y-3">
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-1.5 text-xs font-bold text-[#191F28]">
-                <ExternalLink className="w-3.5 h-3.5 text-[#3182F6]" />
+                <ExternalLink className="w-3.5 h-3.5 text-[#191F28]" />
                 <span>외부 연결 링크</span>
               </label>
               <span className="text-[10px] text-[#8B95A1]">선택 (Figma, Behance 등)</span>
@@ -671,7 +685,7 @@ export function AddLinkModal({
                   onClick={() => fileInputRef.current?.click()}
                   className="h-9 px-3 text-xs text-[#191F28] border-[#E5E8EB] hover:bg-[#F2F4F6] flex items-center gap-1.5 shrink-0 disabled:opacity-50"
                 >
-                  <Upload className="w-3.5 h-3.5 text-[#3182F6]" />
+                  <Upload className="w-3.5 h-3.5 text-[#191F28]" />
                   <span>{isCompressing ? "이미지 최적화 중..." : "내 기기에서 파일 선택"}</span>
                 </Button>
                 <Input
@@ -688,7 +702,7 @@ export function AddLinkModal({
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="text-xs font-bold text-[#191F28] flex items-center gap-1">
-                <Wrench className="w-3.5 h-3.5 text-[#3182F6]" />
+                <Wrench className="w-3.5 h-3.5 text-[#191F28]" />
                 <span>사용 도구</span>
               </label>
               <span className="text-[10px] text-[#8B95A1]">
@@ -741,25 +755,30 @@ export function AddLinkModal({
                 size="sm"
                 variant="outline"
                 onClick={() => handleAddTool()}
-                className="h-8 px-3 text-xs text-[#3182F6] border-[#3182F6]/30 hover:bg-[#E8F3FF]"
+                className="h-8 px-3 text-xs text-[#191F28] border-[#E5E8EB] hover:bg-[#F2F4F6]"
               >
                 추가
               </Button>
             </div>
 
-            {/* 유저가 이미 추가했던 도구 추천 (이전에 사용했던 도구만 표시) */}
-            {unselectedSuggestedTools.length > 0 && (
-              <div>
-                <span className="text-[11px] font-semibold text-[#8B95A1] block mb-1">
-                  이전에 추가했던 도구 (클릭하여 추가):
+            {/* 관련 도구 추천 목록 */}
+            {suggestedTools.length > 0 && (
+              <div className="space-y-1">
+                <span className="text-[11px] font-semibold text-[#8B95A1] block">
+                  {customToolInput.trim() ? "관련 추천 도구 (클릭하여 추가):" : "추천 도구:"}
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {unselectedSuggestedTools.map((tool) => (
+                  {suggestedTools.map((tool) => (
                     <button
                       key={tool}
                       type="button"
-                      onClick={() => handleSelectSuggestedTool(tool)}
-                      className="text-[11px] px-2.5 py-0.5 rounded-lg border border-[#E5E8EB] bg-[#F9FAFB] text-[#4E5968] hover:bg-[#E8F3FF] hover:text-[#3182F6] hover:border-[#3182F6]/30 transition-all flex items-center gap-1"
+                      onClick={() => {
+                        if (!selectedTools.includes(tool)) {
+                          setSelectedTools((prev) => [...prev, tool]);
+                          setCustomToolInput("");
+                        }
+                      }}
+                      className="text-[11px] px-2.5 py-0.5 rounded-lg border border-[#E5E8EB] bg-[#F9FAFB] text-[#4E5968] hover:bg-[#191F28] hover:text-white transition-all flex items-center gap-1 cursor-pointer"
                     >
                       <Plus className="w-2.5 h-2.5" />
                       <span>{tool}</span>
@@ -838,10 +857,20 @@ export function AddLinkModal({
             </Button>
             <Button
               type="submit"
-              className="h-10 px-5 rounded-xl text-xs font-bold bg-[#3182F6] hover:bg-[#1B64DA] text-white active:scale-[0.98] transition-all shadow-xs flex items-center gap-1.5"
+              disabled={isSubmitting}
+              className="h-10 px-5 rounded-xl text-xs font-bold bg-[#191F28] hover:bg-[#333D4B] text-white active:scale-[0.98] transition-all shadow-xs flex items-center gap-1.5 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <Plus className="w-3.5 h-3.5" />
-              <span>링크 추가하기</span>
+              {isSubmitting ? (
+                <>
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                  <span>저장 및 갱신 중...</span>
+                </>
+              ) : (
+                <>
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>링크 추가하기</span>
+                </>
+              )}
             </Button>
           </div>
         </form>
