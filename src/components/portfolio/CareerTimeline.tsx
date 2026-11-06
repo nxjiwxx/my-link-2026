@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Briefcase, Plus, Pencil, Trash2, X } from "lucide-react";
 import { CareerItem } from "@/types/portfolio";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { sortCareersByPeriod } from "@/lib/careerUtils";
 
 interface CareerTimelineProps {
   careers: CareerItem[];
@@ -40,6 +41,8 @@ export function CareerTimeline({
   const [newOrg, setNewOrg] = useState<string>("");
   const [newDesc, setNewDesc] = useState<string>("");
 
+  const sortedCareers = useMemo(() => sortCareersByPeriod(careers), [careers]);
+
   const handleStartEdit = (career: CareerItem) => {
     setIsAdding(false);
     setEditingId(career.id);
@@ -54,8 +57,8 @@ export function CareerTimeline({
   };
 
   const handleSaveEdit = (careerId: string) => {
-    if (!editTitle.trim() || !editOrg.trim()) {
-      alert("직무명과 조직/회사명을 입력해주세요.");
+    if (!editTitle.trim()) {
+      alert("직무명/역할을 입력해주세요.");
       return;
     }
 
@@ -71,13 +74,14 @@ export function CareerTimeline({
         : c
     );
 
-    onUpdateCareers?.(updated);
+    // 기간을 감지하여 내림차순 정렬 후 저장
+    onUpdateCareers?.(sortCareersByPeriod(updated));
     setEditingId(null);
   };
 
   const handleSaveNew = () => {
-    if (!newTitle.trim() || !newOrg.trim()) {
-      alert("직무명과 조직/회사명을 입력해주세요.");
+    if (!newTitle.trim()) {
+      alert("직무명/역할을 입력해주세요.");
       return;
     }
 
@@ -89,7 +93,8 @@ export function CareerTimeline({
       description: newDesc.trim() || undefined,
     };
 
-    onUpdateCareers?.([newCareer, ...careers]);
+    // 기간을 감지하여 내림차순 정렬 후 저장
+    onUpdateCareers?.(sortCareersByPeriod([newCareer, ...careers]));
     setNewPeriod("");
     setNewTitle("");
     setNewOrg("");
@@ -167,7 +172,7 @@ export function CareerTimeline({
               </div>
               <div>
                 <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                  소속/회사/기관 *
+                  소속/회사/기관 <span className="text-[10px] text-[#8B95A1] font-normal">(선택)</span>
                 </label>
                 <Input
                   value={newOrg}
@@ -211,9 +216,9 @@ export function CareerTimeline({
           </div>
         )}
 
-        {/* 기존 경력 목록 */}
+        {/* 기존 경력 목록 (기간 내림차순 정렬) */}
         <div className="relative pl-4 border-l-2 border-[#E5E8EB] space-y-4 my-1">
-          {careers.map((career) => {
+          {sortedCareers.map((career) => {
             const isCurrentlyEditing = editingId === career.id;
 
             if (isCurrentlyEditing) {
@@ -258,7 +263,7 @@ export function CareerTimeline({
                       </div>
                       <div>
                         <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                          소속/회사명 *
+                          소속/회사명 <span className="text-[10px] text-[#8B95A1] font-normal">(선택)</span>
                         </label>
                         <Input
                           value={editOrg}
@@ -316,10 +321,12 @@ export function CareerTimeline({
                       {career.period}
                     </div>
                     <div className="text-xs font-semibold text-[#111827] mt-0.5">
-                      {career.title}{" "}
-                      <span className="font-normal text-[#4B5563]">
-                        · {career.organization}
-                      </span>
+                      {career.title}
+                      {career.organization && career.organization.trim() && (
+                        <span className="font-normal text-[#4B5563]">
+                          {" "}· {career.organization}
+                        </span>
+                      )}
                     </div>
                     {career.description && (
                       <p className="text-[11px] text-[#6B7280] leading-relaxed mt-0.5">

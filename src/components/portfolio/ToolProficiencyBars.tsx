@@ -6,13 +6,179 @@ import { ToolProficiency } from "@/types/portfolio";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getMatchingToolSuggestions } from "@/lib/toolSuggestions";
 import {
   FigmaIcon,
   ProtopieIcon,
   AdobeCcIcon,
   BlenderIcon,
   ReactIcon,
+  PhotoshopIcon,
+  IllustratorIcon,
+  InDesignIcon,
+  AfterEffectsIcon,
+  PremiereProIcon,
+  ClaudeIcon,
+  GeminiIcon,
+  ChatGptIcon,
+  MidjourneyIcon,
+  VscodeIcon,
+  FramerIcon,
+  NotionIcon,
+  TypeScriptIcon,
+  PythonIcon,
+  GithubIcon,
 } from "@/components/ui/icons";
+
+const TOOL_DOMAINS: Record<string, string> = {
+  figma: "figma.com",
+  figjam: "figma.com",
+  framer: "framer.com",
+  protopie: "protopie.io",
+  sketch: "sketch.com",
+  photoshop: "adobe.com",
+  illustrator: "adobe.com",
+  indesign: "adobe.com",
+  aftereffects: "adobe.com",
+  premiere: "adobe.com",
+  lightroom: "adobe.com",
+  adobexd: "adobe.com",
+  adobe: "adobe.com",
+  claude: "claude.ai",
+  gemini: "gemini.google.com",
+  chatgpt: "openai.com",
+  openai: "openai.com",
+  gpt: "openai.com",
+  midjourney: "midjourney.com",
+  vscode: "code.visualstudio.com",
+  cursor: "cursor.com",
+  blender: "blender.org",
+  cinema4d: "maxon.net",
+  c4d: "maxon.net",
+  spline: "spline.design",
+  unreal: "unrealengine.com",
+  unity: "unity.com",
+  maya: "autodesk.com",
+  rhino: "rhino3d.com",
+  react: "react.dev",
+  reactnative: "reactnative.dev",
+  nextjs: "nextjs.org",
+  next: "nextjs.org",
+  vue: "vuejs.org",
+  svelte: "svelte.dev",
+  typescript: "typescriptlang.org",
+  javascript: "developer.mozilla.org",
+  tailwind: "tailwindcss.com",
+  notion: "notion.so",
+  slack: "slack.com",
+  jira: "atlassian.com",
+  linear: "linear.app",
+  miro: "miro.com",
+  zeplin: "zeplin.io",
+  github: "github.com",
+  git: "git-scm.com",
+  python: "python.org",
+  swift: "swift.org",
+  swiftui: "apple.com",
+  flutter: "flutter.dev",
+  canva: "canva.com",
+  webflow: "webflow.com",
+  procreate: "procreate.art",
+  lottie: "lottiefiles.com",
+};
+
+function getToolFaviconUrl(toolName: string): string | null {
+  if (!toolName || !toolName.trim()) return null;
+  const clean = toolName.toLowerCase().replace(/[^a-z0-9]/g, "");
+  for (const [key, domain] of Object.entries(TOOL_DOMAINS)) {
+    if (clean.includes(key) || key.includes(clean)) {
+      return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+    }
+  }
+  return `https://www.google.com/s2/favicons?domain=${clean}.com&sz=64`;
+}
+
+export function ToolFavicon({ name, iconKey }: { name: string; iconKey?: string }) {
+  const [hasError, setHasError] = useState(false);
+  const lower = (name || "").toLowerCase().trim();
+
+  // 1. 디자이너 & 개발자 주요 툴 공식 SVG 로고 정확한 우선 매핑
+  if (lower.includes("illustrator") || lower.includes("일러스트") || lower.includes("일러") || lower === "ai") {
+    return <IllustratorIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("photoshop") || lower.includes("포토샵") || lower === "ps") {
+    return <PhotoshopIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("indesign") || lower.includes("인디자인") || lower === "id") {
+    return <InDesignIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("after effects") || lower.includes("aftereffects") || lower.includes("애프터이펙트") || lower.includes("에펙") || lower === "ae") {
+    return <AfterEffectsIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("premiere") || lower.includes("프리미어") || lower === "pr") {
+    return <PremiereProIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("claude") || lower.includes("클로드") || lower.includes("anthropic")) {
+    return <ClaudeIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("gemini") || lower.includes("제미나이")) {
+    return <GeminiIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("chatgpt") || lower.includes("gpt") || lower.includes("지피티") || lower.includes("챗지피티") || lower.includes("openai")) {
+    return <ChatGptIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("midjourney") || lower.includes("미드저니")) {
+    return <MidjourneyIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("vscode") || lower.includes("vs code") || lower.includes("visual studio code") || lower.includes("브이에스코드")) {
+    return <VscodeIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("figma") || lower.includes("피그마") || lower.includes("figjam") || iconKey === "figma") {
+    return <FigmaIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("framer") || lower.includes("프레이머")) {
+    return <FramerIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("protopie") || lower.includes("프로토파이") || iconKey === "protopie") {
+    return <ProtopieIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("blender") || lower.includes("블렌더") || iconKey === "blender") {
+    return <BlenderIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("notion") || lower.includes("노션")) {
+    return <NotionIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("react") || lower.includes("리액트") || iconKey === "react") {
+    return <ReactIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("typescript") || lower.includes("타입스크립트") || lower === "ts") {
+    return <TypeScriptIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("python") || lower.includes("파이썬")) {
+    return <PythonIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("github") || lower.includes("깃허브") || lower === "git") {
+    return <GithubIcon className="w-4 h-4 shrink-0" />;
+  }
+  if (lower.includes("adobe") || iconKey === "adobe") {
+    return <AdobeCcIcon className="w-4 h-4 shrink-0" />;
+  }
+
+  // 2. 외부 파비콘 서비스 fallback
+  const faviconUrl = getToolFaviconUrl(name);
+  if (faviconUrl && !hasError) {
+    return (
+      <img
+        src={faviconUrl}
+        alt={name}
+        className="w-4 h-4 rounded-xs shrink-0 object-contain"
+        onError={() => setHasError(true)}
+      />
+    );
+  }
+
+  return <Wrench className="w-3.5 h-3.5 text-[#8B95A1] shrink-0" />;
+}
 
 interface ToolProficiencyBarsProps {
   tools: ToolProficiency[];
@@ -44,21 +210,16 @@ export function ToolProficiencyBars({
   const [newLevel, setNewLevel] = useState<number>(80);
   const [newExperience, setNewExperience] = useState<string>("");
 
-  const renderToolLogo = (iconKey?: string) => {
-    switch (iconKey?.toLowerCase()) {
-      case "figma":
-        return <FigmaIcon className="w-4 h-4 shrink-0" />;
-      case "protopie":
-        return <ProtopieIcon className="w-4 h-4 shrink-0" />;
-      case "adobe":
-        return <AdobeCcIcon className="w-4 h-4 shrink-0" />;
-      case "blender":
-        return <BlenderIcon className="w-4 h-4 shrink-0" />;
-      case "react":
-        return <ReactIcon className="w-4 h-4 shrink-0" />;
-      default:
-        return <Wrench className="w-4 h-4 text-[#8B95A1] shrink-0" />;
-    }
+  const newToolSuggestions = isAdding && newName.trim()
+    ? getMatchingToolSuggestions(newName, tools.map((t) => t.name), [], 4)
+    : [];
+
+  const editToolSuggestions = editingIndex !== null && editName.trim()
+    ? getMatchingToolSuggestions(editName, tools.map((t) => t.name), [], 4)
+    : [];
+
+  const renderToolLogo = (name: string, iconKey?: string) => {
+    return <ToolFavicon name={name} iconKey={iconKey} />;
   };
 
   const inferIconKey = (name: string): ToolProficiency["iconKey"] => {
@@ -171,13 +332,35 @@ export function ToolProficiencyBars({
                 <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
                   도구 이름 *
                 </label>
-                <Input
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  placeholder="예: Figma, Framer, Blender"
-                  className="h-8 text-xs bg-white"
-                  autoFocus
-                />
+                <div className="relative flex items-center">
+                  <div className="absolute left-2.5 flex items-center justify-center w-4 h-4 pointer-events-none text-[#8B95A1]">
+                    <Wrench className="w-3.5 h-3.5 text-[#8B95A1]" />
+                  </div>
+                  <Input
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    placeholder="예: Figma, Framer, Photoshop, Claude"
+                    className="h-8 text-xs bg-white pl-8 font-medium"
+                    autoFocus
+                  />
+                </div>
+                {/* 추천 도구 칩 (입력 시 관련 툴만 가로 1줄로 최대 4개 제안) */}
+                {newToolSuggestions.length > 0 && (
+                  <div className="mt-1.5 flex items-center gap-1.5 flex-nowrap overflow-x-auto no-scrollbar py-0.5">
+                    <span className="text-[10px] text-[#8B95A1] font-medium shrink-0">추천:</span>
+                    {newToolSuggestions.slice(0, 4).map((sug) => (
+                      <button
+                        key={sug}
+                        type="button"
+                        onClick={() => setNewName(sug)}
+                        className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-md bg-white border border-[#E5E8EB] text-[#4E5968] hover:text-[#3182F6] hover:border-[#3182F6] transition-colors cursor-pointer shrink-0"
+                      >
+                        <ToolFavicon name={sug} />
+                        <span>{sug}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
@@ -268,12 +451,34 @@ export function ToolProficiencyBars({
                     <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
                       도구 이름 *
                     </label>
-                    <Input
-                      value={editName}
-                      onChange={(e) => setEditName(e.target.value)}
-                      placeholder="도구 이름"
-                      className="h-8 text-xs bg-white"
-                    />
+                    <div className="relative flex items-center">
+                      <div className="absolute left-2.5 flex items-center justify-center w-4 h-4 pointer-events-none text-[#8B95A1]">
+                        <Wrench className="w-3.5 h-3.5 text-[#8B95A1]" />
+                      </div>
+                      <Input
+                        value={editName}
+                        onChange={(e) => setEditName(e.target.value)}
+                        placeholder="도구 이름"
+                        className="h-8 text-xs bg-white pl-8 font-medium"
+                      />
+                    </div>
+                    {/* 추천 도구 칩 (입력 시 관련 툴만 가로 1줄로 최대 4개 제안) */}
+                    {editToolSuggestions.length > 0 && (
+                      <div className="mt-1.5 flex items-center gap-1.5 flex-nowrap overflow-x-auto no-scrollbar py-0.5">
+                        <span className="text-[10px] text-[#8B95A1] font-medium shrink-0">추천:</span>
+                        {editToolSuggestions.slice(0, 4).map((sug) => (
+                          <button
+                            key={sug}
+                            type="button"
+                            onClick={() => setEditName(sug)}
+                            className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-md bg-white border border-[#E5E8EB] text-[#4E5968] hover:text-[#3182F6] hover:border-[#3182F6] transition-colors cursor-pointer shrink-0"
+                          >
+                            <ToolFavicon name={sug} />
+                            <span>{sug}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
@@ -345,7 +550,7 @@ export function ToolProficiencyBars({
               <div className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2 min-w-0 flex-1 mr-2">
                   <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#F2F4F6] shrink-0">
-                    {renderToolLogo(tool.iconKey)}
+                    {renderToolLogo(tool.name, tool.iconKey)}
                   </div>
                   <span className="font-bold text-[#191F28] truncate">
                     {tool.name}

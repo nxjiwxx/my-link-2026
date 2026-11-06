@@ -10,6 +10,7 @@ import {
 } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { claimUsername } from "@/lib/firestoreProfile";
 
 export interface UserProfileData {
   uid: string;
@@ -19,6 +20,7 @@ export interface UserProfileData {
   roleTitle?: string;
   bio?: string;
   handle?: string;
+  username?: string;
   createdAt?: unknown;
   updatedAt?: unknown;
 }
@@ -46,57 +48,64 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Firestore users/{uid} 경로의 유저 정보 동기화
+  // Firestore users/{uid} 및 user/{uid} 경로의 유저 정보 동기화
   const syncUserDoc = async (currentUser: User): Promise<UserProfileData> => {
     const userDocRef = doc(db, "users", currentUser.uid);
+    const userAltDocRef = doc(db, "user", currentUser.uid);
+
+    // 구글 이메일 @의 앞부분을 사용자 이름(username) 기본값으로 설정 (예: user123@gmail.com -> user123)
+    const emailPrefix = currentUser.email
+      ? currentUser.email.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "")
+      : currentUser.uid.slice(0, 6);
+
+    const initialName =
+      currentUser.displayName ||
+      (currentUser.email ? currentUser.email.split("@")[0] : "디자이너");
+    const defaultUsername = emailPrefix || "user";
+
     let profileData: UserProfileData = {
       uid: currentUser.uid,
       email: currentUser.email,
-      displayName: currentUser.displayName,
+      displayName: initialName,
       photoURL: currentUser.photoURL,
+      username: defaultUsername,
+      handle: defaultUsername,
     };
 
     try {
       const snap = await getDoc(userDocRef);
       if (snap.exists()) {
         const data = snap.data();
+        const resolvedUsername = data.username || data.handle || defaultUsername;
         profileData = {
           uid: currentUser.uid,
           email: currentUser.email,
-          displayName: data.displayName || currentUser.displayName || "디자이너",
+          displayName: data.displayName || currentUser.displayName || initialName,
           photoURL: data.photoURL || currentUser.photoURL,
           roleTitle: data.roleTitle,
           bio: data.bio,
-          handle: data.handle || (currentUser.email ? currentUser.email.split("@")[0] : currentUser.uid.slice(0, 6)),
+          handle: resolvedUsername,
+          username: resolvedUsername,
           createdAt: data.createdAt,
           updatedAt: data.updatedAt,
         };
-        // 최신 구글 프로필 정보로 업데이트
-        await setDoc(
-          userDocRef,
-          {
-            email: currentUser.email,
-            displayName: profileData.displayName,
-            photoURL: profileData.photoURL,
-            updatedAt: serverTimestamp(),
-          },
-          { merge: true }
-        );
+
+        // 최신 구글 프로필 정보 및 username 항상 동기화
+        const updatePayload = {
+          email: currentUser.email,
+          displayName: profileData.displayName,
+          photoURL: profileData.photoURL,
+          username: resolvedUsername,
+          handle: resolvedUsername,
+          updatedAt: serverTimestamp(),
+        };
+
+        await setDoc(userDocRef, updatePayload, { merge: true });
+        try {
+          await setDoc(userAltDocRef, updatePayload, { merge: true });
+        } catch {}
       } else {
         // 새 유저 문서 생성
-        const emailPrefix = currentUser.email
-          ? currentUser.email.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "")
-          : currentUser.uid.slice(0, 6);
-
-        // 기본적인 이름은 로그인 정보 중 이름 (displayName)
-        const initialName =
-          currentUser.displayName ||
-          (currentUser.email ? currentUser.email.split("@")[0] : "디자이너");
-        // 사용자 이름은 사용자의 이메일 @의 앞부분
-        const initialHandle =
-          emailPrefix ||
-          (currentUser.email ? currentUser.email.split("@")[0] : "user");
-
         profileData = {
           uid: currentUser.uid,
           email: currentUser.email,
@@ -104,12 +113,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           photoURL: currentUser.photoURL,
           roleTitle: "",
           bio: "",
-          handle: initialHandle,
+          handle: defaultUsername,
+          username: defaultUsername,
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
         };
 
         await setDoc(userDocRef, profileData);
+        try {
+          await setDoc(userAltDocRef, profileData);
+        } catch {}
+      }
+
+      // 프로필 서브 문서 (users/{uid}/profile/info 및 user/{uid}/profile/info)에도 항상 동기화
+      const infoPayload = {
+        name: profileData.displayName || initialName,
+        handle: profileData.username || defaultUsername,
+        username: profileData.username || defaultUsername,
+        avatarUrl: profileData.photoURL || "",
+        updatedAt: serverTimestamp(),
+      };
+      try {
+        await setDoc(doc(db, `users/${currentUser.uid}/profile`, "info"), infoPayload, { merge: true });
+        await setDoc(doc(db, `user/${currentUser.uid}/profile`, "info"), infoPayload, { merge: true });
+      } catch (err) {
+        console.warn("프로필 info 동기화 실패:", err);
+      }
+
+      // usernames/{username} 고유 문서 등록 (중복 방지 선점)
+      if (profileData.username) {
+        try {
+          await claimUsername(profileData.username, undefined, currentUser.uid);
+        } catch {
+          // ignore
+        }
       }
     } catch (err) {
       console.warn("Firestore users/{uid} 동기화 에러:", err);

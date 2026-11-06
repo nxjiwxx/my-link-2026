@@ -149,3 +149,176 @@ export function ReactIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SV
     </svg>
   );
 }
+
+export function PhotoshopIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <rect width="22" height="22" x="1" y="1" rx="4.5" fill="#001E36" />
+      <path
+        d="M6 6.5h3.8c2.2 0 3.6 1.1 3.6 2.9 0 1.9-1.4 3-3.6 3H8v4.6H6V6.5zm2 4.2h1.7c1.1 0 1.7-.5 1.7-1.3 0-.8-.6-1.3-1.7-1.3H8v2.6zm6.8 5.6c.7.5 1.7.8 2.6.8 1.4 0 2.1-.6 2.1-1.5 0-1-.8-1.4-2.2-1.9-1.8-.6-2.9-1.5-2.9-3 0-1.7 1.3-3 3.3-3 .9 0 1.8.3 2.4.7l-.6 1.5c-.6-.4-1.2-.6-1.9-.6-1.1 0-1.7.6-1.7 1.3 0 .8.7 1.2 2 1.7 1.9.7 3.1 1.6 3.1 3.2 0 1.8-1.4 3.1-3.6 3.1-1.1 0-2.2-.4-2.9-.9l.4-1.4z"
+        fill="#31A8FF"
+      />
+    </svg>
+  );
+}
+
+export function IllustratorIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <rect width="22" height="22" x="1" y="1" rx="4.5" fill="#330000" />
+      <path
+        d="M6.5 17l3.8-10.5h1.9L16 17h-2l-.9-2.6H9.4L8.5 17H6.5zm3.4-4.2h2.7L11.3 9h-.1l-1.3 3.8zm8.6-4.9c-.7 0-1.2-.5-1.2-1.2 0-.7.5-1.2 1.2-1.2.7 0 1.2.5 1.2 1.2 0 .7-.5 1.2-1.2 1.2zm-.9 9.1V9.8h1.8V17h-1.8z"
+        fill="#FF9A00"
+      />
+    </svg>
+  );
+}
+
+export function InDesignIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <rect width="22" height="22" x="1" y="1" rx="4.5" fill="#49021F" />
+      <path
+        d="M6 7.5h2v9H6v-9zm4.2 0H12c2.8 0 4.5 1.8 4.5 4.5s-1.7 4.5-4.5 4.5h-1.8v-9zm2 7.2c1.6 0 2.5-1.1 2.5-2.7s-.9-2.7-2.5-2.7h-.3v5.4h.3z"
+        fill="#FF3366"
+      />
+    </svg>
+  );
+}
+
+export function AfterEffectsIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <rect width="22" height="22" x="1" y="1" rx="4.5" fill="#00005B" />
+      <path
+        d="M5.5 16.5l3.2-9h1.6l3.2 9h-1.6l-.7-2.2H8L7.3 16.5H5.5zm3-3.6h2.2L9.6 10h-.1l-1 2.9zm6.3 3.6v-6.5h3.8v1.3h-2.4v1.3h2.2v1.3h-2.2v1.3h2.5v1.3h-3.9z"
+        fill="#9999FF"
+      />
+    </svg>
+  );
+}
+
+export function PremiereProIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <rect width="22" height="22" x="1" y="1" rx="4.5" fill="#00005B" />
+      <path
+        d="M6 7.5h3.5c2 0 3.2 1 3.2 2.6 0 1.7-1.2 2.7-3.2 2.7H7.7v3.7H6V7.5zm1.7 3.8h1.6c1 0 1.6-.5 1.6-1.2 0-.7-.6-1.2-1.6-1.2H7.7v2.4zm7.1 5.2v-6.5h1.6v1.2c.4-.9 1.2-1.3 2.1-1.3h.6v1.6h-.7c-1.1 0-1.9.7-1.9 2V16.5h-1.7z"
+        fill="#EA77FF"
+      />
+    </svg>
+  );
+}
+
+export function ClaudeIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <rect width="22" height="22" x="1" y="1" rx="4.5" fill="#FBF7F1" />
+      <path
+        d="M13.85 4.35a.65.65 0 0 0-1.14-.14L10.3 7.82l-3.92-.8a.65.65 0 0 0-.75.76l.8 3.92-3.61 2.41a.65.65 0 0 0 .14 1.14l3.92 1.4-1.4 3.92a.65.65 0 0 0 .76.84l3.85-1.22 1.76 3.7a.65.65 0 0 0 1.18 0l1.76-3.7 3.85 1.22a.65.65 0 0 0 .76-.84l-1.4-3.92 3.92-1.4a.65.65 0 0 0 .14-1.14l-3.61-2.41.8-3.92a.65.65 0 0 0-.75-.76l-3.92.8-2.41-3.61z"
+        fill="#D97757"
+      />
+    </svg>
+  );
+}
+
+export function GeminiIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <defs>
+        <linearGradient id="geminiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#1BA1E3" />
+          <stop offset="50%" stopColor="#5B73F8" />
+          <stop offset="100%" stopColor="#9C52F5" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M12 2C12 7.52 7.52 12 2 12C7.52 12 12 16.48 12 22C12 16.48 16.48 12 22 12C16.48 12 12 7.52 12 2Z"
+        fill="url(#geminiGrad)"
+      />
+    </svg>
+  );
+}
+
+export function ChatGptIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <rect width="22" height="22" x="1" y="1" rx="4.5" fill="#10A37F" />
+      <path
+        d="M17.5 10.3a3.5 3.5 0 0 0-.3-2.6 3.6 3.6 0 0 0-3-1.8 3.5 3.5 0 0 0-2.3.8 3.6 3.6 0 0 0-4.8 1.4 3.5 3.5 0 0 0-.4 2.6 3.6 3.6 0 0 0-1.8 3 3.5 3.5 0 0 0 .8 2.3 3.6 3.6 0 0 0 1.4 4.8 3.5 3.5 0 0 0 2.6.4 3.6 3.6 0 0 0 3 1.8 3.5 3.5 0 0 0 2.3-.8 3.6 3.6 0 0 0 4.8-1.4 3.5 3.5 0 0 0 .4-2.6 3.6 3.6 0 0 0 1.8-3 3.5 3.5 0 0 0-.8-2.3 3.6 3.6 0 0 0-1.4-2.6zm-5.5 8.7a2.5 2.5 0 0 1-1.5-.5l1.6-.9 2.5 1.4a2.5 2.5 0 0 1-2.6 0zm-4.7-2.1a2.5 2.5 0 0 1-.4-1.5l1.6.9v2.8a2.5 2.5 0 0 1-1.2-2.2zm-1-4.7a2.5 2.5 0 0 1 1-1.2v1.8l2.4 1.4a2.5 2.5 0 0 1-3.4-2zm6.2-1.2l-2.4-1.4a2.5 2.5 0 0 1 3.4-1.5l-1 1.7v1.2zm3.7 2.1l-2.4-1.4v-2.8a2.5 2.5 0 0 1 3.4 2.2c0 .7-.4 1.4-1 2zm-1.8 1.7l-2.4-1.4 1-1.7 2.4 1.4a2.5 2.5 0 0 1-1 1.7z"
+        fill="#FFFFFF"
+      />
+    </svg>
+  );
+}
+
+export function MidjourneyIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <rect width="22" height="22" x="1" y="1" rx="4.5" fill="#18181B" />
+      <path
+        d="M12 4.5l-4.5 10h4.5V4.5zm1 2.2v7.8h4.5L13 6.7zM6 16.5c1.8 1.8 4 2 6 2s4.2-.2 6-2H6z"
+        fill="#FFFFFF"
+      />
+    </svg>
+  );
+}
+
+export function VscodeIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <path
+        d="M17.8 2.2a1.3 1.3 0 0 0-1.1.3L8.4 9 4.8 6.3a.9.9 0 0 0-1.2.2L2.3 8a.9.9 0 0 0 .2 1.2l3.4 2.8-3.4 2.8a.9.9 0 0 0-.2 1.2l1.3 1.5a.9.9 0 0 0 1.2.2l3.6-2.7 8.3 6.5a1.3 1.3 0 0 0 1.9-.6l3.8-17.5a1.3 1.3 0 0 0-1.1-1.4zM16.5 16.8L10.7 12l5.8-4.8v9.6z"
+        fill="#007ACC"
+      />
+    </svg>
+  );
+}
+
+export function FramerIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <rect width="22" height="22" x="1" y="1" rx="4.5" fill="#0055FF" />
+      <path d="M7 5h10v5h-5l5 4H7l5-4H7V5z" fill="#FFFFFF" />
+    </svg>
+  );
+}
+
+export function NotionIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <rect width="22" height="22" x="1" y="1" rx="4.5" fill="#FFFFFF" stroke="#D1D5DB" strokeWidth="1" />
+      <path
+        d="M6.5 6.5l3.2.4v9.8L7.8 17l-.5-1V7.5l-.8-.2V6.5zm5.5 0l4.5.6v1.2l-1 .2v8.5l1.5.5V18l-5-.6v-1.2l1-.2V8.8l-1-.2V6.5zm2.8 2.2l-2.8 7.3h1.8l2.6-7.3h-1.6z"
+        fill="#111827"
+      />
+    </svg>
+  );
+}
+
+export function TypeScriptIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <rect width="22" height="22" x="1" y="1" rx="4.5" fill="#3178C6" />
+      <path
+        d="M6 9.5h5.5v1.8H9.8v6.2H7.7v-6.2H6V9.5zm7.3 6.3c.6.4 1.4.6 2.1.6 1.2 0 1.8-.5 1.8-1.2 0-.8-.7-1.1-1.8-1.5-1.5-.5-2.4-1.2-2.4-2.4 0-1.4 1.1-2.4 2.7-2.4.8 0 1.5.2 2 .5l-.5 1.6c-.4-.3-1-.5-1.6-.5-.8 0-1.3.4-1.3 1 0 .6.5.9 1.6 1.3 1.6.6 2.6 1.3 2.6 2.6 0 1.5-1.2 2.5-3 2.5-.9 0-1.8-.3-2.4-.7l.2-1.8z"
+        fill="#FFFFFF"
+      />
+    </svg>
+  );
+}
+
+export function PythonIcon({ className = "w-4 h-4", ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} {...props}>
+      <path
+        d="M11.8 2c-3.1 0-4.8 1.4-4.8 3.5v2.5h5v.8H5.8c-2.3 0-4.3 1.4-4.3 4.2 0 2.5 1.8 4.2 4.3 4.2h1.5v-2.1c0-2.3 2-4.2 4.3-4.2h5V8.5c0-2.7-2.3-6.5-4.8-6.5zm-2 1.7a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm2.4 18.3c3.1 0 4.8-1.4 4.8-3.5V16h-5v-.8h6.2c2.3 0 4.3-1.4 4.3-4.2 0-2.5-1.8-4.2-4.3-4.2h-1.5v2.1c0 2.3-2 4.2-4.3 4.2h-5v2.4c0 2.7 2.3 6.5 4.8 6.5zm2-1.7a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"
+        fill="#3776AB"
+      />
+      <path
+        d="M14.2 20.3c3.1 0 4.8-1.4 4.8-3.5V16h-5v-.8h6.2c2.3 0 4.3-1.4 4.3-4.2 0-2.5-1.8-4.2-4.3-4.2h-1.5v2.1c0 2.3-2 4.2-4.3 4.2h-5v2.4c0 2.7 2.3 6.5 4.8 6.5z"
+        fill="#FFD43B"
+      />
+    </svg>
+  );
+}

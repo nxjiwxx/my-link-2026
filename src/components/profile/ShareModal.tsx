@@ -31,8 +31,8 @@ export function ShareModal({
   const cleanHandle = handle ? handle.replace(/^@/, "") : "designer";
   const currentUrl =
     typeof window !== "undefined"
-      ? `${window.location.origin}/@${cleanHandle}`
-      : `https://mylink.io/@${cleanHandle}`;
+      ? `${window.location.origin}/${cleanHandle}`
+      : `http://localhost:3000/${cleanHandle}`;
 
   const handleCopy = () => {
     if (navigator.clipboard) {

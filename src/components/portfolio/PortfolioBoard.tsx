@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, notFound } from "next/navigation";
 import {
   Search,
   RefreshCw,
@@ -36,6 +36,7 @@ import {
   getCareersFromFirestore,
   saveToolsToFirestore,
   saveCareersToFirestore,
+  findUserIdByUsername,
   findUserByHandleOrUid,
 } from "@/lib/firestoreProfile";
 import { useAuth } from "@/context/AuthContext";
@@ -61,12 +62,18 @@ type DeleteTarget =
 
 export interface PortfolioBoardProps {
   targetHandle?: string;
+  targetUsername?: string;
   targetUid?: string;
   isDemo?: boolean;
+  isDynamicRoute?: boolean;
+  hideHeaderProfileMenu?: boolean;
+  showCreateProjectButton?: boolean;
+  onUserNotFound?: () => void;
 }
 
 const EMPTY_PROFILE: DesignerProfileData = {
   handle: "",
+  username: "",
   name: "",
   roleTitle: "",
   bio: "",
@@ -82,13 +89,21 @@ const EMPTY_PROFILE: DesignerProfileData = {
 
 export function PortfolioBoard({
   targetHandle,
+  targetUsername,
   targetUid: initialTargetUid,
   isDemo = false,
+  isDynamicRoute = false,
+  hideHeaderProfileMenu = false,
+  showCreateProjectButton,
+  onUserNotFound,
 }: PortfolioBoardProps) {
   const router = useRouter();
   const { user, userProfile, signInWithGoogle } = useAuth();
 
   const [profile, setProfile] = useState<DesignerProfileData>(EMPTY_PROFILE);
+  const [isNotFound, setIsNotFound] = useState<boolean>(false);
+
+  const effectiveIdentifier = targetUsername || targetHandle;
 
   const [selectedCategory, setSelectedCategory] =
     useState<ProjectCategory>("all");
@@ -117,7 +132,7 @@ export function PortfolioBoard({
 
   const isPublicView = useMemo(() => {
     if (isDemo) return true;
-    if (targetHandle) {
+    if (effectiveIdentifier) {
       if (user && resolvedOwnerUid && user.uid === resolvedOwnerUid) {
         return false;
       }
@@ -127,7 +142,7 @@ export function PortfolioBoard({
       return true;
     }
     return false;
-  }, [isDemo, targetHandle, initialTargetUid, user, resolvedOwnerUid]);
+  }, [isDemo, effectiveIdentifier, initialTargetUid, user, resolvedOwnerUid]);
 
   const isOwner = useMemo(() => {
     if (isDemo) return false;
@@ -204,18 +219,18 @@ export function PortfolioBoard({
       setIsLoadingLinks(true);
 
       // 케이스 1: 데모 모드이거나 타겟 핸들이 "demo"인 경우
-      if (isDemo || targetHandle === "demo") {
+      if (isDemo || effectiveIdentifier === "demo") {
         const sample = getDesignerProfile();
         setProfile(sample);
         setIsLoadingLinks(false);
         return;
       }
 
-      // 케이스 2: 타인의 핸들이 지정된 경우
-      if (targetHandle) {
-        const cleanHandle = targetHandle.replace(/^@/, "");
+      // 케이스 2: 타인의 사용자 이름(username)이 지정된 경우
+      if (effectiveIdentifier) {
+        const cleanIdentifier = effectiveIdentifier.replace(/^@/, "").trim();
         try {
-          const match = await findUserByHandleOrUid(cleanHandle);
+          const match = await findUserIdByUsername(cleanIdentifier);
           if (match?.uid) {
             setResolvedOwnerUid(match.uid);
             const firestoreLinks = await getLinksFromFirestore(match.uid);
@@ -229,7 +244,8 @@ export function PortfolioBoard({
 
             setProfile({
               name: info?.name || match.userInfo?.displayName || "프로필",
-              handle: info?.handle || match.userInfo?.handle || cleanHandle,
+              handle: info?.handle || match.userInfo?.handle || cleanIdentifier,
+              username: info?.username || match.userInfo?.username || cleanIdentifier,
               avatarUrl: info?.avatarUrl || match.userInfo?.photoURL || "",
               roleTitle: info?.roleTitle || match.userInfo?.roleTitle || "",
               bio: info?.bio || match.userInfo?.bio || "",
@@ -245,7 +261,18 @@ export function PortfolioBoard({
             return;
           }
         } catch (err) {
-          console.warn("핸들 기반 유저 조회 실패:", err);
+          console.warn("사용자 이름 기반 유저 조회 실패:", err);
+        }
+
+        // 유저를 찾지 못한 경우: 동적 라우팅 페이지에서는 404 처리
+        if (isDynamicRoute) {
+          setIsLoadingLinks(false);
+          if (onUserNotFound) {
+            onUserNotFound();
+          } else {
+            setIsNotFound(true);
+          }
+          return;
         }
 
         // 핸들 조회 실패 시 기본 샘플 표시
@@ -269,12 +296,14 @@ export function PortfolioBoard({
             getCareersFromFirestore(user.uid),
           ]);
 
-          // 1) 사용자 이름(핸들): 사용자의 이메일 @의 앞부분
+          // 1) 사용자 이름: 구글 이메일 @의 앞부분 (예: user123@gmail.com -> user123)
           const emailPrefix = user.email
             ? user.email.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "")
             : user.uid.slice(0, 6);
-          const userHandle =
+          const userUsername =
+            info?.username ||
             info?.handle ||
+            userProfile?.username ||
             userProfile?.handle ||
             emailPrefix ||
             "user";
@@ -294,7 +323,8 @@ export function PortfolioBoard({
               userProfile?.photoURL ||
               user.photoURL ||
               "",
-            handle: userHandle,
+            handle: userUsername,
+            username: userUsername,
             roleTitle:
               info?.roleTitle || userProfile?.roleTitle || "",
             bio: info?.bio || userProfile?.bio || "",
@@ -559,6 +589,10 @@ export function PortfolioBoard({
 
   const containerStyle = customWidth ? { maxWidth: `${customWidth}px` } : undefined;
 
+  if (isNotFound) {
+    notFound();
+  }
+
   return (
     <div className="min-h-screen w-full bg-[#F3F4F6] text-[#191F28] flex flex-col items-center">
       {/* 0. 화면 크기 모바일/웹 리사이징 뷰포트 컨트롤 바 */}
@@ -582,19 +616,23 @@ export function PortfolioBoard({
 
       {/* 모바일/웹 뷰포트 컨테이너 (웹 데스크톱에서도 태블릿 사이즈 680px 고정 프레임) */}
       <main className={containerClasses} style={containerStyle}>
-        {/* 1. 상단 네비게이션 헤더 */}
-        <TopNavHeader
-          onShareClick={() => setIsShareModalOpen(true)}
-          showToast={showToast}
-          isPublicView={isPublicView}
-          ownerName={profile.name}
-          isOwner={isOwner}
-        />
+        {/* 1. 상단 네비게이션 헤더 (다른 사람들이 페이지를 보는 경우 완전히 숨김) */}
+        {!isPublicView && (
+          <TopNavHeader
+            onShareClick={() => setIsShareModalOpen(true)}
+            showToast={showToast}
+            isPublicView={isPublicView}
+            ownerName={profile.name}
+            isOwner={isOwner}
+            hideProfileMenu={hideHeaderProfileMenu || isDynamicRoute}
+          />
+        )}
 
-        {/* 2. 프로필 상단 영역 */}
+        {/* 2. 프로필 상단 영역 (타인 열람 시 프로필 이미지 더 크게 표시) */}
         <ProfileHeader
           profile={profile}
           onResumeDownload={handleResumeDownload}
+          isPublicView={isPublicView}
         />
 
         {/* 3. 검색 바 & 그리드/리스트 토글, 작업물 카테고리 뱃지 목록 (링크 아이콘 아래 충분한 여백 확보) */}
@@ -778,6 +816,19 @@ export function PortfolioBoard({
             }
             isReadOnly={!isOwner}
           />
+
+          {/* 경력 및 활동 하단: 내 페이지 만들러가기 텍스트 버튼 (그레이스케일 80의 약간 흐릿한 컬러) */}
+          {(showCreateProjectButton ?? (isDynamicRoute || isPublicView)) && (
+            <div className="pt-3 pb-2 flex justify-center">
+              <button
+                type="button"
+                onClick={() => router.push("/")}
+                className="text-xs sm:text-sm font-medium text-[#8B95A1] hover:text-[#4E5968] hover:underline underline-offset-4 transition-colors py-2 px-3 flex items-center gap-1 cursor-pointer"
+              >
+                내 페이지 만들러가기
+              </button>
+            </div>
+          )}
         </section>
 
         {/* 9. 심플 미니멀 푸터 */}

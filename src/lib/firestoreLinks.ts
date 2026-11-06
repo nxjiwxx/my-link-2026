@@ -133,44 +133,82 @@ export function fromFirestoreDoc(data: Record<string, unknown>, docId?: string):
 }
 
 /**
- * 새 링크/프로젝트를 Firestore users/{uid}/links 경로에 저장
+ * 새 링크/프로젝트를 Firestore users/{uid}/links 및 user/{uid}/links 경로에 저장
  */
 export async function saveLinkToFirestore(project: ProjectItem, uid?: string): Promise<void> {
-  const collectionPath = getLinksCollectionPath(uid);
-  const docRef = doc(db, collectionPath, project.id);
-  await setDoc(docRef, toFirestoreData(project));
+  const targetUid = uid || auth.currentUser?.uid || "anonymous";
+  const paths = [
+    `users/${targetUid}/links`,
+    `user/${targetUid}/links`,
+  ];
+  const data = toFirestoreData(project);
+  for (const p of paths) {
+    try {
+      const docRef = doc(db, p, project.id);
+      await setDoc(docRef, data);
+    } catch {
+      // ignore
+    }
+  }
 }
 
 /**
- * 기존 링크/프로젝트를 Firestore users/{uid}/links 경로에서 수정(업데이트)
+ * 기존 링크/프로젝트를 Firestore users/{uid}/links 및 user/{uid}/links 경로에서 수정(업데이트)
  */
 export async function updateLinkInFirestore(project: ProjectItem, uid?: string): Promise<void> {
-  const collectionPath = getLinksCollectionPath(uid);
-  const docRef = doc(db, collectionPath, project.id);
-  await setDoc(docRef, toFirestoreData(project, true), { merge: true });
+  const targetUid = uid || auth.currentUser?.uid || "anonymous";
+  const paths = [
+    `users/${targetUid}/links`,
+    `user/${targetUid}/links`,
+  ];
+  const data = toFirestoreData(project, true);
+  for (const p of paths) {
+    try {
+      const docRef = doc(db, p, project.id);
+      await setDoc(docRef, data, { merge: true });
+    } catch {
+      // ignore
+    }
+  }
 }
 
 /**
- * Firestore users/{uid}/links 경로에서 모든 링크 조회 (createdAt 기준 최신순 정렬)
+ * Firestore user/{uid}/links 및 users/{uid}/links 경로에서 모든 링크 조회 (createdAt 기준 최신순 정렬)
  */
 export async function getLinksFromFirestore(uid?: string): Promise<ProjectItem[]> {
   try {
-    const collectionPath = getLinksCollectionPath(uid);
-    const colRef = collection(db, collectionPath);
-    const q = query(colRef, orderBy("createdAt", "desc"));
-    let snapshot;
-    try {
-      snapshot = await getDocs(q);
-    } catch {
-      // orderBy 쿼리 실패 시 기본 getDocs fallback
-      snapshot = await getDocs(colRef);
+    const targetUid = uid || auth.currentUser?.uid || "anonymous";
+    const paths = [
+      `user/${targetUid}/links`,
+      `users/${targetUid}/links`,
+    ];
+    const itemsMap = new Map<string, ProjectItem>();
+
+    for (const collectionPath of paths) {
+      try {
+        const colRef = collection(db, collectionPath);
+        let snapshot;
+        try {
+          const q = query(colRef, orderBy("createdAt", "desc"));
+          snapshot = await getDocs(q);
+        } catch {
+          // orderBy 쿼리 실패 시 기본 getDocs fallback
+          snapshot = await getDocs(colRef);
+        }
+
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data({ serverTimestamps: "estimate" });
+          const item = fromFirestoreDoc(data, docSnap.id);
+          if (!itemsMap.has(item.id)) {
+            itemsMap.set(item.id, item);
+          }
+        });
+      } catch (err) {
+        // 경로 없거나 권한 등 무시
+      }
     }
 
-    const links: ProjectItem[] = [];
-    snapshot.forEach((docSnap) => {
-      const data = docSnap.data({ serverTimestamps: "estimate" });
-      links.push(fromFirestoreDoc(data, docSnap.id));
-    });
+    const links = Array.from(itemsMap.values());
 
     // 클라이언트 측 최신순 정렬 보장
     links.sort((a, b) => {
@@ -187,10 +225,20 @@ export async function getLinksFromFirestore(uid?: string): Promise<ProjectItem[]
 }
 
 /**
- * Firestore users/{uid}/links 경로에서 링크 삭제
+ * Firestore users/{uid}/links 및 user/{uid}/links 경로에서 링크 삭제
  */
 export async function deleteLinkFromFirestore(projectId: string, uid?: string): Promise<void> {
-  const collectionPath = getLinksCollectionPath(uid);
-  const docRef = doc(db, collectionPath, projectId);
-  await deleteDoc(docRef);
+  const targetUid = uid || auth.currentUser?.uid || "anonymous";
+  const paths = [
+    `users/${targetUid}/links`,
+    `user/${targetUid}/links`,
+  ];
+  for (const p of paths) {
+    try {
+      const docRef = doc(db, p, projectId);
+      await deleteDoc(docRef);
+    } catch {
+      // ignore
+    }
+  }
 }

@@ -5,6 +5,7 @@ import { Download, FileText } from "lucide-react";
 import { DesignerProfileData } from "@/types/portfolio";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   BehanceIcon,
   LinkedinIcon,
@@ -17,11 +18,13 @@ import {
 interface ProfileHeaderProps {
   profile: DesignerProfileData;
   onResumeDownload?: () => void;
+  isPublicView?: boolean;
 }
 
 export function ProfileHeader({
   profile,
   onResumeDownload,
+  isPublicView = false,
 }: ProfileHeaderProps) {
   const { name, roleTitle, bio, avatarUrl, socialLinks, resumePdfUrl } = profile;
 
@@ -34,24 +37,34 @@ export function ProfileHeader({
   const hasResume = Boolean(resumePdfUrl && resumePdfUrl.trim().length > 0);
 
   return (
-    <header className="relative flex flex-col items-center text-center pt-8 sm:pt-10 pb-6 px-4 sm:px-6 select-none w-full">
-      {/* 원형 아바타 (모바일 88px, 데스크톱 96px) */}
+    <header
+      className={cn(
+        "relative flex flex-col items-center text-center pb-6 px-4 sm:px-6 select-none w-full",
+        isPublicView ? "pt-10 sm:pt-12" : "pt-8 sm:pt-10"
+      )}
+    >
+      {/* 원형 아바타 (타인 조회 시 더 크게: 모바일 104px / 데스크톱 116px, 기본: 88px / 96px) */}
       <div className="relative mb-3.5 sm:mb-4">
         <Avatar
           src={avatarUrl}
           alt={name}
           fallback={name.slice(0, 1)}
           size="xl"
-          className="w-22 h-22 sm:w-24 sm:h-24 ring-1 ring-[#E5E8EB]"
+          className={cn(
+            "ring-1 ring-[#E5E8EB] transition-all",
+            isPublicView
+              ? "w-26 h-26 sm:w-30 sm:h-30 ring-2 ring-[#E5E8EB]/80 shadow-xs"
+              : "w-22 h-22 sm:w-24 sm:h-24"
+          )}
         />
       </div>
 
       {/* 디자이너 이름 & 핸들 */}
       <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-[#191F28] flex items-center justify-center gap-2 flex-wrap">
         <span>{name}</span>
-        {profile.handle && (
+        {(profile.username || profile.handle) && (
           <span className="text-xs sm:text-sm font-normal text-[#6B7684]">
-            @{profile.handle.replace(/^@/, "")}
+            @{(profile.username || profile.handle || "").replace(/^@/, "")}
           </span>
         )}
       </h1>

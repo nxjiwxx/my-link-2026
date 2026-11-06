@@ -251,9 +251,9 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
         </header>
 
         {/* 페이지 본문 영역 */}
-        <div className="p-4 sm:p-6 flex-1">
-          {isEditing ? (
-            /* 인라인 편집 모드 (해당 페이지 내에서 직접 편집) */
+        {isEditing ? (
+          /* 인라인 편집 모드 (해당 페이지 내에서 직접 편집) */
+          <div className="p-4 sm:p-6 flex-1">
             <ProjectInlineEditCard
               project={project}
               availableCategories={
@@ -264,100 +264,96 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
               onCancel={() => setIsEditing(false)}
               isSaving={isSaving}
             />
-          ) : (
-            /* 일반 상세 뷰 모드: Linear/Notion 스타일 */
-            <div className="space-y-4">
-              {/* 대표 썸네일 이미지 */}
-              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-[#E5E8EB] bg-[#F2F4F6] shadow-xs">
-                <img
-                  src={project.thumbnailUrl}
-                  alt={project.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+          </div>
+        ) : (
+          /* 일반 상세 뷰 모드: 프레임 채움 이미지 & 미니멀 타이포그래피 */
+          <div className="flex-1 flex flex-col">
+            {/* 1. 프레임을 가득 채우는 대표 이미지 (카드 형식 탈피) */}
+            <div className="relative w-full aspect-[16/9] sm:aspect-[21/10] overflow-hidden bg-[#F2F4F6] border-b border-[#E5E8EB]">
+              <img
+                src={project.thumbnailUrl}
+                alt={project.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
 
-              {/* 뱃지 및 메타 태그 */}
+            {/* 2. 카드 형식 대신 세련되고 정돈된 타이포그래피 콘텐츠 */}
+            <div className="px-5 sm:px-8 py-6 sm:py-8 space-y-6">
+              {/* 카테고리 & 프로젝트 구분 뱃지 */}
               <div className="flex items-center gap-2 flex-wrap">
-                <Badge
-                  variant="neutral"
-                  className="bg-[#F2F4F6] text-[#191F28] border border-[#E5E8EB] text-xs font-semibold px-2.5 py-1"
-                >
+                <span className="text-xs font-bold text-[#3182F6] bg-[#3182F6]/10 px-2.5 py-1 rounded-md">
                   {project.categoryLabel}
-                </Badge>
-                <Badge
-                  variant="neutral"
-                  className="bg-[#F2F4F6] text-[#4E5968] border border-[#E5E8EB] text-xs font-medium px-2.5 py-1 flex items-center gap-1"
-                >
+                </span>
+                <span className="text-xs font-medium text-[#6B7684] bg-[#F2F4F6] px-2.5 py-1 rounded-md flex items-center gap-1">
                   {isTeam ? (
-                    <Users className="w-3 h-3 text-[#6B7684]" />
+                    <Users className="w-3 h-3 text-[#3182F6]" />
                   ) : (
                     <User className="w-3 h-3 text-[#6B7684]" />
                   )}
                   <span>{project.projectTypeLabel}</span>
-                </Badge>
+                </span>
               </div>
 
-              {/* 제목 및 한 줄 요약 */}
-              <div className="bg-white rounded-2xl border border-[#E5E8EB] p-4 sm:p-5 space-y-1.5 shadow-2xs">
-                <h1 className="text-lg sm:text-xl font-bold text-[#191F28] leading-tight">
+              {/* 프로젝트 제목과 한 줄 소개 (카드 테두리 없는 깔끔한 디자인) */}
+              <div className="space-y-2">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-[#191F28] tracking-tight leading-snug">
                   {project.title}
                 </h1>
-                <p className="text-xs sm:text-sm text-[#4E5968] leading-relaxed break-words">
+                <p className="text-sm sm:text-base text-[#4E5968] leading-relaxed break-keep font-normal">
                   {project.summary}
                 </p>
               </div>
 
-              {/* 기간 및 담당 역할 카드 */}
-              <div className="grid grid-cols-2 gap-2.5">
-                <div className="bg-white rounded-xl border border-[#E5E8EB] p-3.5">
-                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#6B7684] mb-1">
-                    <Calendar className="w-3.5 h-3.5 text-[#6B7684]" />
-                    <span>작업 기간</span>
-                  </div>
-                  <div className="text-xs font-semibold text-[#191F28] truncate font-mono">
+              {/* 메타데이터 (기간, 역할, 도구) - 박스형 카드 대신 깔끔한 미니멀 사양 바 */}
+              <div className="py-4 border-y border-[#E5E8EB] grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <div>
+                  <span className="block text-[11px] font-semibold text-[#8B95A1] mb-1">
+                    작업 기간
+                  </span>
+                  <span className="text-xs sm:text-sm font-semibold text-[#191F28] font-mono">
                     {project.period || "2026"}
-                  </div>
+                  </span>
                 </div>
-
-                <div className="bg-white rounded-xl border border-[#E5E8EB] p-3.5">
-                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#6B7684] mb-1">
-                    <User className="w-3.5 h-3.5 text-[#6B7684]" />
-                    <span>담당 역할</span>
-                  </div>
-                  <div className="text-xs font-semibold text-[#191F28] truncate">
+                <div>
+                  <span className="block text-[11px] font-semibold text-[#8B95A1] mb-1">
+                    담당 역할
+                  </span>
+                  <span className="text-xs sm:text-sm font-semibold text-[#191F28]">
                     {project.role || "Creator"}
+                  </span>
+                </div>
+                <div className="col-span-2 sm:col-span-1">
+                  <span className="block text-[11px] font-semibold text-[#8B95A1] mb-1">
+                    사용 도구
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.tools && project.tools.length > 0 ? (
+                      project.tools.map((t) => (
+                        <span
+                          key={t}
+                          className="inline-flex items-center text-[11px] font-medium text-[#4E5968] bg-[#F2F4F6] px-2 py-0.5 rounded"
+                        >
+                          {t}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-xs text-[#8B95A1]">-</span>
+                    )}
                   </div>
                 </div>
               </div>
 
-              {/* 사용 도구 목록 */}
-              <div className="bg-white rounded-2xl border border-[#E5E8EB] p-4 sm:p-5 shadow-2xs">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-[#191F28] mb-2.5">
-                  <Wrench className="w-3.5 h-3.5 text-[#4E5968]" />
-                  <span>사용 도구 (Tools)</span>
+              {/* 프로젝트 상세 설명 */}
+              {project.description && (
+                <div className="space-y-2 pt-1">
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-[#8B95A1]">
+                    상세 설명
+                  </h2>
+                  <div className="text-sm sm:text-[15px] text-[#333D4B] leading-relaxed whitespace-pre-line break-words">
+                    {project.description}
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {project.tools.map((t) => (
-                    <Badge
-                      key={t}
-                      variant="neutral"
-                      className="bg-[#F2F4F6] text-[#191F28] font-medium text-xs px-2.5 py-1 border border-[#E5E8EB]"
-                    >
-                      {t}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-
-              {/* 상세 설명 */}
-              <div className="bg-white rounded-2xl border border-[#E5E8EB] p-4 sm:p-5 shadow-2xs space-y-2">
-                <div className="text-xs font-bold text-[#191F28]">
-                  프로젝트 상세 설명
-                </div>
-                <div className="text-xs sm:text-sm text-[#4E5968] leading-relaxed whitespace-pre-line break-words">
-                  {project.description || project.summary}
-                </div>
-              </div>
+              )}
 
               {/* 외부 원본 링크 이동 버튼 */}
               {project.externalLink?.url && (
@@ -377,11 +373,11 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
               )}
 
               {/* 하단 보조 액션 버튼 바 */}
-              <div className="pt-4 flex items-center justify-center gap-3 border-t border-[#F2F4F6]">
+              <div className="pt-6 pb-2 flex items-center justify-center gap-3 border-t border-[#F2F4F6]">
                 <button
                   type="button"
                   onClick={() => setIsEditing(true)}
-                  className="inline-flex items-center gap-1.5 text-xs text-[#4E5968] hover:text-[#191F28] py-1.5 px-3 rounded-lg hover:bg-[#F2F4F6] transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-xs text-[#4E5968] hover:text-[#191F28] py-1.5 px-3 rounded-lg hover:bg-[#F2F4F6] transition-colors cursor-pointer font-medium"
                 >
                   <Pencil className="w-3.5 h-3.5" />
                   <span>이 작업물 수정하기</span>
@@ -390,15 +386,15 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
                 <button
                   type="button"
                   onClick={() => setIsDeleteModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 text-xs text-[#8B95A1] hover:text-[#EF4444] py-1.5 px-3 rounded-lg hover:bg-[#FEF2F2] transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-xs text-[#8B95A1] hover:text-[#EF4444] py-1.5 px-3 rounded-lg hover:bg-[#FEF2F2] transition-colors cursor-pointer font-medium"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>이 작업물 삭제하기</span>
                 </button>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </main>
 
       {/* 삭제 확인 모달 (요청된 스펙 적용) */}

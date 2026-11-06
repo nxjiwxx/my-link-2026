@@ -14,6 +14,7 @@ import {
   Camera,
   Globe,
   Check,
+  AlertCircle,
   ExternalLink,
   Edit2,
 } from "lucide-react";
@@ -26,6 +27,7 @@ import {
   saveProfileLinksToFirestore,
   getProfileInfoFromFirestore,
   getProfileLinksFromFirestore,
+  checkUsernameAvailability,
 } from "@/lib/firestoreProfile";
 import { compressImageFile } from "@/lib/imageUtils";
 import { DesignerProfileData, SocialLinks } from "@/types/portfolio";
@@ -173,10 +175,71 @@ export default function ProfileEditPage() {
 
   // 1. 기본 프로필 정보
   const [name, setName] = useState<string>("");
-  const [handle, setHandle] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [originalUsername, setOriginalUsername] = useState<string>("");
   const [roleTitle, setRoleTitle] = useState<string>("");
   const [bio, setBio] = useState<string>("");
   const [avatarUrl, setAvatarUrl] = useState<string>("");
+
+  // 사용자 이름 중복 및 유효성 상태 관리
+  const [usernameStatus, setUsernameStatus] = useState<
+    "idle" | "checking" | "available" | "mine" | "taken" | "invalid"
+  >("idle");
+  const [usernameFeedback, setUsernameFeedback] = useState<string>("");
+
+  // 사용자 이름(username)에는 영문 및 숫자, 언더스코어만 작성할 수 있도록 제한하는 핸들러 (예: user123)
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onlyEnglish = e.target.value.replace(/[^a-zA-Z0-9_]/g, "");
+    setUsername(onlyEnglish);
+  };
+
+  // 사용자 이름 실시간 중복 체크 (350ms 디바운스)
+  useEffect(() => {
+    const clean = username.trim().toLowerCase();
+    const origClean = originalUsername.trim().toLowerCase();
+
+    if (!clean) {
+      setUsernameStatus("idle");
+      setUsernameFeedback("");
+      return;
+    }
+
+    if (clean.length < 2) {
+      setUsernameStatus("invalid");
+      setUsernameFeedback("2자 이상의 영문/숫자를 입력해주세요.");
+      return;
+    }
+
+    // 기존 본인의 사용자 이름과 같다면 즉시 통과
+    if (origClean && clean === origClean) {
+      setUsernameStatus("mine");
+      setUsernameFeedback("현재 회원님이 사용 중인 이름입니다.");
+      return;
+    }
+
+    setUsernameStatus("checking");
+    setUsernameFeedback("중복 여부를 확인하고 있어요...");
+
+    const timer = setTimeout(async () => {
+      const res = await checkUsernameAvailability(clean, user?.uid);
+      if (res.available) {
+        if (res.reason === "mine") {
+          setUsernameStatus("mine");
+        } else {
+          setUsernameStatus("available");
+        }
+      } else {
+        if (res.reason === "taken") {
+          setUsernameStatus("taken");
+        } else {
+          setUsernameStatus("invalid");
+        }
+      }
+      setUsernameFeedback(res.message);
+    }, 350);
+
+    return () => clearTimeout(timer);
+  }, [username, originalUsername, user?.uid]);
 
   // 2. 소셜 링크 목록 (사용자가 추가한 링크만 동적 리스트로 관리)
   const [socialList, setSocialList] = useState<SocialItem[]>([]);
@@ -209,7 +272,9 @@ export default function ProfileEditPage() {
   useEffect(() => {
     const local = getDesignerProfile();
     setName(local.name || "");
-    setHandle(local.handle || "");
+    const initialLocalUsername = (local.username || local.handle || "").replace(/^@/, "").replace(/[^a-zA-Z0-9_]/g, "");
+    setUsername(initialLocalUsername);
+    setOriginalUsername(initialLocalUsername);
     setRoleTitle(local.roleTitle || "");
     setBio(local.bio || "");
     setAvatarUrl(local.avatarUrl || "");
@@ -246,7 +311,11 @@ export default function ProfileEditPage() {
       .then(([info, links]) => {
         if (info) {
           if (info.name) setName(info.name);
-          if (info.handle) setHandle(info.handle);
+          const initialFsUsername = (info.username || info.handle || "").replace(/^@/, "").replace(/[^a-zA-Z0-9_]/g, "");
+          if (initialFsUsername) {
+            setUsername(initialFsUsername);
+            setOriginalUsername(initialFsUsername);
+          }
           if (info.roleTitle) setRoleTitle(info.roleTitle);
           if (info.bio) setBio(info.bio);
           if (info.avatarUrl) setAvatarUrl(info.avatarUrl);
@@ -398,6 +467,32 @@ export default function ProfileEditPage() {
       return;
     }
 
+    if (usernameStatus === "taken") {
+      alert("이미 사용 중인 사용자 이름입니다. 다른 이름을 입력해주세요.");
+      return;
+    }
+
+    if (usernameStatus === "invalid") {
+      alert("사용자 이름 형식이 올바르지 않습니다. (2자 이상 영문/숫자/언더스코어)");
+      return;
+    }
+
+    if (usernameStatus === "checking") {
+      alert("사용자 이름 중복 확인이 진행 중입니다. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+
+    const cleanUsername = username.trim().replace(/^@/, "").replace(/[^a-zA-Z0-9_]/g, "");
+
+    // 저장 전 최종 안전 중복 검사 (새로운 username으로 변경하는 경우)
+    if (cleanUsername && cleanUsername.toLowerCase() !== originalUsername.toLowerCase()) {
+      const finalCheck = await checkUsernameAvailability(cleanUsername, user?.uid);
+      if (!finalCheck.available && finalCheck.reason !== "mine") {
+        alert(finalCheck.message || "이미 다른 사용자가 선점한 사용자 이름입니다.");
+        return;
+      }
+    }
+
     setIsSaving(true);
     try {
       // 소셜 링크 목록을 SocialLinks 객체로 역변환
@@ -418,7 +513,8 @@ export default function ProfileEditPage() {
       const updatedProfile: DesignerProfileData = {
         ...currentProfile,
         name: name.trim(),
-        handle: handle.trim() || currentProfile.handle,
+        handle: cleanUsername || currentProfile.handle,
+        username: cleanUsername,
         roleTitle: roleTitle.trim(),
         bio: bio.trim(),
         avatarUrl: avatarUrl.trim() || currentProfile.avatarUrl,
@@ -429,18 +525,20 @@ export default function ProfileEditPage() {
       // 1. 로컬 스토리지 저장
       saveDesignerProfile(updatedProfile);
 
-      // 2. Firestore 세부 서브 컬렉션 동기화 (users/{user.uid}/profile)
+      // 2. Firestore 세부 서브 컬렉션 동기화 (users/{user.uid}/profile 및 user/{user.uid}/profile)
       await Promise.all([
         saveProfileInfoToFirestore(
           {
             name: updatedProfile.name,
             handle: updatedProfile.handle,
+            username: updatedProfile.username,
             roleTitle: updatedProfile.roleTitle,
             bio: updatedProfile.bio,
             avatarUrl: updatedProfile.avatarUrl,
             skills: updatedProfile.skills,
           },
-          user?.uid
+          user?.uid,
+          originalUsername
         ),
         saveProfileLinksToFirestore(
           {
@@ -588,7 +686,7 @@ export default function ProfileEditPage() {
 
             {/* 프로필 텍스트 필드 그룹 */}
             <div className="space-y-3 pt-2">
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
                     이름 *
@@ -601,20 +699,66 @@ export default function ProfileEditPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                    사용자 이름
-                  </label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-[11px] font-semibold text-[#6B7684]">
+                      사용자 이름
+                    </label>
+                    <span className="text-[10px] text-[#8B95A1]">
+                      영문, 숫자, 언더스코어(_)
+                    </span>
+                  </div>
                   <div className="relative flex items-center">
                     <span className="absolute left-2.5 text-xs text-[#8B95A1] font-mono pointer-events-none">
                       @
                     </span>
                     <Input
-                      value={handle}
-                      onChange={(e) => setHandle(e.target.value.replace(/^@/, ""))}
+                      value={username}
+                      onChange={handleUsernameChange}
                       placeholder="username"
-                      className="h-9 text-xs pl-6 bg-white font-mono"
+                      className={`h-9 text-xs pl-6 pr-8 bg-white font-mono transition-colors ${
+                        usernameStatus === "taken" || usernameStatus === "invalid"
+                          ? "border-[#E8344E] focus-visible:ring-[#E8344E]/20"
+                          : usernameStatus === "available" || usernameStatus === "mine"
+                          ? "border-[#00B06B] focus-visible:ring-[#00B06B]/20"
+                          : ""
+                      }`}
                     />
+                    <div className="absolute right-2.5 flex items-center pointer-events-none">
+                      {usernameStatus === "checking" && (
+                        <Loader2 className="w-3.5 h-3.5 text-[#3182F6] animate-spin" />
+                      )}
+                      {usernameStatus === "available" && (
+                        <Check className="w-3.5 h-3.5 text-[#00B06B]" />
+                      )}
+                      {usernameStatus === "mine" && (
+                        <Check className="w-3.5 h-3.5 text-[#3182F6]" />
+                      )}
+                      {usernameStatus === "taken" && (
+                        <X className="w-3.5 h-3.5 text-[#E8344E]" />
+                      )}
+                      {usernameStatus === "invalid" && (
+                        <AlertCircle className="w-3.5 h-3.5 text-[#E8344E]" />
+                      )}
+                    </div>
                   </div>
+                  {/* 실시간 중복 체크 피드백 안내 문구 */}
+                  {usernameFeedback && (
+                    <div className="mt-1 flex items-center gap-1">
+                      <span
+                        className={`text-[11px] font-medium transition-colors ${
+                          usernameStatus === "taken" || usernameStatus === "invalid"
+                            ? "text-[#E8344E]"
+                            : usernameStatus === "available"
+                            ? "text-[#00B06B]"
+                            : usernameStatus === "mine"
+                            ? "text-[#3182F6]"
+                            : "text-[#8B95A1]"
+                        }`}
+                      >
+                        {usernameFeedback}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
 

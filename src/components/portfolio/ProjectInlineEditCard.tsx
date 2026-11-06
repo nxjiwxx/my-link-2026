@@ -357,6 +357,76 @@ export function ProjectInlineEditCard({
   return (
     <div className="w-full">
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* 0. 대표 썸네일 이미지 업로드 (최상단 위치) */}
+        <div>
+          <label className="block text-xs font-bold text-[#191F28] mb-1.5 flex items-center justify-between">
+            <span>대표 썸네일 이미지</span>
+            {thumbnailUrl && (
+              <span className="text-[11px] text-[#3182F6] font-normal">등록됨</span>
+            )}
+          </label>
+          {thumbnailUrl ? (
+            <div className="relative rounded-xl overflow-hidden border border-[#E5E8EB] bg-[#F2F4F6] aspect-[16/9] mb-2 group shadow-2xs">
+              <img
+                src={thumbnailUrl}
+                alt="썸네일 미리보기"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="px-2.5 py-1.5 bg-white text-xs font-bold text-[#191F28] rounded-lg shadow-xs hover:bg-[#F2F4F6] cursor-pointer"
+                >
+                  이미지 변경
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setThumbnailUrl("")}
+                  className="px-2.5 py-1.5 bg-[#E8344E] text-xs font-bold text-white rounded-lg shadow-xs hover:bg-[#D02640] cursor-pointer"
+                >
+                  이미지 삭제
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              className="border-2 border-dashed border-[#E5E8EB] hover:border-[#3182F6] bg-[#F9FAFB] hover:bg-[#F2F4F6] rounded-xl p-4 sm:p-5 flex flex-col items-center justify-center gap-1.5 cursor-pointer transition-all mb-2 text-center"
+            >
+              <Upload className="w-5 h-5 text-[#8B95A1]" />
+              <span className="text-xs font-semibold text-[#191F28]">대표 이미지를 업로드하세요</span>
+              <span className="text-[11px] text-[#8B95A1]">클릭하여 기기에서 사진 선택 (권장 16:9 비율)</span>
+            </div>
+          )}
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileUpload}
+            className="hidden"
+          />
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isCompressing}
+              onClick={() => fileInputRef.current?.click()}
+              className="h-8 px-2.5 text-xs text-[#191F28] border-[#E5E8EB] hover:bg-[#F2F4F6] flex items-center gap-1.5 shrink-0 cursor-pointer"
+            >
+              <Upload className="w-3 h-3 text-[#191F28]" />
+              <span>{isCompressing ? "압축 중..." : "파일 선택"}</span>
+            </Button>
+            <Input
+              value={thumbnailUrl}
+              onChange={(e) => setThumbnailUrl(e.target.value)}
+              placeholder="또는 이미지 주소(URL) 직접 입력"
+              className="h-8 text-xs flex-1"
+            />
+          </div>
+        </div>
+
         {/* 1. 작업 제목 */}
         <div>
           <label className="block text-xs font-bold text-[#191F28] mb-1">
@@ -582,64 +652,6 @@ export function ProjectInlineEditCard({
                 {errors.externalLabel}
               </p>
             )}
-          </div>
-        </div>
-
-        {/* 5. 썸네일 이미지 */}
-        <div>
-          <label className="block text-xs font-bold text-[#191F28] mb-1">
-            대표 썸네일 이미지
-          </label>
-          {thumbnailUrl ? (
-            <div className="relative rounded-lg overflow-hidden border border-[#E5E8EB] bg-[#F2F4F6] aspect-[16/9] mb-2 group">
-              <img
-                src={thumbnailUrl}
-                alt="썸네일 미리보기"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="px-2 py-1 bg-white text-[11px] font-bold text-[#191F28] rounded-md shadow-xs hover:bg-[#F2F4F6]"
-                >
-                  변경
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setThumbnailUrl("")}
-                  className="px-2 py-1 bg-[#E8344E] text-[11px] font-bold text-white rounded-md shadow-xs hover:bg-[#D02640]"
-                >
-                  삭제
-                </button>
-              </div>
-            </div>
-          ) : null}
-
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleFileUpload}
-            className="hidden"
-          />
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              disabled={isCompressing}
-              onClick={() => fileInputRef.current?.click()}
-              className="h-8 px-2.5 text-xs text-[#191F28] border-[#E5E8EB] hover:bg-[#F2F4F6] flex items-center gap-1.5 shrink-0"
-            >
-              <Upload className="w-3 h-3 text-[#191F28]" />
-              <span>{isCompressing ? "압축 중..." : "파일 선택"}</span>
-            </Button>
-            <Input
-              value={thumbnailUrl}
-              onChange={(e) => setThumbnailUrl(e.target.value)}
-              placeholder="또는 이미지 주소(URL) 직접 입력"
-              className="h-8 text-xs flex-1"
-            />
           </div>
         </div>
 

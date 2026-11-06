@@ -15,6 +15,7 @@ interface TopNavHeaderProps {
   isPublicView?: boolean;
   ownerName?: string;
   isOwner?: boolean;
+  hideProfileMenu?: boolean;
 }
 
 export function TopNavHeader({
@@ -25,6 +26,7 @@ export function TopNavHeader({
   isPublicView = false,
   ownerName,
   isOwner = true,
+  hideProfileMenu = false,
 }: TopNavHeaderProps) {
   const { user, userProfile, isLoading, signInWithGoogle, logout } = useAuth();
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
@@ -84,16 +86,20 @@ export function TopNavHeader({
 
   const handleCopyLink = () => {
     setIsDropdownOpen(false);
-    const handle = userProfile?.handle || (user?.email ? user.email.split("@")[0] : "designer");
-    const cleanHandle = handle.replace(/^@/, "");
-    const shareUrl = typeof window !== "undefined"
-      ? `${window.location.origin}/@${cleanHandle}`
-      : `https://mylink.io/@${cleanHandle}`;
+    const username =
+      userProfile?.username ||
+      userProfile?.handle ||
+      (user?.email ? user.email.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "") : "user");
+    const cleanUsername = username.replace(/^@/, "");
+    const shareUrl =
+      typeof window !== "undefined"
+        ? `${window.location.origin}/${cleanUsername}`
+        : `http://localhost:3000/${cleanUsername}`;
 
     if (navigator.clipboard) {
       navigator.clipboard.writeText(shareUrl);
     }
-    showToast?.("내 링크 주소가 복사되었습니다.");
+    showToast?.(`내 링크 주소가 복사되었습니다: /${cleanUsername}`);
   };
 
   const displayName = userProfile?.displayName || user?.displayName || "디자이너";
@@ -112,90 +118,106 @@ export function TopNavHeader({
         My Link
       </Link>
 
-      {/* 우측: 사용자 프로필 아바타 (드롭다운) 또는 비로그인 로그인 버튼 */}
-      <div className="relative" ref={dropdownRef}>
-        {isLoading ? (
-          <div className="h-8 w-8 bg-[#F2F4F6] rounded-full animate-pulse" />
-        ) : user ? (
-          /* 로그인된 상태: 아바타 아이콘 ➔ 클릭 시 드롭다운 */
-          <>
-            <button
-              type="button"
-              onClick={() => setIsDropdownOpen((prev) => !prev)}
-              aria-label="프로필 메뉴 열기"
-              className="flex items-center justify-center rounded-full ring-2 ring-transparent hover:ring-[#E5E8EB] focus:outline-none transition-all cursor-pointer"
-            >
-              <Avatar
-                src={userPhoto}
-                alt={displayName}
-                fallback={displayName.slice(0, 1)}
-                size="sm"
-                className="w-8 h-8 sm:w-8.5 sm:h-8.5"
-              />
-            </button>
+      {/* 우측: 사용자 프로필 아바타 (드롭다운) 또는 비로그인 로그인 버튼 (라우팅 페이지 등에서 숨김 가능) */}
+      {!hideProfileMenu ? (
+        <div className="relative" ref={dropdownRef}>
+          {isLoading ? (
+            <div className="h-8 w-8 bg-[#F2F4F6] rounded-full animate-pulse" />
+          ) : user ? (
+            /* 로그인된 상태: 아바타 아이콘 ➔ 클릭 시 드롭다운 */
+            <>
+              <button
+                type="button"
+                onClick={() => setIsDropdownOpen((prev) => !prev)}
+                aria-label="프로필 메뉴 열기"
+                className="flex items-center justify-center rounded-full ring-2 ring-transparent hover:ring-[#E5E8EB] focus:outline-none transition-all cursor-pointer"
+              >
+                <Avatar
+                  src={userPhoto}
+                  alt={displayName}
+                  fallback={displayName.slice(0, 1)}
+                  size="sm"
+                  className="w-8 h-8 sm:w-8.5 sm:h-8.5"
+                />
+              </button>
 
-            {/* 프로필 드롭다운 메뉴 */}
-            {isDropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-52 rounded-xl bg-white border border-[#E5E8EB] shadow-lg p-1.5 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                {/* 유저 정보 요약 */}
-                <div className="px-3 py-2 border-b border-[#F2F4F6] mb-1">
-                  <p className="text-xs font-semibold text-[#191F28] truncate">
-                    {displayName}
-                  </p>
-                  <p className="text-[11px] text-[#6B7684] truncate">
-                    {userProfile?.handle ? `@${userProfile.handle.replace(/^@/, "")}` : user.email}
-                  </p>
+              {/* 프로필 드롭다운 메뉴 */}
+              {isDropdownOpen && (
+                <div className="absolute right-0 top-full mt-2 w-52 rounded-xl bg-white border border-[#E5E8EB] shadow-lg p-1.5 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                  {/* 유저 정보 요약 */}
+                  <div className="px-3 py-2 border-b border-[#F2F4F6] mb-1">
+                    <p className="text-xs font-semibold text-[#191F28] truncate">
+                      {displayName}
+                    </p>
+                    <p className="text-[11px] text-[#6B7684] truncate">
+                      {userProfile?.username || userProfile?.handle ? `@${(userProfile?.username || userProfile?.handle || "").replace(/^@/, "")}` : user.email}
+                    </p>
+                  </div>
+
+                  {/* 내 공개 페이지 바로가기 */}
+                  <Link
+                    href={`/${(userProfile?.username || userProfile?.handle || (user?.email ? user.email.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "") : "")).replace(/^@/, "")}`}
+                    onClick={() => setIsDropdownOpen(false)}
+                    className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-[#3182F6] hover:bg-[#F2F4F6] transition-colors"
+                  >
+                    <span>내 페이지 보기</span>
+                    <span className="text-[10px] font-mono text-[#8B95A1]">
+                      /{((userProfile?.username || userProfile?.handle || (user?.email ? user.email.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "") : "")).replace(/^@/, ""))}
+                    </span>
+                  </Link>
+
+                  {/* 프로필 편집 */}
+                  <Link
+                    href="/profile/edit"
+                    onClick={() => setIsDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-[#4E5968] hover:bg-[#F2F4F6] hover:text-[#191F28] transition-colors"
+                  >
+                    <User className="w-3.5 h-3.5 text-[#6B7684]" />
+                    <span>프로필 편집</span>
+                  </Link>
+
+                  {/* 링크 복사 */}
+                  <button
+                    type="button"
+                    onClick={handleCopyLink}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-[#4E5968] hover:bg-[#F2F4F6] hover:text-[#191F28] transition-colors cursor-pointer text-left"
+                  >
+                    <Copy className="w-3.5 h-3.5 text-[#6B7684]" />
+                    <span>링크 복사</span>
+                  </button>
+
+                  <div className="my-1 border-t border-[#F2F4F6]" />
+
+                  {/* 로그아웃 */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsDropdownOpen(false);
+                      handleLogout();
+                    }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-[#F04452] hover:bg-[#FEF2F2] transition-colors cursor-pointer text-left"
+                  >
+                    <LogOut className="w-3.5 h-3.5 text-[#F04452]" />
+                    <span>로그아웃</span>
+                  </button>
                 </div>
-
-                {/* 프로필 편집 */}
-                <Link
-                  href="/profile/edit"
-                  onClick={() => setIsDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-[#4E5968] hover:bg-[#F2F4F6] hover:text-[#191F28] transition-colors"
-                >
-                  <User className="w-3.5 h-3.5 text-[#6B7684]" />
-                  <span>프로필 편집</span>
-                </Link>
-
-                {/* 링크 복사 */}
-                <button
-                  type="button"
-                  onClick={handleCopyLink}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-[#4E5968] hover:bg-[#F2F4F6] hover:text-[#191F28] transition-colors cursor-pointer text-left"
-                >
-                  <Copy className="w-3.5 h-3.5 text-[#6B7684]" />
-                  <span>링크 복사</span>
-                </button>
-
-                <div className="my-1 border-t border-[#F2F4F6]" />
-
-                {/* 로그아웃 */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsDropdownOpen(false);
-                    handleLogout();
-                  }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-[#F04452] hover:bg-[#FEF2F2] transition-colors cursor-pointer text-left"
-                >
-                  <LogOut className="w-3.5 h-3.5 text-[#F04452]" />
-                  <span>로그아웃</span>
-                </button>
-              </div>
-            )}
-          </>
-        ) : (
-          /* 비로그인 상태 */
-          <button
-            onClick={handleGoogleLogin}
-            disabled={isLoggingIn}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#191F28] hover:bg-[#333D4B] text-white text-xs font-semibold transition-all shadow-xs active:scale-95 cursor-pointer disabled:opacity-60"
-          >
-            <GoogleIcon className="w-3.5 h-3.5" />
-            <span>{isLoggingIn ? "연결 중..." : "Google 로그인"}</span>
-          </button>
-        )}
-      </div>
+              )}
+            </>
+          ) : (
+            /* 비로그인 상태 */
+            <button
+              onClick={handleGoogleLogin}
+              disabled={isLoggingIn}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#191F28] hover:bg-[#333D4B] text-white text-xs font-semibold transition-all shadow-xs active:scale-95 cursor-pointer disabled:opacity-60"
+            >
+              <GoogleIcon className="w-3.5 h-3.5" />
+              <span>{isLoggingIn ? "연결 중..." : "Google 로그인"}</span>
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className="w-8" />
+      )}
     </nav>
   );
 }

@@ -63,6 +63,7 @@ export interface ToolProficiency {
 
 export interface DesignerProfileData {
   handle: string; // "dohyun"
+  username?: string; // 사용자 이름 (영문 전용)
   name: string; // "이도현"
   roleTitle: string; // "Product & Visual Designer"
   bio: string; // "문제를 시각적으로 해결하는 4년차 프로덕트 디자이너입니다."
