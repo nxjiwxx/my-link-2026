@@ -35,6 +35,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { compressImageFile } from "@/lib/imageUtils";
 
 interface AddLinkModalProps {
   isOpen: boolean;
@@ -72,6 +73,7 @@ export function AddLinkModal({
 
   // 썸네일 이미지 관련 상태 (추천 이미지 제거, 유저 업로드 / URL 입력만 유지)
   const [thumbnailUrl, setThumbnailUrl] = useState("");
+  const [isCompressing, setIsCompressing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 사용 도구 관련 상태 (기본 제시 도구 제거, 유저 입력 도구 + 이전에 추가했던 도구 추천)
@@ -206,8 +208,8 @@ export function AddLinkModal({
     }
   };
 
-  // 이미지 로컬 파일 업로드 핸들러
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // 이미지 로컬 파일 업로드 핸들러 (Canvas 리사이징 & 압축 적용하여 Firestore 용량 초과 방지)
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -216,13 +218,20 @@ export function AddLinkModal({
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      if (event.target?.result) {
-        setThumbnailUrl(event.target.result as string);
+    try {
+      setIsCompressing(true);
+      // 고용량 이미지를 최대 너비 800px, 0.75 퀄리티로 압축하여 수십 KB 수준으로 경량화
+      const compressedDataUrl = await compressImageFile(file, 800, 0.75);
+      setThumbnailUrl(compressedDataUrl);
+    } catch (error) {
+      console.error("이미지 압축 실패:", error);
+      alert("이미지를 처리하는 중 오류가 발생했습니다.");
+    } finally {
+      setIsCompressing(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
       }
-    };
-    reader.readAsDataURL(file);
+    }
   };
 
   // 도구 추가 (유저 직접 입력)
@@ -658,11 +667,12 @@ export function AddLinkModal({
                 <Button
                   type="button"
                   variant="outline"
+                  disabled={isCompressing}
                   onClick={() => fileInputRef.current?.click()}
-                  className="h-9 px-3 text-xs text-[#191F28] border-[#E5E8EB] hover:bg-[#F2F4F6] flex items-center gap-1.5 shrink-0"
+                  className="h-9 px-3 text-xs text-[#191F28] border-[#E5E8EB] hover:bg-[#F2F4F6] flex items-center gap-1.5 shrink-0 disabled:opacity-50"
                 >
                   <Upload className="w-3.5 h-3.5 text-[#3182F6]" />
-                  <span>내 기기에서 파일 선택</span>
+                  <span>{isCompressing ? "이미지 최적화 중..." : "내 기기에서 파일 선택"}</span>
                 </Button>
                 <Input
                   value={thumbnailUrl}

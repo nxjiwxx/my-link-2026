@@ -16,6 +16,11 @@ import {
   saveDesignerProfile,
   INITIAL_DESIGNER_PROFILE,
 } from "@/lib/portfolioStorage";
+import {
+  saveLinkToFirestore,
+  deleteLinkFromFirestore,
+  subscribeToFirestoreLinks,
+} from "@/lib/firestoreLinks";
 import { ProfileHeader } from "@/components/portfolio/ProfileHeader";
 import { FilterAndToggleBar } from "@/components/portfolio/FilterAndToggleBar";
 import { ProjectCard } from "@/components/portfolio/ProjectCard";
@@ -44,11 +49,51 @@ export default function DesignerPortfolioPage() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState<boolean>(false);
 
-  // 로컬스토리지에서 디자이너 프로필 데이터 로드
+  // 로컬스토리지 및 Firestore(users/anonymous/links)에서 디자이너 프로필 데이터 로드 및 실시간 동기화
   useEffect(() => {
     setIsMounted(true);
-    const data = getDesignerProfile();
-    setProfile(data);
+    const localData = getDesignerProfile();
+    setProfile(localData);
+
+    // Firestore users/anonymous/links 실시간 구독
+    const unsubscribe = subscribeToFirestoreLinks(
+      (firestoreLinks) => {
+        if (firestoreLinks.length > 0) {
+          setProfile((prev) => {
+            // Firestore 링크들을 기존 로컬 프로젝트와 ID 기준으로 병합 (Firestore 링크 우선)
+            const map = new Map<string, ProjectItem>();
+            // 1. 기존 프로젝트 추가
+            prev.projects.forEach((p) => map.set(p.id, p));
+            // 2. Firestore 링크로 덮어쓰거나 상단 추가
+            firestoreLinks.forEach((p) => map.set(p.id, p));
+
+            // Firestore 링크를 최상단에 오도록 정렬
+            const firestoreIds = new Set(firestoreLinks.map((p) => p.id));
+            const mergedList = Array.from(map.values()).sort((a, b) => {
+              const aIsFs = firestoreIds.has(a.id);
+              const bIsFs = firestoreIds.has(b.id);
+              if (aIsFs && !bIsFs) return -1;
+              if (!aIsFs && bIsFs) return 1;
+              return a.orderIndex - b.orderIndex;
+            });
+
+            const updated = {
+              ...prev,
+              projects: mergedList,
+            };
+            saveDesignerProfile(updated);
+            return updated;
+          });
+        }
+      },
+      (error) => {
+        console.warn("Firestore 구독 에러 (오프라인 혹은 권한 확인 필요):", error);
+      }
+    );
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const showToast = (message: string) => {
@@ -100,7 +145,8 @@ export default function DesignerPortfolioPage() {
     showToast(`'${newCategory.label}' 카테고리가 추가되었어요`);
   };
 
-  const handleAddProject = (newProject: ProjectItem, newTools: string[]) => {
+  const handleAddProject = async (newProject: ProjectItem, newTools: string[]) => {
+    // 1. UI 및 로컬 스토리지 선반영
     setProfile((prev) => {
       const projectTools = newProject.tools || [];
       const combinedTools = Array.from(
@@ -134,10 +180,25 @@ export default function DesignerPortfolioPage() {
       setSelectedCategory("all");
     }
 
-    showToast("새 작업물 링크가 성공적으로 추가되었어요!");
+    // 2. Firestore (users/anonymous/links)에 저장
+    try {
+      await saveLinkToFirestore(newProject);
+      showToast("Firestore(users/anonymous/links)에 성공적으로 저장되었어요! ✨");
+    } catch (error) {
+      console.error("Firestore 저장 실패:", error);
+      showToast("Firestore 저장 중 문제가 발생하여 로컬에 저장되었습니다.");
+    }
   };
 
-  const handleDeleteProject = (projectId: string) => {
+  const handleDeleteProject = async (projectId: string) => {
+    // 1. Firestore에서 삭제 시도
+    try {
+      await deleteLinkFromFirestore(projectId);
+    } catch (error) {
+      console.warn("Firestore 삭제 실패 혹은 로컬 항목:", error);
+    }
+
+    // 2. UI 및 로컬 스토리지 반영
     setProfile((prev) => {
       const updated = {
         ...prev,
