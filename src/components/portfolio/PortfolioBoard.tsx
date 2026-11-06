@@ -28,6 +28,7 @@ import {
   saveLinkToFirestore,
   deleteLinkFromFirestore,
   getLinksFromFirestore,
+  trackProjectClick,
 } from "@/lib/firestoreLinks";
 import {
   getProfileInfoFromFirestore,
@@ -454,7 +455,25 @@ export function PortfolioBoard({
   };
 
   const handleCardClick = (project: ProjectItem) => {
-    router.push(`/projects/${project.id}`);
+    // 1. 소유자 본인의 클릭인지 확인 (로그인된 본인 클릭은 집계 제외)
+    const isOwnerOrSelf = Boolean(
+      isOwner || (user && resolvedOwnerUid && user.uid === resolvedOwnerUid)
+    );
+
+    // 본인이 아닌 방문자일 때만 프로젝트 클릭 카운트 증가 트래킹
+    if (!isOwnerOrSelf) {
+      trackProjectClick(project.id, resolvedOwnerUid || undefined);
+    }
+
+    // 2. 프로젝트 상세 페이지 이동 (소유자 식별자 쿼리 파라미터 전달)
+    const query = new URLSearchParams();
+    if (effectiveIdentifier) {
+      query.set("u", effectiveIdentifier);
+    } else if (resolvedOwnerUid) {
+      query.set("owner", resolvedOwnerUid);
+    }
+    const queryString = query.toString() ? `?${query.toString()}` : "";
+    router.push(`/projects/${project.id}${queryString}`);
   };
 
   const handleUpdateTools = async (newTools: ToolProficiency[]) => {
@@ -592,6 +611,9 @@ export function PortfolioBoard({
   if (isNotFound) {
     notFound();
   }
+
+  // 동적 라우팅 된 공개 페이지에서는 클릭 수를 숨기고, 본인 관리 보드에서만 노출
+  const showProjectClickCount = !isDynamicRoute && isOwner;
 
   return (
     <div className="min-h-screen w-full bg-[#F3F4F6] text-[#191F28] flex flex-col items-center">
@@ -771,6 +793,7 @@ export function PortfolioBoard({
                   project={project}
                   viewMode={viewMode}
                   onClick={handleCardClick}
+                  isOwner={showProjectClickCount}
                 />
               ))}
             </div>

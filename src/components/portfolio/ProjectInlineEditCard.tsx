@@ -341,6 +341,7 @@ export function ProjectInlineEditCard({
             url: trimmedUrl,
           }
         : undefined,
+      clickCount: project.clickCount ?? 0,
     };
 
     await onSave(updatedProject, selectedTools);

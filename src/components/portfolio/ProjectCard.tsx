@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Users, User } from "lucide-react";
+import { Users, User, Eye } from "lucide-react";
 import { ProjectItem, ViewMode } from "@/types/portfolio";
 import { Badge } from "@/components/ui/badge";
 
@@ -9,9 +9,10 @@ interface ProjectCardProps {
   project: ProjectItem;
   viewMode: ViewMode;
   onClick: (project: ProjectItem) => void;
+  isOwner?: boolean;
 }
 
-export function ProjectCard({ project, viewMode, onClick }: ProjectCardProps) {
+export function ProjectCard({ project, viewMode, onClick, isOwner = false }: ProjectCardProps) {
   const isTeam = project.projectType === "team";
 
   // 표(그리드) 구조 (2~4열 타일 형태)
@@ -64,20 +65,33 @@ export function ProjectCard({ project, viewMode, onClick }: ProjectCardProps) {
             </p>
           </div>
 
-          {/* 하단 툴 정보 */}
-          <div className="flex items-center gap-1 mt-2.5 pt-2 border-t border-[#F2F4F6] overflow-hidden flex-wrap">
-            {project.tools.slice(0, 2).map((t) => (
-              <span
-                key={t}
-                className="text-[10px] sm:text-[11px] font-medium text-[#4E5968] bg-[#F2F4F6] px-1.5 py-0.5 rounded truncate max-w-[70px] sm:max-w-[90px]"
+          {/* 하단 툴 정보 및 우측 하단 클릭수 */}
+          <div className="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-[#F2F4F6]">
+            <div className="flex items-center gap-1 overflow-hidden flex-wrap min-w-0 flex-1">
+              {project.tools && project.tools.slice(0, 2).map((t) => (
+                <span
+                  key={t}
+                  className="text-[10px] sm:text-[11px] font-medium text-[#4E5968] bg-[#F2F4F6] px-1.5 py-0.5 rounded truncate max-w-[70px] sm:max-w-[90px]"
+                >
+                  {t}
+                </span>
+              ))}
+              {project.tools && project.tools.length > 2 && (
+                <span className="text-[10px] sm:text-[11px] text-[#8B95A1] bg-[#F2F4F6] px-1.5 py-0.5 rounded shrink-0">
+                  +{project.tools.length - 2}
+                </span>
+              )}
+            </div>
+
+            {/* 페이지 주인 전용: 우측 하단 클릭수 (아이콘과 숫자만) */}
+            {isOwner && (
+              <div
+                className="flex items-center gap-1 shrink-0 text-[#8B95A1] font-mono text-[11px] select-none pl-1"
+                title={`조회/클릭수 ${project.clickCount || 0}`}
               >
-                {t}
-              </span>
-            ))}
-            {project.tools.length > 2 && (
-              <span className="text-[10px] sm:text-[11px] text-[#8B95A1] bg-[#F2F4F6] px-1.5 py-0.5 rounded shrink-0">
-                +{project.tools.length - 2}
-              </span>
+                <Eye className="w-3.5 h-3.5 text-[#8B95A1]" />
+                <span>{project.clickCount || 0}</span>
+              </div>
             )}
           </div>
         </div>
@@ -130,20 +144,33 @@ export function ProjectCard({ project, viewMode, onClick }: ProjectCardProps) {
           </p>
         </div>
 
-        {/* 프로젝트 사용 툴 */}
-        <div className="flex items-center gap-1.5 mt-2 pt-1.5 border-t border-[#F2F4F6] overflow-hidden flex-wrap">
-          {project.tools.slice(0, 3).map((t) => (
-            <span
-              key={t}
-              className="text-[10px] sm:text-[11px] font-medium text-[#4E5968] bg-[#F2F4F6] px-1.5 py-0.5 rounded truncate max-w-[85px] sm:max-w-[120px]"
+        {/* 프로젝트 사용 툴 및 우측 하단 클릭수 */}
+        <div className="flex items-center justify-between gap-1.5 mt-2 pt-1.5 border-t border-[#F2F4F6]">
+          <div className="flex items-center gap-1.5 overflow-hidden flex-wrap min-w-0 flex-1">
+            {project.tools && project.tools.slice(0, 3).map((t) => (
+              <span
+                key={t}
+                className="text-[10px] sm:text-[11px] font-medium text-[#4E5968] bg-[#F2F4F6] px-1.5 py-0.5 rounded truncate max-w-[85px] sm:max-w-[120px]"
+              >
+                {t}
+              </span>
+            ))}
+            {project.tools && project.tools.length > 3 && (
+              <span className="text-[10px] sm:text-[11px] text-[#8B95A1] bg-[#F2F4F6] px-1.5 py-0.5 rounded shrink-0">
+                +{project.tools.length - 3}
+              </span>
+            )}
+          </div>
+
+          {/* 페이지 주인 전용: 우측 하단 클릭수 (아이콘과 숫자만) */}
+          {isOwner && (
+            <div
+              className="flex items-center gap-1 shrink-0 text-[#8B95A1] font-mono text-[11px] select-none pl-1"
+              title={`조회/클릭수 ${project.clickCount || 0}`}
             >
-              {t}
-            </span>
-          ))}
-          {project.tools.length > 3 && (
-            <span className="text-[10px] sm:text-[11px] text-[#8B95A1] bg-[#F2F4F6] px-1.5 py-0.5 rounded shrink-0">
-              +{project.tools.length - 3}
-            </span>
+              <Eye className="w-3.5 h-3.5 text-[#8B95A1]" />
+              <span>{project.clickCount || 0}</span>
+            </div>
           )}
         </div>
       </div>

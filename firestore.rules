@@ -1,0 +1,68 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ==========================================
+    // 1. users 컬렉션 및 서브컬렉션
+    // ==========================================
+    match /users/{userId} {
+      // 기본 사용자 프로필 정보: 누구나 조회 가능, 본인만 생성/수정/삭제
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId;
+
+      // 링크(프로젝트) 서브컬렉션
+      match /links/{linkId} {
+        // 누구나 링크 목록/상세 조회 가능
+        allow read: if true;
+
+        // 링크 생성 및 삭제는 소유자 본인만 가능
+        allow create, delete: if request.auth != null && request.auth.uid == userId;
+
+        // 링크 수정: 
+        // 1) 소유자 본인은 모든 필드 수정 가능
+        // 2) 비로그인 방문자 또는 다른 사용자는 클릭수('clickCount') 업데이트만 허용
+        allow update: if (request.auth != null && request.auth.uid == userId)
+          || (
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['clickCount', 'updatedAt'])
+          );
+      }
+
+      // 도구(tools), 경력(careers), info, links 등 기타 서브컬렉션
+      match /{subcollection}/{docId} {
+        allow read: if true;
+        allow write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // ==========================================
+    // 2. user 컬렉션 (기존 레거시 경로 fallback 호환)
+    // ==========================================
+    match /user/{userId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId;
+
+      match /links/{linkId} {
+        allow read: if true;
+        allow create, delete: if request.auth != null && request.auth.uid == userId;
+        allow update: if (request.auth != null && request.auth.uid == userId)
+          || (
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['clickCount', 'updatedAt'])
+          );
+      }
+
+      match /{subcollection}/{docId} {
+        allow read: if true;
+        allow write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // ==========================================
+    // 3. 사용자 이름(username) 중복 검사 및 선점 컬렉션
+    // ==========================================
+    match /usernames/{username} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}

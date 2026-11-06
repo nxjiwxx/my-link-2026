@@ -43,6 +43,7 @@ export interface ProjectItem {
     url: string;
   };
   orderIndex: number;
+  clickCount?: number;
   createdAt?: any;
 }
 

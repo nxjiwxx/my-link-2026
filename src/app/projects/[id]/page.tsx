@@ -26,6 +26,7 @@ import {
   updateLinkInFirestore,
   deleteLinkFromFirestore,
 } from "@/lib/firestoreLinks";
+import { findUserIdByUsername } from "@/lib/firestoreProfile";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Toast } from "@/components/ui/toast";
@@ -45,6 +46,13 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuth();
+
+  const queryUsername = searchParams.get("u") || "";
+  const queryOwnerUid = searchParams.get("owner") || "";
+
+  const [resolvedOwnerUid, setResolvedOwnerUid] = useState<string | null>(
+    queryOwnerUid || null
+  );
 
   const [project, setProject] = useState<ProjectItem | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -72,32 +80,70 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
     }, 2400);
   };
 
-  // 프로젝트 데이터 로드 (로컬스토리지 우선 로드 후 Firestore 동기화)
+  // 소유자 여부 판단
+  const isOwner = Boolean(
+    user && (resolvedOwnerUid ? user.uid === resolvedOwnerUid : true)
+  );
+
+  // 프로젝트 데이터 로드 (소유자 식별 및 Firestore 동기화)
   useEffect(() => {
-    const profile = getDesignerProfile();
-    const foundLocal = profile.projects.find((p) => p.id === projectId);
-    if (foundLocal) {
-      setProject(foundLocal);
-      setIsLoading(false);
+    let isCancelled = false;
+
+    async function loadProject() {
+      // 1. 로컬스토리지 우선 확인
+      const profile = getDesignerProfile();
+      const foundLocal = profile.projects.find((p) => p.id === projectId);
+      if (foundLocal && !isCancelled) {
+        setProject(foundLocal);
+      }
+
+      // 2. 소유자 UID 식별 (쿼리 파라미터 u 또는 owner 기반)
+      let ownerUid = queryOwnerUid;
+      if (!ownerUid && queryUsername) {
+        try {
+          const match = await findUserIdByUsername(queryUsername);
+          if (match?.uid) {
+            ownerUid = match.uid;
+            if (!isCancelled) {
+              setResolvedOwnerUid(match.uid);
+            }
+          }
+        } catch (err) {
+          console.warn("사용자 이름 기반 소유자 조회 실패:", err);
+        }
+      }
+
+      const effectiveUid = ownerUid || user?.uid;
+      if (effectiveUid && !isCancelled) {
+        setResolvedOwnerUid(effectiveUid);
+      }
+
+      // 3. Firestore에서 최신 정보 조회 시도
+      try {
+        const firestoreLinks = await getLinksFromFirestore(effectiveUid || undefined);
+        const foundFs = firestoreLinks.find((p) => p.id === projectId);
+        if (!isCancelled) {
+          if (foundFs) {
+            setProject(foundFs);
+          } else if (!foundLocal) {
+            setProject(null);
+          }
+        }
+      } catch (err) {
+        console.warn("Firestore에서 프로젝트 상세 로드 실패:", err);
+      } finally {
+        if (!isCancelled) {
+          setIsLoading(false);
+        }
+      }
     }
 
-    // Firestore에서 최신 정보 조회 시도 (users/{user.uid}/links)
-    getLinksFromFirestore(user?.uid)
-      .then((firestoreLinks) => {
-        const foundFs = firestoreLinks.find((p) => p.id === projectId);
-        if (foundFs) {
-          setProject(foundFs);
-        } else if (!foundLocal) {
-          setProject(null);
-        }
-      })
-      .catch((err) => {
-        console.warn("Firestore에서 프로젝트 상세 로드 실패:", err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [projectId, user]);
+    loadProject();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [projectId, user, queryOwnerUid, queryUsername]);
 
   // 수정 저장 핸들러
   const handleSave = async (updatedProject: ProjectItem, newTools: string[]) => {
@@ -222,6 +268,12 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
 
   const containerStyle = customWidth ? { maxWidth: `${customWidth}px` } : undefined;
 
+  const backHref = queryUsername
+    ? `/@${queryUsername}`
+    : queryOwnerUid
+    ? `/?owner=${queryOwnerUid}`
+    : "/";
+
   return (
     <div className="min-h-screen w-full bg-[#F3F4F6] text-[#191F28] flex flex-col items-center">
       {/* 0. 화면 크기 모바일/웹 리사이징 뷰포트 컨트롤 바 */}
@@ -236,7 +288,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
         {/* 상단 네비게이션 헤더 */}
         <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-md px-4 sm:px-6 py-3.5 border-b border-[#E5E8EB] flex items-center justify-between select-none">
           <Link
-            href="/"
+            href={backHref}
             className="flex items-center gap-1.5 text-xs font-semibold text-[#4E5968] hover:text-[#191F28] transition-colors p-1.5 -ml-1.5 rounded-lg hover:bg-[#F2F4F6]"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -355,7 +407,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
                 </div>
               )}
 
-              {/* 외부 원본 링크 이동 버튼 */}
+              {/* 외부 원본 링크 이동 버튼 (외부 링크 클릭 시 카운트 미포함) */}
               {project.externalLink?.url && (
                 <div className="pt-2">
                   <a
@@ -372,26 +424,28 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
                 </div>
               )}
 
-              {/* 하단 보조 액션 버튼 바 */}
-              <div className="pt-6 pb-2 flex items-center justify-center gap-3 border-t border-[#F2F4F6]">
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(true)}
-                  className="inline-flex items-center gap-1.5 text-xs text-[#4E5968] hover:text-[#191F28] py-1.5 px-3 rounded-lg hover:bg-[#F2F4F6] transition-colors cursor-pointer font-medium"
-                >
-                  <Pencil className="w-3.5 h-3.5" />
-                  <span>이 작업물 수정하기</span>
-                </button>
-                <span className="text-[#E5E8EB]">|</span>
-                <button
-                  type="button"
-                  onClick={() => setIsDeleteModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 text-xs text-[#8B95A1] hover:text-[#EF4444] py-1.5 px-3 rounded-lg hover:bg-[#FEF2F2] transition-colors cursor-pointer font-medium"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                  <span>이 작업물 삭제하기</span>
-                </button>
-              </div>
+              {/* 하단 보조 액션 버튼 바 (페이지 주인만 노출) */}
+              {isOwner && (
+                <div className="pt-6 pb-2 flex items-center justify-center gap-3 border-t border-[#F2F4F6]">
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(true)}
+                    className="inline-flex items-center gap-1.5 text-xs text-[#4E5968] hover:text-[#191F28] py-1.5 px-3 rounded-lg hover:bg-[#F2F4F6] transition-colors cursor-pointer font-medium"
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                    <span>이 작업물 수정하기</span>
+                  </button>
+                  <span className="text-[#E5E8EB]">|</span>
+                  <button
+                    type="button"
+                    onClick={() => setIsDeleteModalOpen(true)}
+                    className="inline-flex items-center gap-1.5 text-xs text-[#8B95A1] hover:text-[#EF4444] py-1.5 px-3 rounded-lg hover:bg-[#FEF2F2] transition-colors cursor-pointer font-medium"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>이 작업물 삭제하기</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}

@@ -90,3 +90,29 @@ export function deleteProjectFromStorage(projectId: string): DesignerProfileData
   saveDesignerProfile(updated);
   return updated;
 }
+
+export function incrementProjectClickCountInStorage(projectId: string): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const current = getDesignerProfile();
+    let updatedCount = 0;
+    const updatedProjects = (current.projects || []).map((p) => {
+      if (p.id === projectId) {
+        updatedCount = (p.clickCount || 0) + 1;
+        return {
+          ...p,
+          clickCount: updatedCount,
+        };
+      }
+      return p;
+    });
+    saveDesignerProfile({
+      ...current,
+      projects: updatedProjects,
+    });
+    return updatedCount;
+  } catch (error) {
+    console.error("Failed to increment click count in storage:", error);
+    return 0;
+  }
+}

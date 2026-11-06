@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { LogOut, User, Copy } from "lucide-react";
+import { LogOut, User, Copy, BarChart2 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { GoogleIcon } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
@@ -164,6 +164,16 @@ export function TopNavHeader({
                     <span className="text-[10px] font-mono text-[#8B95A1]">
                       /{((userProfile?.username || userProfile?.handle || (user?.email ? user.email.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "") : "")).replace(/^@/, ""))}
                     </span>
+                  </Link>
+
+                  {/* 통계 대시보드 */}
+                  <Link
+                    href="/stats"
+                    onClick={() => setIsDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-[#4E5968] hover:bg-[#F2F4F6] hover:text-[#191F28] transition-colors"
+                  >
+                    <BarChart2 className="w-3.5 h-3.5 text-[#3182F6]" />
+                    <span>통계 대시보드</span>
                   </Link>
 
                   {/* 프로필 편집 */}

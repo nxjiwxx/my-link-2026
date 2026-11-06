@@ -346,6 +346,7 @@ export function AddLinkModal({
           }
         : undefined,
       orderIndex: 0,
+      clickCount: 0,
       createdAt: new Date().toISOString(),
     };
 

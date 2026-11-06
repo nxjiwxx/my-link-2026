@@ -8,8 +8,10 @@ import {
   serverTimestamp,
   query,
   orderBy,
+  increment,
 } from "firebase/firestore";
 import { ProjectItem } from "@/types/portfolio";
+import { incrementProjectClickCountInStorage } from "./portfolioStorage";
 
 export const getLinksCollectionPath = (uid?: string): string => {
   const targetUid = uid || auth.currentUser?.uid || "anonymous";
@@ -80,8 +82,13 @@ function toFirestoreData(project: ProjectItem, isUpdate = false) {
     description: project.description,
     externalLink: project.externalLink || null,
     orderIndex: project.orderIndex ?? 0,
+    clickCount: typeof project.clickCount === "number" ? project.clickCount : isUpdate ? undefined : 0,
     updatedAt: serverTimestamp(),
   };
+
+  if (data.clickCount === undefined) {
+    delete data.clickCount;
+  }
 
   if (!isUpdate) {
     data.createdAt = serverTimestamp();
@@ -128,6 +135,7 @@ export function fromFirestoreDoc(data: Record<string, unknown>, docId?: string):
           }
         : undefined,
     orderIndex: typeof data.orderIndex === "number" ? data.orderIndex : 0,
+    clickCount: typeof data.clickCount === "number" ? data.clickCount : 0,
     createdAt: data.createdAt,
   };
 }
@@ -241,4 +249,59 @@ export async function deleteLinkFromFirestore(projectId: string, uid?: string): 
       // ignore
     }
   }
+}
+
+/**
+ * Firestore users/{uid}/links 경로의 프로젝트 클릭 카운트 원자적 증가
+ */
+export async function incrementLinkClickCount(projectId: string, uid?: string): Promise<void> {
+  const targetUid = uid || auth.currentUser?.uid || "anonymous";
+  const paths = [
+    `users/${targetUid}/links`,
+    `user/${targetUid}/links`,
+  ];
+  for (const p of paths) {
+    try {
+      const docRef = doc(db, p, projectId);
+      await setDoc(
+        docRef,
+        {
+          clickCount: increment(1),
+          updatedAt: serverTimestamp(),
+        },
+        { merge: true }
+      );
+    } catch (err) {
+      console.warn(`Firestore(${p}/${projectId}) 클릭수 증분 실패:`, err);
+    }
+  }
+}
+
+/**
+ * 프로젝트 클릭 이벤트 트래킹 (로컬스토리지 및 Firestore 동시 반영)
+ * - 로그인된 소유자 본인의 클릭은 집계에서 제외
+ */
+export async function trackProjectClick(projectId: string, uid?: string): Promise<number> {
+  const currentUid = auth.currentUser?.uid;
+
+  // 1. 로그인된 본인의 페이지/프로젝트 클릭 시 카운트 제외
+  if (currentUid && uid && currentUid === uid) {
+    return 0;
+  }
+  // 2. 소유자 식별자 없이 로그인된 상태에서 클릭한 경우도 본인 페이지로 간주하여 제외
+  if (currentUid && !uid) {
+    return 0;
+  }
+
+  // 1. 로컬 스토리지에 즉시 +1 반영 (비로그인 상태 또는 타인 열람 시)
+  const localCount = incrementProjectClickCountInStorage(projectId);
+
+  // 2. Firestore에 원자적 증분 요청 (비동기)
+  try {
+    await incrementLinkClickCount(projectId, uid);
+  } catch (err) {
+    console.warn("Firestore 클릭수 트래킹 중 오류 발생:", err);
+  }
+
+  return localCount;
 }
