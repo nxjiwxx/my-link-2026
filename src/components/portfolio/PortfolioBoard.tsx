@@ -68,6 +68,7 @@ export interface PortfolioBoardProps {
   isDynamicRoute?: boolean;
   hideHeaderProfileMenu?: boolean;
   showCreateProjectButton?: boolean;
+  isPreview?: boolean;
   onUserNotFound?: () => void;
 }
 
@@ -95,6 +96,7 @@ export function PortfolioBoard({
   isDynamicRoute = false,
   hideHeaderProfileMenu = false,
   showCreateProjectButton,
+  isPreview = false,
   onUserNotFound,
 }: PortfolioBoardProps) {
   const router = useRouter();
@@ -125,6 +127,7 @@ export function PortfolioBoard({
   );
 
   const isPublicView = useMemo(() => {
+    if (isPreview) return true;
     if (isDemo) return true;
     if (effectiveIdentifier) {
       if (user && resolvedOwnerUid && user.uid === resolvedOwnerUid) {
@@ -136,7 +139,7 @@ export function PortfolioBoard({
       return true;
     }
     return false;
-  }, [isDemo, effectiveIdentifier, initialTargetUid, user, resolvedOwnerUid]);
+  }, [isPreview, isDemo, effectiveIdentifier, initialTargetUid, user, resolvedOwnerUid]);
 
   const isOwner = useMemo(() => {
     if (isDemo) return false;
@@ -448,6 +451,12 @@ export function PortfolioBoard({
   };
 
   const handleCardClick = (project: ProjectItem) => {
+    // 0. 프리뷰 모드일 경우: 본인 프리뷰이므로 클릭수 집계 제외 + ?from=preview 파라미터로 상세 이동
+    if (isPreview) {
+      router.push(`/projects/${project.id}?from=preview`);
+      return;
+    }
+
     // 1. 소유자 본인의 클릭인지 확인 (로그인된 본인 클릭은 집계 제외)
     const isOwnerOrSelf = Boolean(
       isOwner || (user && resolvedOwnerUid && user.uid === resolvedOwnerUid)
@@ -600,11 +609,11 @@ export function PortfolioBoard({
     notFound();
   }
 
-  // 동적 라우팅 된 공개 페이지에서는 클릭 수를 숨기고, 본인 관리 보드에서만 노출
-  const showProjectClickCount = !isDynamicRoute && isOwner;
+  // 동적 라우팅 된 공개 페이지나 프리뷰 화면에서는 클릭 수를 숨기고, 본인 관리 보드에서만 노출
+  const showProjectClickCount = !isDynamicRoute && !isPreview && isOwner;
 
-  // 헤더 노출 여부: 비공개 뷰(관리 화면)이거나, 소유자가 '내 페이지 보기(?from=mypage)'로 진입한 경우
-  const shouldShowHeader = !isPublicView || (fromMypage && isOwner);
+  // 헤더 노출 여부: 프리뷰 화면이거나, 비공개 관리 화면이거나, 소유자가 '?from=mypage'로 진입한 경우
+  const shouldShowHeader = isPreview || !isPublicView || (fromMypage && isOwner);
 
   return (
     <div className="min-h-screen w-full bg-[#F3F4F6] text-[#191F28] flex flex-col items-center">
@@ -621,7 +630,7 @@ export function PortfolioBoard({
 
       {/* 모바일/웹 뷰포트 컨테이너 (웹 데스크톱에서도 태블릿 사이즈 680px 고정 프레임) */}
       <main className={containerClasses}>
-        {/* 1. 상단 네비게이션 헤더 (소유자 본인 또는 ?from=mypage 소유자 보기 시 노출) */}
+        {/* 1. 상단 네비게이션 헤더 (프리뷰 모드이거나 소유자 관리 화면일 때 노출) */}
         {shouldShowHeader && (
           <TopNavHeader
             onShareClick={() => setIsShareModalOpen(true)}
@@ -629,7 +638,8 @@ export function PortfolioBoard({
             isPublicView={isPublicView}
             ownerName={profile.name}
             isOwner={isOwner}
-            hideProfileMenu={fromMypage ? false : (hideHeaderProfileMenu || isDynamicRoute)}
+            hideProfileMenu={isPreview ? false : (fromMypage ? false : (hideHeaderProfileMenu || isDynamicRoute))}
+            isPreview={isPreview}
           />
         )}
 

@@ -17,6 +17,7 @@ interface TopNavHeaderProps {
   ownerName?: string;
   isOwner?: boolean;
   hideProfileMenu?: boolean;
+  isPreview?: boolean;
 }
 
 export function TopNavHeader({
@@ -28,6 +29,7 @@ export function TopNavHeader({
   ownerName,
   isOwner = true,
   hideProfileMenu = false,
+  isPreview = false,
 }: TopNavHeaderProps) {
   const { user, userProfile, isLoading, signInWithGoogle, logout } = useAuth();
   const searchParams = useSearchParams();
@@ -35,8 +37,10 @@ export function TopNavHeader({
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // 내 페이지 보기(?from=mypage)를 통해 진입한 소유자에게만 뒤로가기 버튼 노출
-  const showBackButton = Boolean(isOwner && searchParams.get("from") === "mypage");
+  // 프리뷰 페이지(/preview)이거나 ?from=mypage로 진입한 소유자에게 수정 페이지 복귀 뒤로가기 버튼 노출
+  const showBackButton = Boolean(
+    isPreview || (isOwner && searchParams.get("from") === "mypage")
+  );
 
   // 드롭다운 외부 클릭 시 닫기
   useEffect(() => {
@@ -171,15 +175,15 @@ export function TopNavHeader({
                     </p>
                   </div>
 
-                  {/* 1. 내 공개 페이지 바로가기 (from=mypage 쿼리로 복귀 버튼 활성화) */}
+                  {/* 1. 내 페이지 보기 (프리뷰 전용 페이지로 이동) */}
                   <Link
-                    href={`/${(userProfile?.username || userProfile?.handle || (user?.email ? user.email.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "") : "")).replace(/^@/, "")}?from=mypage`}
+                    href="/preview"
                     onClick={() => setIsDropdownOpen(false)}
                     className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-[#3182F6] hover:bg-[#F2F4F6] transition-colors"
                   >
                     <span>내 페이지 보기</span>
                     <span className="text-[10px] font-mono text-[#8B95A1]">
-                      /{((userProfile?.username || userProfile?.handle || (user?.email ? user.email.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "") : "")).replace(/^@/, ""))}
+                      /preview
                     </span>
                   </Link>
 

@@ -48,6 +48,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
 
   const queryUsername = searchParams.get("u") || "";
   const queryOwnerUid = searchParams.get("owner") || "";
+  const fromSource = searchParams.get("from") || "";
 
   const [resolvedOwnerUid, setResolvedOwnerUid] = useState<string | null>(
     queryOwnerUid || null
@@ -253,11 +254,16 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const containerClasses =
     "w-full max-w-[680px] my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col pb-16 transition-all duration-300";
 
-  const backHref = queryUsername
-    ? `/@${queryUsername}`
-    : queryOwnerUid
-    ? `/?owner=${queryOwnerUid}`
-    : "/";
+  const backHref =
+    fromSource === "preview"
+      ? "/preview"
+      : fromSource === "mypage"
+      ? (queryUsername ? `/@${queryUsername}?from=mypage` : "/preview")
+      : queryUsername
+      ? `/@${queryUsername}`
+      : queryOwnerUid
+      ? `/?owner=${queryOwnerUid}`
+      : "/";
 
   return (
     <div className="min-h-screen w-full bg-[#F3F4F6] text-[#191F28] flex flex-col items-center">
