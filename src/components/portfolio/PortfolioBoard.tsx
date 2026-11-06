@@ -601,9 +601,9 @@ export function PortfolioBoard({
     return list;
   }, [profile.projects, selectedCategory, searchQuery]);
 
-  // 반응형 컨테이너 클래스 (웹 데스크톱에서도 680px 고정 프레임)
+  // 반응형 컨테이너 클래스 (웹 데스크톱에서도 680px 고정 프레임, radius 0)
   const containerClasses =
-    "w-full max-w-[680px] my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col pb-16 transition-all duration-300";
+    "w-full max-w-[680px] my-0 sm:my-6 rounded-none border-0 sm:border border-[#E5E8EB] shadow-none bg-white flex flex-col pb-16 transition-all duration-300";
 
   if (isNotFound) {
     notFound();
@@ -621,7 +621,7 @@ export function PortfolioBoard({
       {isUpdating && (
         <aside
           aria-live="polite"
-          className="fixed top-14 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 bg-[#191F28] text-white px-3.5 py-1.5 rounded-full shadow-md text-xs animate-in fade-in slide-in-from-top-1 duration-150"
+          className="fixed top-14 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 bg-[#191F28] text-white px-3.5 py-1.5 rounded-full border border-[#333D4B] shadow-none text-xs animate-in fade-in slide-in-from-top-1 duration-150"
         >
           <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
           <span>저장 중...</span>
@@ -661,7 +661,7 @@ export function PortfolioBoard({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="프로젝트, 기술 검색"
-                className="pl-8.5 pr-10 h-8.5 bg-white border-[#E5E8EB] focus:border-[#191F28] rounded-xl text-xs w-full shadow-2xs"
+                className="pl-8.5 pr-10 h-8.5 bg-white border-[#E5E8EB] focus:border-[#191F28] rounded-xl text-xs w-full shadow-none"
               />
               {searchQuery && (
                 <button
@@ -674,7 +674,7 @@ export function PortfolioBoard({
             </div>
 
             {/* 그리드/리스트 뷰 토글 (shrink-0으로 안전하게 고정) */}
-            <div className="flex items-center shrink-0 rounded-xl bg-white border border-[#E5E8EB] p-0.5 shadow-2xs">
+            <div className="flex items-center shrink-0 rounded-xl bg-white border border-[#E5E8EB] p-0.5 shadow-none">
               <button
                 type="button"
                 onClick={() => setViewMode("grid")}
@@ -683,7 +683,7 @@ export function PortfolioBoard({
                 className={cn(
                   "flex h-7.5 w-7.5 items-center justify-center rounded-lg transition-all cursor-pointer",
                   viewMode === "grid"
-                    ? "bg-[#191F28] text-white shadow-xs"
+                    ? "bg-[#191F28] text-white shadow-none"
                     : "text-[#8B95A1] hover:text-[#191F28]"
                 )}
               >
@@ -697,7 +697,7 @@ export function PortfolioBoard({
                 className={cn(
                   "flex h-7.5 w-7.5 items-center justify-center rounded-lg transition-all cursor-pointer",
                   viewMode === "list"
-                    ? "bg-[#191F28] text-white shadow-xs"
+                    ? "bg-[#191F28] text-white shadow-none"
                     : "text-[#8B95A1] hover:text-[#191F28]"
                 )}
               >
@@ -726,7 +726,7 @@ export function PortfolioBoard({
                     className={cn(
                       "h-8 shrink-0 rounded-full px-3 text-xs font-semibold tracking-tight transition-all cursor-pointer whitespace-nowrap",
                       isActive
-                        ? "bg-[#191F28] text-white shadow-xs"
+                        ? "bg-[#191F28] text-white shadow-none"
                         : "bg-white text-[#4E5968] border border-[#E5E8EB] hover:border-[#D1D6DB] hover:text-[#191F28]"
                     )}
                   >
@@ -741,7 +741,7 @@ export function PortfolioBoard({
               <Button
                 onClick={handleOpenAddModal}
                 size="sm"
-                className="h-8 shrink-0 text-xs font-semibold gap-1.5 bg-[#191F28] hover:bg-[#333D4B] text-white rounded-xl px-3 transition-all cursor-pointer shadow-2xs whitespace-nowrap"
+                className="h-8 shrink-0 text-xs font-semibold gap-1.5 bg-[#191F28] hover:bg-[#333D4B] text-white rounded-xl px-3 transition-all cursor-pointer shadow-none whitespace-nowrap"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>링크 추가</span>
@@ -800,7 +800,7 @@ export function PortfolioBoard({
               {isOwner && (
                 <Button
                   onClick={handleOpenAddModal}
-                  className="mt-3.5 h-8 text-xs font-semibold bg-[#191F28] hover:bg-[#333D4B] text-white rounded-xl gap-1.5 px-3.5 shadow-xs cursor-pointer"
+                  className="mt-3.5 h-8 text-xs font-semibold bg-[#191F28] hover:bg-[#333D4B] text-white rounded-xl gap-1.5 px-3.5 shadow-none cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>새 작업물 등록</span>

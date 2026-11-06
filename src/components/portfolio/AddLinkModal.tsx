@@ -381,7 +381,7 @@ export function AddLinkModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-md w-full max-h-[90vh] overflow-y-auto p-0 rounded-[24px] border border-[#E5E8EB] bg-white shadow-2xl">
+      <DialogContent className="sm:max-w-md w-full max-h-[90vh] overflow-y-auto p-0 rounded-[24px] border border-[#E5E8EB] bg-white shadow-none">
         {/* 모달 상단 헤더 */}
         <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-md px-6 pt-6 pb-4 border-b border-[#F2F4F6]">
           <DialogHeader className="text-left space-y-1">
@@ -490,7 +490,7 @@ export function AddLinkModal({
                     className={cn(
                       "py-1.5 px-3 text-xs font-bold rounded-xl border text-center transition-all",
                       category === cat.id
-                        ? "bg-[#191F28] text-white border-[#191F28] shadow-xs"
+                        ? "bg-[#191F28] text-white border-[#191F28] shadow-none"
                         : "bg-[#F9FAFB] text-[#4E5968] border-[#E5E8EB] hover:bg-[#F2F4F6]"
                     )}
                   >
@@ -512,7 +512,7 @@ export function AddLinkModal({
                   className={cn(
                     "flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border text-xs font-bold transition-all",
                     projectType === "solo"
-                      ? "bg-[#191F28] text-white border-[#191F28] shadow-xs"
+                      ? "bg-[#191F28] text-white border-[#191F28] shadow-none"
                       : "bg-[#F9FAFB] text-[#6B7684] border-[#E5E8EB] hover:bg-[#F2F4F6]"
                   )}
                 >
@@ -525,7 +525,7 @@ export function AddLinkModal({
                   className={cn(
                     "flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border text-xs font-bold transition-all",
                     projectType === "team"
-                      ? "bg-[#191F28] text-white border-[#191F28] shadow-xs"
+                      ? "bg-[#191F28] text-white border-[#191F28] shadow-none"
                       : "bg-[#F9FAFB] text-[#6B7684] border-[#E5E8EB] hover:bg-[#F2F4F6]"
                   )}
                 >
@@ -654,14 +654,14 @@ export function AddLinkModal({
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-2.5 py-1.5 bg-white text-xs font-bold text-[#191F28] rounded-lg shadow-sm hover:bg-[#F2F4F6]"
+                    className="px-2.5 py-1.5 bg-white text-xs font-bold text-[#191F28] rounded-lg shadow-none hover:bg-[#F2F4F6]"
                   >
                     이미지 변경
                   </button>
                   <button
                     type="button"
                     onClick={() => setThumbnailUrl("")}
-                    className="px-2.5 py-1.5 bg-[#E8344E] text-xs font-bold text-white rounded-lg shadow-sm hover:bg-[#D02640]"
+                    className="px-2.5 py-1.5 bg-[#E8344E] text-xs font-bold text-white rounded-lg shadow-none hover:bg-[#D02640]"
                   >
                     삭제
                   </button>
@@ -718,7 +718,7 @@ export function AddLinkModal({
                   <Badge
                     key={tool}
                     variant="neutral"
-                    className="bg-white text-[#191F28] border border-[#E5E8EB] pl-2 pr-1.5 py-1 text-xs font-bold flex items-center gap-1 shadow-2xs"
+                    className="bg-white text-[#191F28] border border-[#E5E8EB] pl-2 pr-1.5 py-1 text-xs font-bold flex items-center gap-1 shadow-none"
                   >
                     <span>{tool}</span>
                     <button
@@ -859,7 +859,7 @@ export function AddLinkModal({
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="h-10 px-5 rounded-xl text-xs font-bold bg-[#191F28] hover:bg-[#333D4B] text-white active:scale-[0.98] transition-all shadow-xs flex items-center gap-1.5 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="h-10 px-5 rounded-xl text-xs font-bold bg-[#191F28] hover:bg-[#333D4B] text-white active:scale-[0.98] transition-all shadow-none flex items-center gap-1.5 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
                 <>

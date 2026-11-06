@@ -252,7 +252,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const isTeam = project.projectType === "team";
 
   const containerClasses =
-    "w-full max-w-[680px] my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col pb-16 transition-all duration-300";
+    "w-full max-w-[680px] my-0 sm:my-6 rounded-none border-0 sm:border border-[#E5E8EB] shadow-none bg-white flex flex-col pb-16 transition-all duration-300";
 
   const backHref =
     fromSource === "preview"
@@ -272,17 +272,17 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
         <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-md px-4 sm:px-6 py-3.5 border-b border-[#E5E8EB] flex items-center justify-between select-none">
           <Link
             href={backHref}
-            className="flex items-center gap-1.5 text-xs font-semibold text-[#4E5968] hover:text-[#191F28] transition-colors p-1.5 -ml-1.5 rounded-lg hover:bg-[#F2F4F6]"
+            aria-label="뒤로가기"
+            className="flex items-center justify-center text-[#4E5968] hover:text-[#191F28] transition-colors p-2 -ml-2 rounded-lg hover:bg-[#F2F4F6]"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>목록으로</span>
+            <ArrowLeft className="w-5 h-5" />
           </Link>
 
           <span className="text-xs sm:text-sm font-bold text-[#191F28] max-w-[220px] truncate">
             {isEditing ? "프로젝트 수정" : project.title}
           </span>
 
-          <div className="w-16" />
+          <div className="w-9" />
         </header>
 
         {/* 페이지 본문 영역 */}
@@ -399,7 +399,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
                     rel="noopener noreferrer"
                     className="block w-full"
                   >
-                    <Button className="w-full h-11 sm:h-12 rounded-xl bg-[#191F28] hover:bg-[#333D4B] text-white font-semibold text-xs sm:text-sm active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-xs cursor-pointer">
+                    <Button className="w-full h-11 sm:h-12 rounded-xl bg-[#191F28] hover:bg-[#333D4B] text-white font-semibold text-xs sm:text-sm active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-none cursor-pointer">
                       <span>{project.externalLink.label || "외부 링크 바로가기"}</span>
                       <ArrowUpRight className="w-4 h-4" />
                     </Button>

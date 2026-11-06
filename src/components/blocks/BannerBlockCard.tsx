@@ -18,7 +18,7 @@ export function BannerBlockCard({ block, className }: BannerBlockCardProps) {
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "group relative block w-full overflow-hidden rounded-2xl border border-[#E5E8EB] bg-white tds-shadow-card tds-press-scale transition-all duration-200 select-none",
+        "group relative block w-full overflow-hidden rounded-2xl border border-[#E5E8EB] bg-white shadow-none tds-press-scale transition-all duration-200 select-none",
         className
       )}
     >

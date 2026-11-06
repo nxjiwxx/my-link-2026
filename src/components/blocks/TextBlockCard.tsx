@@ -15,7 +15,7 @@ export function TextBlockCard({ block, className }: TextBlockCardProps) {
   return (
     <div
       className={cn(
-        "w-full rounded-2xl border border-[#E5E8EB] bg-[#FFFFFF] p-4 tds-shadow-card select-none",
+        "w-full rounded-2xl border border-[#E5E8EB] bg-[#FFFFFF] p-4 shadow-none select-none",
         className
       )}
     >

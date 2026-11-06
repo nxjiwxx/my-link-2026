@@ -49,7 +49,7 @@ export function FilterAndToggleBar({
               className={cn(
                 "h-8 shrink-0 rounded-full px-3 text-xs font-semibold tracking-tight transition-all cursor-pointer whitespace-nowrap",
                 isActive
-                  ? "bg-[#191F28] text-white shadow-xs"
+                  ? "bg-[#191F28] text-white shadow-none"
                   : "bg-white text-[#4E5968] border border-[#E5E8EB] hover:border-[#D1D6DB] hover:text-[#191F28]"
               )}
             >
@@ -60,7 +60,7 @@ export function FilterAndToggleBar({
       </div>
 
       {/* 우측 뷰 모드 토글 (그리드 ⊞ ↔ 리스트 ☰) */}
-      <div className="flex items-center shrink-0 rounded-xl bg-white border border-[#E5E8EB] p-0.5 shadow-xs">
+      <div className="flex items-center shrink-0 rounded-xl bg-white border border-[#E5E8EB] p-0.5 shadow-none">
         <button
           type="button"
           onClick={() => onToggleViewMode("grid")}
@@ -69,7 +69,7 @@ export function FilterAndToggleBar({
           className={cn(
             "flex h-7 w-7 sm:h-7.5 sm:w-7.5 items-center justify-center rounded-lg transition-all cursor-pointer",
             viewMode === "grid"
-              ? "bg-[#191F28] text-white shadow-xs"
+              ? "bg-[#191F28] text-white shadow-none"
               : "text-[#8B95A1] hover:text-[#191F28]"
           )}
         >
@@ -83,7 +83,7 @@ export function FilterAndToggleBar({
           className={cn(
             "flex h-7 w-7 sm:h-7.5 sm:w-7.5 items-center justify-center rounded-lg transition-all cursor-pointer",
             viewMode === "list"
-              ? "bg-[#191F28] text-white shadow-xs"
+              ? "bg-[#191F28] text-white shadow-none"
               : "text-[#8B95A1] hover:text-[#191F28]"
           )}
         >

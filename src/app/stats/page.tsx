@@ -158,7 +158,7 @@ export default function StatsPage() {
   }
 
   const containerClasses =
-    "w-full max-w-[680px] my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col pb-16 transition-all duration-300";
+    "w-full max-w-[680px] my-0 sm:my-6 rounded-none border-0 sm:border border-[#E5E8EB] shadow-none bg-white flex flex-col pb-16 transition-all duration-300";
 
   return (
     <div className="min-h-screen w-full bg-[#F3F4F6] text-[#191F28] flex flex-col items-center">
@@ -278,7 +278,7 @@ export default function StatsPage() {
           </div>
 
           {/* 2. shadcn 차트 영역: 프로젝트별 클릭 수 막대 차트 */}
-          <div className="bg-white border border-[#E5E8EB] rounded-2xl p-4 sm:p-5 shadow-2xs space-y-3">
+          <div className="bg-white border border-[#E5E8EB] rounded-2xl p-4 sm:p-5 shadow-none space-y-3">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-xs sm:text-sm font-bold text-[#191F28]">
@@ -356,7 +356,7 @@ export default function StatsPage() {
           {/* 3. 카테고리별 클릭 점유율 (도넛 차트) & 프로젝트 순위 목록 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* 카테고리별 점유율 */}
-            <div className="bg-white border border-[#E5E8EB] rounded-2xl p-4 sm:p-5 shadow-2xs space-y-3 flex flex-col justify-between">
+            <div className="bg-white border border-[#E5E8EB] rounded-2xl p-4 sm:p-5 shadow-none space-y-3 flex flex-col justify-between">
               <div>
                 <h3 className="text-xs sm:text-sm font-bold text-[#191F28]">
                   카테고리별 클릭 점유율
@@ -421,7 +421,7 @@ export default function StatsPage() {
             </div>
 
             {/* 개별 링크 상세 순위 테이블 */}
-            <div className="bg-white border border-[#E5E8EB] rounded-2xl p-4 sm:p-5 shadow-2xs space-y-3">
+            <div className="bg-white border border-[#E5E8EB] rounded-2xl p-4 sm:p-5 shadow-none space-y-3">
               <div>
                 <h3 className="text-xs sm:text-sm font-bold text-[#191F28]">
                   프로젝트별 상세 클릭 순위

@@ -8,7 +8,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-2xl border border-[#E5E8EB] bg-white text-[#191F28] tds-shadow-card transition-all duration-200",
+      "rounded-2xl border border-[#E5E8EB] bg-white text-[#191F28] shadow-none transition-all duration-200",
       pressable && "tds-press-scale cursor-pointer hover:border-[#D1D6DB] active:scale-[0.98]",
       className
     )}

@@ -575,7 +575,7 @@ export default function ProfileEditPage() {
   }
 
   const containerClasses =
-    "w-full max-w-[680px] my-0 sm:my-6 rounded-none sm:rounded-2xl border-0 sm:border border-[#E5E8EB] shadow-none sm:shadow-sm bg-white flex flex-col pb-16 transition-all duration-300";
+    "w-full max-w-[680px] my-0 sm:my-6 rounded-none border-0 sm:border border-[#E5E8EB] shadow-none bg-white flex flex-col pb-16 transition-all duration-300";
 
   return (
     <div className="min-h-screen w-full bg-[#F3F4F6] text-[#191F28] flex flex-col items-center">
@@ -584,17 +584,17 @@ export default function ProfileEditPage() {
         <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-md px-4 sm:px-6 py-3.5 border-b border-[#E5E8EB] flex items-center justify-between select-none">
           <Link
             href="/"
-            className="flex items-center gap-1.5 text-xs font-semibold text-[#4E5968] hover:text-[#191F28] transition-colors p-1.5 -ml-1.5 rounded-lg hover:bg-[#F2F4F6]"
+            aria-label="뒤로가기"
+            className="flex items-center justify-center text-[#4E5968] hover:text-[#191F28] transition-colors p-2 -ml-2 rounded-lg hover:bg-[#F2F4F6]"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>홈으로</span>
+            <ArrowLeft className="w-5 h-5" />
           </Link>
 
           <span className="text-xs sm:text-sm font-bold text-[#191F28]">
-            프로필 및 링크 관리
+            프로필 편집
           </span>
 
-          <div className="w-16" />
+          <div className="w-9" />
         </header>
 
         <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-6">
@@ -620,11 +620,11 @@ export default function ProfileEditPage() {
                   alt={name}
                   fallback={name.slice(0, 1) || "P"}
                   size="xl"
-                  className="w-24 h-24 shadow-md ring-4 ring-white transition-opacity group-hover:opacity-90"
+                  className="w-24 h-24 ring-4 ring-white shadow-none transition-opacity group-hover:opacity-90"
                 />
 
                 {/* 우측 하단 카메라 아이콘 뱃지 */}
-                <div className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-full bg-white text-[#4E5968] border border-[#E5E8EB] shadow-xs group-hover:text-[#191F28] transition-colors">
+                <div className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-full bg-white text-[#4E5968] border border-[#E5E8EB] shadow-none group-hover:text-[#191F28] transition-colors">
                   <Camera className="w-3.5 h-3.5" />
                 </div>
 
@@ -769,7 +769,7 @@ export default function ProfileEditPage() {
           {/* ======================================================== */}
           {/* 2. 소셜 채널 링크 관리 (추가 시 목록 생성 & 아이콘 자동)  */}
           {/* ======================================================== */}
-          <div className="bg-white rounded-2xl border border-[#E5E8EB] p-5 shadow-2xs space-y-3.5">
+          <div className="bg-white rounded-2xl border border-[#E5E8EB] p-5 shadow-none space-y-3.5">
             <div className="flex items-center justify-between border-b border-[#F2F4F6] pb-2.5">
               <div className="flex items-center gap-1.5">
                 <Globe className="w-4 h-4 text-[#191F28]" />
@@ -791,7 +791,7 @@ export default function ProfileEditPage() {
                     className="flex items-center justify-between p-2.5 rounded-xl border border-[#E5E8EB] bg-[#F9FAFB] hover:border-[#D1D6DB] transition-all"
                   >
                     <div className="flex items-center gap-2.5 min-w-0 flex-1 mr-2">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-[#E5E8EB]/80 shrink-0 shadow-2xs">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-[#E5E8EB]/80 shrink-0 shadow-none">
                         {renderSocialIcon(item.iconType, "w-4 h-4")}
                       </div>
                       <div className="min-w-0 flex-1">
@@ -915,7 +915,7 @@ export default function ProfileEditPage() {
           {/* ======================================================== */}
           {/* 3. 이력서 (Resume) PDF 관리 */}
           {/* ======================================================== */}
-          <div className="bg-white rounded-2xl border border-[#E5E8EB] p-4 sm:p-5 shadow-2xs space-y-3.5">
+          <div className="bg-white rounded-2xl border border-[#E5E8EB] p-4 sm:p-5 shadow-none space-y-3.5">
             <div className="flex items-center justify-between border-b border-[#F2F4F6] pb-2.5">
               <div className="flex items-center gap-1.5">
                 <FileText className="w-4 h-4 text-[#4E5968]" />
@@ -1060,7 +1060,7 @@ export default function ProfileEditPage() {
             <Button
               type="submit"
               disabled={isSaving}
-              className="flex-1 h-11 text-xs sm:text-sm font-semibold bg-[#191F28] hover:bg-[#333D4B] text-white rounded-xl flex items-center justify-center gap-1.5 shadow-xs active:scale-[0.98] transition-all cursor-pointer"
+              className="flex-1 h-11 text-xs sm:text-sm font-semibold bg-[#191F28] hover:bg-[#333D4B] text-white rounded-xl flex items-center justify-center gap-1.5 shadow-none active:scale-[0.98] transition-all cursor-pointer"
             >
               {isSaving ? (
                 <>

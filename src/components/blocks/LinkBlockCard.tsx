@@ -71,7 +71,7 @@ export function LinkBlockCard({ block, className, onClick }: LinkBlockCardProps)
       rel="noopener noreferrer"
       onClick={onClick}
       className={cn(
-        "group relative flex items-center justify-between w-full p-4 bg-white rounded-2xl border border-[#E5E8EB] tds-shadow-card tds-press-scale hover:border-[#D1D6DB] hover:bg-[#FAFAFA] transition-all duration-200 select-none",
+        "group relative flex items-center justify-between w-full p-4 bg-white rounded-2xl border border-[#E5E8EB] shadow-none tds-press-scale hover:border-[#D1D6DB] hover:bg-[#FAFAFA] transition-all duration-200 select-none",
         className
       )}
     >

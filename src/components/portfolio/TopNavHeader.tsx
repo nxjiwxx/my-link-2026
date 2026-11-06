@@ -164,7 +164,7 @@ export function TopNavHeader({
 
               {/* 프로필 드롭다운 메뉴 */}
               {isDropdownOpen && (
-                <div className="absolute right-0 top-full mt-2 w-52 rounded-xl bg-white border border-[#E5E8EB] shadow-lg p-1.5 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                <div className="absolute right-0 top-full mt-2 w-52 rounded-xl bg-white border border-[#E5E8EB] shadow-none p-1.5 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
                   {/* 유저 정보 요약 */}
                   <div className="px-3 py-2 border-b border-[#F2F4F6] mb-1">
                     <p className="text-xs font-semibold text-[#191F28] truncate">
@@ -239,7 +239,7 @@ export function TopNavHeader({
             <button
               onClick={handleGoogleLogin}
               disabled={isLoggingIn}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#191F28] hover:bg-[#333D4B] text-white text-xs font-semibold transition-all shadow-xs active:scale-95 cursor-pointer disabled:opacity-60"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#191F28] hover:bg-[#333D4B] text-white text-xs font-semibold transition-all shadow-none active:scale-95 cursor-pointer disabled:opacity-60"
             >
               <GoogleIcon className="w-3.5 h-3.5" />
               <span>{isLoggingIn ? "연결 중..." : "Google 로그인"}</span>

@@ -102,7 +102,7 @@ export function ShareModal({
           <Button
             size="sm"
             onClick={handleCopy}
-            className="shrink-0 h-8 rounded-lg bg-[#3182F6] px-3 text-xs font-bold text-white hover:bg-[#1B64DA] active:scale-95 transition-all shadow-xs"
+            className="shrink-0 h-8 rounded-lg bg-[#3182F6] px-3 text-xs font-bold text-white hover:bg-[#1B64DA] active:scale-95 transition-all shadow-none"
           >
             {copied ? (
               <>

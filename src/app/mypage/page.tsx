@@ -173,7 +173,7 @@ export default function MyPage() {
     return (
       <TooltipProvider>
         <div className="min-h-screen w-full bg-[#F2F4F6] text-[#191F28] flex flex-col items-center">
-          <main className="w-full max-w-[480px] min-h-screen bg-[#F9FAFB] flex flex-col shadow-xs border-x border-[#E5E8EB]/60 pb-16">
+          <main className="w-full max-w-[480px] min-h-screen bg-[#F9FAFB] flex flex-col rounded-none shadow-none border-x border-[#E5E8EB]/60 pb-16">
             {/* 상단 탑바 */}
             <header className="w-full flex items-center justify-between px-4 py-3 bg-white border-b border-[#E5E8EB]">
               <Link
@@ -195,7 +195,7 @@ export default function MyPage() {
 
             {/* 비로그인 안내 카드 */}
             <div className="px-5 py-12 flex-1 flex flex-col items-center justify-center text-center">
-              <div className="w-16 h-16 rounded-3xl bg-[#E8F3FF] text-[#3182F6] flex items-center justify-center mb-4 shadow-sm">
+              <div className="w-16 h-16 rounded-3xl bg-[#E8F3FF] text-[#3182F6] flex items-center justify-center mb-4 shadow-none">
                 <Lock className="w-8 h-8" />
               </div>
 
@@ -213,7 +213,7 @@ export default function MyPage() {
               <div className="mt-6 w-full max-w-xs space-y-2.5">
                 <Button
                   onClick={handleGoogleLogin}
-                  className="w-full h-12 rounded-2xl bg-[#3182F6] hover:bg-[#1B64DA] text-white font-bold text-sm shadow-md shadow-[#3182F6]/20 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full h-12 rounded-2xl bg-[#3182F6] hover:bg-[#1B64DA] text-white font-bold text-sm shadow-none flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center">
                     <GoogleIcon className="w-3.5 h-3.5" />
@@ -241,7 +241,7 @@ export default function MyPage() {
   return (
     <TooltipProvider>
       <div className="min-h-screen w-full bg-[#F2F4F6] text-[#191F28] flex flex-col items-center">
-        <main className="w-full max-w-[480px] min-h-screen bg-[#F9FAFB] flex flex-col shadow-xs border-x border-[#E5E8EB]/60 pb-16">
+        <main className="w-full max-w-[480px] min-h-screen bg-[#F9FAFB] flex flex-col rounded-none shadow-none border-x border-[#E5E8EB]/60 pb-16">
           {/* 1. 상단 네비게이션 헤더 */}
           <header className="w-full flex items-center justify-between px-4 py-3 bg-white/90 backdrop-blur-md border-b border-[#E5E8EB]/70 sticky top-0 z-30 select-none">
             <div className="flex items-center gap-2">
@@ -249,7 +249,7 @@ export default function MyPage() {
                 href="/"
                 className="flex items-center gap-1.5 text-[15px] font-bold text-[#191F28] hover:opacity-85 transition-opacity"
               >
-                <span className="w-6 h-6 rounded-lg bg-[#3182F6] flex items-center justify-center text-white text-xs font-black shadow-2xs">
+                <span className="w-6 h-6 rounded-lg bg-[#3182F6] flex items-center justify-center text-white text-xs font-black shadow-none">
                   M
                 </span>
                 <span className="tracking-tight">MyLink</span>
@@ -280,14 +280,14 @@ export default function MyPage() {
 
           {/* 2. 유저 프로필 및 계정 요약 카드 */}
           <section className="p-4 select-none">
-            <div className="rounded-3xl bg-white border border-[#E5E8EB] p-5 shadow-xs">
+            <div className="rounded-3xl bg-white border border-[#E5E8EB] p-5 shadow-none">
               <div className="flex items-center gap-3.5">
                 <Avatar
                   src={profile.avatarUrl}
                   alt={profile.name}
                   fallback={profile.name.slice(0, 1)}
                   size="lg"
-                  className="w-14 h-14 ring-2 ring-[#3182F6]/20 shadow-xs shrink-0"
+                  className="w-14 h-14 ring-2 ring-[#3182F6]/20 shadow-none shrink-0"
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
@@ -368,19 +368,19 @@ export default function MyPage() {
               <TabsList className="w-full grid grid-cols-3 h-10 p-1 bg-[#E5E8EB]/70 rounded-2xl mb-4">
                 <TabsTrigger
                   value="overview"
-                  className="rounded-xl text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-[#191F28] data-[state=active]:shadow-xs transition-all"
+                  className="rounded-xl text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-[#191F28] data-[state=active]:shadow-none transition-all"
                 >
                   개요 & 통계
                 </TabsTrigger>
                 <TabsTrigger
                   value="links"
-                  className="rounded-xl text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-[#191F28] data-[state=active]:shadow-xs transition-all"
+                  className="rounded-xl text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-[#191F28] data-[state=active]:shadow-none transition-all"
                 >
                   내 링크 ({links.length})
                 </TabsTrigger>
                 <TabsTrigger
                   value="settings"
-                  className="rounded-xl text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-[#191F28] data-[state=active]:shadow-xs transition-all"
+                  className="rounded-xl text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-[#191F28] data-[state=active]:shadow-none transition-all"
                 >
                   설정
                 </TabsTrigger>
@@ -390,7 +390,7 @@ export default function MyPage() {
               <TabsContent value="overview" className="space-y-3">
                 {/* 통계 요약 그리드 */}
                 <div className="grid grid-cols-2 gap-2.5">
-                  <div className="p-3.5 rounded-2xl bg-white border border-[#E5E8EB] shadow-2xs">
+                  <div className="p-3.5 rounded-2xl bg-white border border-[#E5E8EB] shadow-none">
                     <div className="flex items-center gap-1.5 text-xs text-[#8B95A1] font-medium">
                       <Layers className="w-3.5 h-3.5 text-[#3182F6]" />
                       <span>등록된 작업물</span>
@@ -403,7 +403,7 @@ export default function MyPage() {
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-2xl bg-white border border-[#E5E8EB] shadow-2xs">
+                  <div className="p-3.5 rounded-2xl bg-white border border-[#E5E8EB] shadow-none">
                     <div className="flex items-center gap-1.5 text-xs text-[#8B95A1] font-medium">
                       <FolderGit2 className="w-3.5 h-3.5 text-[#3182F6]" />
                       <span>보유 도구</span>
@@ -416,7 +416,7 @@ export default function MyPage() {
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-2xl bg-white border border-[#E5E8EB] shadow-2xs">
+                  <div className="p-3.5 rounded-2xl bg-white border border-[#E5E8EB] shadow-none">
                     <div className="flex items-center gap-1.5 text-xs text-[#8B95A1] font-medium">
                       <Calendar className="w-3.5 h-3.5 text-[#3182F6]" />
                       <span>경력 및 활동</span>
@@ -429,7 +429,7 @@ export default function MyPage() {
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-2xl bg-white border border-[#E5E8EB] shadow-2xs">
+                  <div className="p-3.5 rounded-2xl bg-white border border-[#E5E8EB] shadow-none">
                     <div className="flex items-center gap-1.5 text-xs text-[#8B95A1] font-medium">
                       <FileText className="w-3.5 h-3.5 text-[#3182F6]" />
                       <span>이력서 PDF</span>
@@ -524,7 +524,7 @@ export default function MyPage() {
                     </p>
                     <Link
                       href="/"
-                      className="mt-3 inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#3182F6] text-white text-xs font-bold shadow-2xs hover:bg-[#1B64DA] transition-all"
+                      className="mt-3 inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#3182F6] text-white text-xs font-bold shadow-none hover:bg-[#1B64DA] transition-all"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>작업물 추가하러 가기</span>

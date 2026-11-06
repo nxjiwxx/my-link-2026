@@ -80,7 +80,7 @@ export function ProjectDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-lg rounded-[24px] p-0 border border-[#E5E8EB] bg-white shadow-2xl overflow-hidden">
+      <DialogContent className="sm:max-w-lg rounded-[24px] p-0 border border-[#E5E8EB] bg-white shadow-none overflow-hidden">
         {/* 상단 미세 스크롤 진행률 바 (스크롤바 대신 읽은 위치를 시각화) */}
         <div className="absolute top-0 left-0 right-0 h-1 z-30 bg-[#F2F4F6]">
           <div
@@ -104,13 +104,13 @@ export function ProjectDetailModal({
             />
             {/* 좌측 상단 카테고리 뱃지 */}
             <div className="absolute top-3 left-3 flex items-center gap-1.5">
-              <Badge variant="primary" className="bg-[#3182F6] text-white shadow-xs">
+              <Badge variant="primary" className="bg-[#3182F6] text-white shadow-none">
                 {project.categoryLabel}
               </Badge>
               {/* 팀 / 개인 프로젝트 구분 뱃지 */}
               <Badge
                 variant="neutral"
-                className="bg-black/60 backdrop-blur-md text-white border-0 shadow-xs flex items-center gap-1 text-[11px]"
+                className="bg-black/60 backdrop-blur-md text-white border-0 shadow-none flex items-center gap-1 text-[11px]"
               >
                 {isTeam ? (
                   <Users className="w-3 h-3 text-[#3182F6]" />
@@ -215,7 +215,7 @@ export function ProjectDetailModal({
                   rel="noopener noreferrer"
                   className="w-full"
                 >
-                  <Button className="w-full h-12 rounded-xl bg-[#3182F6] hover:bg-[#1B64DA] text-white font-bold text-xs sm:text-sm active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-xs">
+                  <Button className="w-full h-12 rounded-xl bg-[#3182F6] hover:bg-[#1B64DA] text-white font-bold text-xs sm:text-sm active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-none">
                     <span>{project.externalLink.label}</span>
                     <ArrowUpRight className="w-4 h-4" />
                   </Button>
@@ -247,7 +247,7 @@ export function ProjectDetailModal({
             <button
               type="button"
               onClick={handleScrollDown}
-              className="pointer-events-auto flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#191F28]/85 text-white text-[10px] font-semibold backdrop-blur-md shadow-md hover:bg-[#191F28] transition-all animate-bounce"
+              className="pointer-events-auto flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#191F28]/85 text-white text-[10px] font-semibold backdrop-blur-md shadow-none border border-white/20 hover:bg-[#191F28] transition-all animate-bounce"
             >
               <span>아래로 스크롤하여 더 보기</span>
               <ChevronDown className="w-3 h-3 text-[#3182F6]" />

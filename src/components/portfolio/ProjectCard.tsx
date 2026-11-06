@@ -34,7 +34,7 @@ export function ProjectCard({ project, viewMode, onClick, isOwner = false }: Pro
             <Badge
               variant="neutral"
               size="sm"
-              className="bg-white/95 text-[#191F28] font-semibold text-[10px] shadow-2xs border border-[#E5E8EB] truncate max-w-[58%] pointer-events-auto"
+              className="bg-white/95 text-[#191F28] font-semibold text-[10px] shadow-none border border-[#E5E8EB] truncate max-w-[58%] pointer-events-auto"
             >
               {project.categoryLabel}
             </Badge>
@@ -42,7 +42,7 @@ export function ProjectCard({ project, viewMode, onClick, isOwner = false }: Pro
             <Badge
               variant="neutral"
               size="sm"
-              className="bg-white/95 text-[#4E5968] font-medium text-[10px] shadow-2xs border border-[#E5E8EB] flex items-center gap-1 shrink-0 pointer-events-auto"
+              className="bg-white/95 text-[#4E5968] font-medium text-[10px] shadow-none border border-[#E5E8EB] flex items-center gap-1 shrink-0 pointer-events-auto"
             >
               {isTeam ? (
                 <Users className="w-2.5 h-2.5 text-[#6B7684]" />
@@ -118,7 +118,7 @@ export function ProjectCard({ project, viewMode, onClick, isOwner = false }: Pro
           <Badge
             variant="neutral"
             size="sm"
-            className="bg-white/95 text-[#4E5968] font-medium text-[9px] sm:text-[10px] shadow-2xs border border-[#E5E8EB] flex items-center gap-1 py-0 px-1.5"
+            className="bg-white/95 text-[#4E5968] font-medium text-[9px] sm:text-[10px] shadow-none border border-[#E5E8EB] flex items-center gap-1 py-0 px-1.5"
           >
             {isTeam ? (
               <Users className="w-2.5 h-2.5 text-[#6B7684]" />

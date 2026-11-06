@@ -284,12 +284,10 @@ export function ToolProficiencyBars({
   };
 
   return (
-    <Card className="rounded-xl border border-[#E5E8EB] bg-white select-none shadow-2xs">
+    <Card className="rounded-xl border border-[#E5E8EB] bg-white select-none shadow-none">
       <CardHeader className="p-4 pb-2.5 flex flex-row items-center justify-between space-y-0">
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#F3F4F6] text-[#4B5563]">
-            <Wrench className="w-4 h-4" />
-          </div>
+        <div className="flex items-center gap-1.5">
+          <Wrench className="w-4 h-4 text-[#4B5563]" />
           <CardTitle className="text-sm font-semibold text-[#111827]">
             사용 도구 숙련도
           </CardTitle>
@@ -305,7 +303,7 @@ export function ToolProficiencyBars({
               setEditingIndex(null);
               setIsAdding(!isAdding);
             }}
-            className="h-7 px-2.5 text-[11px] font-medium text-[#111827] border-[#E5E8EB] hover:bg-[#F9FAFB] rounded-lg gap-1"
+            className="h-7 px-2.5 text-[11px] font-medium text-[#4E5968] bg-transparent border border-[#E5E8EB] hover:bg-[#F2F4F6] hover:text-[#191F28] rounded-lg gap-1 shadow-none transition-colors cursor-pointer"
           >
             <Plus className="w-3 h-3" />
             <span>도구 추가</span>

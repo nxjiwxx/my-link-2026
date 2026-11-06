@@ -40,7 +40,7 @@ export function GuestNoticeCard({ onLoginSuccess, showToast }: GuestNoticeCardPr
 
   return (
     <section className="px-4 py-4 select-none animate-in fade-in slide-in-from-top-2 duration-300">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-white via-white to-[#F2F8FF] border border-[#D5E4F7] p-5 shadow-sm">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-white via-white to-[#F2F8FF] border border-[#D5E4F7] p-5 shadow-none">
         {/* 장식용 배경 블러 원 */}
         <div className="absolute -top-12 -right-12 w-32 h-32 bg-[#3182F6]/10 rounded-full blur-2xl pointer-events-none" />
         <div className="absolute -bottom-8 -left-8 w-28 h-28 bg-[#3182F6]/10 rounded-full blur-2xl pointer-events-none" />
@@ -103,9 +103,9 @@ export function GuestNoticeCard({ onLoginSuccess, showToast }: GuestNoticeCardPr
             type="button"
             onClick={handleLogin}
             disabled={isLoading}
-            className="w-full h-12 rounded-2xl bg-[#3182F6] hover:bg-[#1B64DA] text-white font-bold text-sm shadow-md shadow-[#3182F6]/20 flex items-center justify-center gap-2.5 active:scale-[0.98] transition-all cursor-pointer"
+            className="w-full h-12 rounded-2xl bg-[#3182F6] hover:bg-[#1B64DA] text-white font-bold text-sm shadow-none flex items-center justify-center gap-2.5 active:scale-[0.98] transition-all cursor-pointer"
           >
-            <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-2xs">
+            <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-none">
               <GoogleIcon className="w-3.5 h-3.5" />
             </div>
             <span>{isLoading ? "Google 로그인 연결 중..." : "Google 계정으로 3초 만에 시작하기"}</span>

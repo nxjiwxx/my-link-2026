@@ -54,7 +54,7 @@ export function DeleteConfirmModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && !isDeleting && onClose()}>
-      <DialogContent className="sm:max-w-[400px] w-full p-6 rounded-[24px] border border-[#E5E8EB] bg-white shadow-2xl">
+      <DialogContent className="sm:max-w-[400px] w-full p-6 rounded-[24px] border border-[#E5E8EB] bg-white shadow-none">
         <DialogHeader className="text-left space-y-3">
           {/* 상단 경고 아이콘 */}
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FEECEF] text-[#E8344E]">
@@ -122,7 +122,7 @@ export function DeleteConfirmModal({
             type="button"
             disabled={isDeleting}
             onClick={handleDelete}
-            className="flex-1 h-11 text-xs sm:text-sm font-bold bg-[#E8344E] hover:bg-[#D02640] text-white rounded-xl flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98] transition-all"
+            className="flex-1 h-11 text-xs sm:text-sm font-bold bg-[#E8344E] hover:bg-[#D02640] text-white rounded-xl flex items-center justify-center gap-1.5 shadow-none active:scale-[0.98] transition-all"
           >
             {isDeleting ? (
               <>

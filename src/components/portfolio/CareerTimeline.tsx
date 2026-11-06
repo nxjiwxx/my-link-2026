@@ -103,12 +103,10 @@ export function CareerTimeline({
   };
 
   return (
-    <Card className="rounded-xl border border-[#E5E8EB] bg-white select-none shadow-2xs">
+    <Card className="rounded-xl border border-[#E5E8EB] bg-white select-none shadow-none">
       <CardHeader className="p-4 pb-2.5 flex flex-row items-center justify-between space-y-0">
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#F3F4F6] text-[#4B5563]">
-            <Briefcase className="w-4 h-4" />
-          </div>
+        <div className="flex items-center gap-1.5">
+          <Briefcase className="w-4 h-4 text-[#4B5563]" />
           <CardTitle className="text-sm font-semibold text-[#111827]">
             경력 및 활동
           </CardTitle>
@@ -124,7 +122,7 @@ export function CareerTimeline({
               setEditingId(null);
               setIsAdding(!isAdding);
             }}
-            className="h-7 px-2.5 text-[11px] font-medium text-[#111827] border-[#E5E8EB] hover:bg-[#F9FAFB] rounded-lg gap-1"
+            className="h-7 px-2.5 text-[11px] font-medium text-[#4E5968] bg-transparent border border-[#E5E8EB] hover:bg-[#F2F4F6] hover:text-[#191F28] rounded-lg gap-1 shadow-none transition-colors cursor-pointer"
           >
             <Plus className="w-3 h-3" />
             <span>경력 추가</span>
@@ -226,7 +224,7 @@ export function CareerTimeline({
               return (
                 <div key={career.id} className="relative">
                   {/* 타임라인 불릿 닷 */}
-                  <div className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-[#3182F6] shadow-xs" />
+                  <div className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-[#3182F6] shadow-none" />
                   <div className="p-3.5 rounded-xl bg-[#F9FAFB] border-2 border-[#3182F6]/40 space-y-2.5 animate-in fade-in duration-150">
                     <div className="text-xs font-bold text-[#191F28] flex items-center justify-between">
                       <span>경력 정보 인라인 수정</span>
@@ -313,7 +311,7 @@ export function CareerTimeline({
             return (
               <div key={career.id} className="relative group/career">
                 {/* 타임라인 불릿 닷 */}
-                <div className="absolute -left-[21px] top-1.5 h-2 w-2 rounded-full border-2 border-white bg-[#111827] shadow-xs" />
+                <div className="absolute -left-[21px] top-1.5 h-2 w-2 rounded-full border-2 border-white bg-[#111827] shadow-none" />
 
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">

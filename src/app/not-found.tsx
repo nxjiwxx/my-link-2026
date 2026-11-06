@@ -4,7 +4,7 @@ import { UserX, ArrowLeft } from "lucide-react";
 export default function NotFound() {
   return (
     <div className="min-h-screen w-full bg-[#F2F4F6] flex flex-col items-center justify-center p-4">
-      <main className="w-full max-w-[480px] bg-white rounded-2xl border border-[#E5E8EB] shadow-xs p-8 text-center flex flex-col items-center animate-in fade-in zoom-in-95 duration-200">
+      <main className="w-full max-w-[480px] bg-white rounded-none border border-[#E5E8EB] shadow-none p-8 text-center flex flex-col items-center animate-in fade-in zoom-in-95 duration-200">
         <div className="w-16 h-16 rounded-2xl bg-[#FEECEF] text-[#E8344E] flex items-center justify-center mb-5">
           <UserX className="w-8 h-8" />
         </div>

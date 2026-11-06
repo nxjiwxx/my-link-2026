@@ -53,7 +53,7 @@ export function ProfileHeader({
           className={cn(
             "ring-1 ring-[#E5E8EB] transition-all",
             isPublicView
-              ? "w-26 h-26 sm:w-30 sm:h-30 ring-2 ring-[#E5E8EB]/80 shadow-xs"
+              ? "w-26 h-26 sm:w-30 sm:h-30 ring-2 ring-[#E5E8EB]/80 shadow-none"
               : "w-22 h-22 sm:w-24 sm:h-24"
           )}
         />
@@ -95,7 +95,7 @@ export function ProfileHeader({
               rel="noopener noreferrer"
               title="GitHub 프로필"
               aria-label="GitHub"
-              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E5E8EB] bg-white text-[#4E5968] hover:border-[#191F28] hover:text-[#191F28] hover:bg-[#F9FAFB] active:scale-95 transition-all shadow-2xs"
+              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E5E8EB] bg-white text-[#4E5968] hover:border-[#191F28] hover:text-[#191F28] hover:bg-[#F9FAFB] active:scale-95 transition-all shadow-none"
             >
               <GithubIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </a>
@@ -108,7 +108,7 @@ export function ProfileHeader({
               rel="noopener noreferrer"
               title="LinkedIn 프로필"
               aria-label="LinkedIn"
-              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E5E8EB] bg-white text-[#4E5968] hover:border-[#0A66C2] hover:text-[#0A66C2] hover:bg-[#F9FAFB] active:scale-95 transition-all shadow-2xs"
+              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E5E8EB] bg-white text-[#4E5968] hover:border-[#0A66C2] hover:text-[#0A66C2] hover:bg-[#F9FAFB] active:scale-95 transition-all shadow-none"
             >
               <LinkedinIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </a>
@@ -121,7 +121,7 @@ export function ProfileHeader({
               rel="noopener noreferrer"
               title="Behance 포트폴리오"
               aria-label="Behance"
-              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E5E8EB] bg-white text-[#4E5968] hover:border-[#0057FF] hover:text-[#0057FF] hover:bg-[#F9FAFB] active:scale-95 transition-all shadow-2xs"
+              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E5E8EB] bg-white text-[#4E5968] hover:border-[#0057FF] hover:text-[#0057FF] hover:bg-[#F9FAFB] active:scale-95 transition-all shadow-none"
             >
               <BehanceIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </a>
@@ -134,7 +134,7 @@ export function ProfileHeader({
               rel="noopener noreferrer"
               title="Dribbble 프로필"
               aria-label="Dribbble"
-              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E5E8EB] bg-white text-[#4E5968] hover:border-[#EA4C89] hover:text-[#EA4C89] hover:bg-[#F9FAFB] active:scale-95 transition-all shadow-2xs"
+              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E5E8EB] bg-white text-[#4E5968] hover:border-[#EA4C89] hover:text-[#EA4C89] hover:bg-[#F9FAFB] active:scale-95 transition-all shadow-none"
             >
               <DribbbleIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </a>
@@ -147,7 +147,7 @@ export function ProfileHeader({
               rel="noopener noreferrer"
               title="Instagram 프로필"
               aria-label="Instagram"
-              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E5E8EB] bg-white text-[#4E5968] hover:border-[#E1306C] hover:text-[#E1306C] hover:bg-[#F9FAFB] active:scale-95 transition-all shadow-2xs"
+              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E5E8EB] bg-white text-[#4E5968] hover:border-[#E1306C] hover:text-[#E1306C] hover:bg-[#F9FAFB] active:scale-95 transition-all shadow-none"
             >
               <InstagramIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </a>
@@ -158,7 +158,7 @@ export function ProfileHeader({
               href={`mailto:${socialLinks.email}`}
               title="이메일 문의"
               aria-label="이메일"
-              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E5E8EB] bg-white text-[#4E5968] hover:border-[#191F28] hover:text-[#191F28] hover:bg-[#F9FAFB] active:scale-95 transition-all shadow-2xs"
+              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E5E8EB] bg-white text-[#4E5968] hover:border-[#191F28] hover:text-[#191F28] hover:bg-[#F9FAFB] active:scale-95 transition-all shadow-none"
             >
               <MailIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </a>
@@ -172,7 +172,7 @@ export function ProfileHeader({
           <Button
             type="button"
             onClick={onResumeDownload}
-            className="w-full h-10 sm:h-11 rounded-xl bg-white border border-[#D1D6DB] hover:border-[#191F28] text-[#191F28] hover:bg-[#F9FAFB] active:scale-[0.98] font-medium text-xs sm:text-sm transition-all shadow-2xs flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full h-10 sm:h-11 rounded-xl bg-white border border-[#D1D6DB] hover:border-[#191F28] text-[#191F28] hover:bg-[#F9FAFB] active:scale-[0.98] font-medium text-xs sm:text-sm transition-all shadow-none flex items-center justify-center gap-2 cursor-pointer"
           >
             <FileText className="w-4 h-4 text-[#4E5968]" />
             <span>이력서 다운로드</span>
