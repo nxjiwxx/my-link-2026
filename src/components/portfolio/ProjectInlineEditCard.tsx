@@ -357,11 +357,11 @@ export function ProjectInlineEditCard({
 
   return (
     <div className="w-full">
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-1">
         {/* ======================================================== */}
         {/* 1. 커버 / 대표 썸네일 (노션 페이지 커버 스타일) */}
         {/* ======================================================== */}
-        <div className="space-y-2">
+        <div className="space-y-2 pb-4 border-b border-[#F2F4F6]">
           {thumbnailUrl ? (
             <div className="relative rounded-xl overflow-hidden border border-[#E5E8EB] bg-[#F9FAFB] aspect-[16/9] group shadow-none">
               <img
@@ -435,303 +435,307 @@ export function ProjectInlineEditCard({
         </div>
 
         {/* ======================================================== */}
-        {/* 2. 타이틀 & 한 줄 소개 (노션 페이지 타이틀 스타일) */}
+        {/* 2. 첨부 이미지 스타일 입력 필드 테이블 (좌측 볼드 레이블, 우측 인풋) */}
         {/* ======================================================== */}
-        <div className="space-y-3 pb-2 border-b border-[#F2F4F6]">
-          <div>
-            <input
-              type="text"
+
+        {/* 필드 1: 작업 제목 */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+          <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0">
+            작업 제목 <span className="text-[#E8344E]">*</span>
+          </label>
+          <div className="flex-1">
+            <Input
               value={title}
               onChange={(e) => {
                 setTitle(e.target.value);
                 if (errors.title) setErrors({ ...errors, title: undefined });
               }}
-              placeholder="제목 없는 프로젝트"
+              placeholder="작업 제목을 입력하세요"
               className={cn(
-                "w-full text-lg sm:text-xl font-bold text-[#191F28] placeholder:text-[#B0B8C1] bg-transparent px-1 py-1 focus:outline-none border-b-2 transition-colors",
-                errors.title
-                  ? "border-[#E8344E]"
-                  : "border-transparent hover:border-[#E5E8EB] focus:border-[#191F28]"
+                "h-9 text-xs sm:text-sm bg-white border-[#E5E8EB]",
+                errors.title && "border-[#E8344E]"
               )}
             />
             {errors.title && (
-              <p className="text-[11px] text-[#E8344E] px-1 mt-1 font-medium">{errors.title}</p>
+              <p className="text-[11px] text-[#E8344E] mt-1 font-medium">{errors.title}</p>
             )}
           </div>
+        </div>
 
-          <div>
-            <input
-              type="text"
+        {/* 필드 2: 한 줄 소개 */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+          <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0">
+            한 줄 소개 <span className="text-[#E8344E]">*</span>
+          </label>
+          <div className="flex-1">
+            <Input
               value={summary}
               onChange={(e) => {
                 setSummary(e.target.value);
                 if (errors.summary) setErrors({ ...errors, summary: undefined });
               }}
-              placeholder="작업물에 대한 한 줄 소개를 작성하세요..."
+              placeholder="작업물에 대한 한 줄 소개를 입력하세요"
               className={cn(
-                "w-full text-xs sm:text-sm text-[#4E5968] placeholder:text-[#8B95A1] bg-transparent px-1 py-1 focus:outline-none border-b transition-colors",
-                errors.summary
-                  ? "border-[#E8344E]"
-                  : "border-transparent hover:border-[#E5E8EB] focus:border-[#3182F6]"
+                "h-9 text-xs sm:text-sm bg-white border-[#E5E8EB]",
+                errors.summary && "border-[#E8344E]"
               )}
             />
             {errors.summary && (
-              <p className="text-[11px] text-[#E8344E] px-1 mt-1 font-medium">{errors.summary}</p>
+              <p className="text-[11px] text-[#E8344E] mt-1 font-medium">{errors.summary}</p>
             )}
           </div>
         </div>
 
-        {/* ======================================================== */}
-        {/* 3. 노션 스타일 속성 (Properties) 섹션 */}
-        {/* ======================================================== */}
-        <div className="space-y-3.5 text-xs">
-          {/* 속성 1: 작업 구분 */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 py-1">
-            <span className="w-28 text-xs font-medium text-[#8B95A1] flex items-center gap-1.5 shrink-0">
-              <User className="w-3.5 h-3.5" />
-              <span>작업 구분</span>
-            </span>
-            <div className="flex-1">
-              <div className="inline-flex rounded-lg bg-[#F2F4F6] p-0.5 border border-[#E5E8EB]/60">
+        {/* 필드 3: 작업 구분 */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+          <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0 flex items-center gap-1.5">
+            <User className="w-4 h-4 text-[#4E5968]" />
+            <span>작업 구분</span>
+            <span className="text-[#E8344E]">*</span>
+          </label>
+          <div className="flex-1">
+            <div className="inline-flex rounded-lg bg-[#F2F4F6] p-0.5 border border-[#E5E8EB]/60">
+              <button
+                type="button"
+                onClick={() => setProjectType("solo")}
+                className={cn(
+                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer",
+                  projectType === "solo"
+                    ? "bg-white text-[#191F28] font-bold shadow-none"
+                    : "text-[#6B7684] hover:text-[#191F28]"
+                )}
+              >
+                <User className="w-3.5 h-3.5" />
+                <span>개인 프로젝트</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setProjectType("team")}
+                className={cn(
+                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer",
+                  projectType === "team"
+                    ? "bg-white text-[#191F28] font-bold shadow-none"
+                    : "text-[#6B7684] hover:text-[#191F28]"
+                )}
+              >
+                <Users className="w-3.5 h-3.5" />
+                <span>팀 프로젝트</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* 필드 4: 카테고리 */}
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+          <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0 sm:pt-1.5 flex items-center gap-1.5">
+            <Tag className="w-4 h-4 text-[#4E5968]" />
+            <span>카테고리</span>
+            <span className="text-[#E8344E]">*</span>
+          </label>
+          <div className="flex-1 space-y-2">
+            <div className="flex flex-wrap items-center gap-1.5">
+              {localCategories.map((cat) => (
                 <button
+                  key={cat.id}
                   type="button"
-                  onClick={() => setProjectType("solo")}
+                  onClick={() => setCategory(cat.id)}
                   className={cn(
-                    "flex items-center gap-1 px-3 py-1 rounded-md text-xs font-medium transition-all cursor-pointer",
-                    projectType === "solo"
-                      ? "bg-white text-[#191F28] font-semibold shadow-none"
-                      : "text-[#6B7684] hover:text-[#191F28]"
+                    "px-3 py-1.5 text-xs rounded-md border text-center transition-all cursor-pointer font-medium",
+                    category === cat.id
+                      ? "bg-[#191F28] text-white border-[#191F28] font-bold"
+                      : "bg-[#FAFAFA] text-[#4E5968] border-[#E5E8EB] hover:bg-[#F2F4F6] hover:text-[#191F28]"
                   )}
                 >
-                  <User className="w-3 h-3" />
-                  <span>개인 프로젝트</span>
+                  {cat.label}
                 </button>
+              ))}
+              {!isAddingCategory ? (
                 <button
                   type="button"
-                  onClick={() => setProjectType("team")}
-                  className={cn(
-                    "flex items-center gap-1 px-3 py-1 rounded-md text-xs font-medium transition-all cursor-pointer",
-                    projectType === "team"
-                      ? "bg-white text-[#191F28] font-semibold shadow-none"
-                      : "text-[#6B7684] hover:text-[#191F28]"
-                  )}
+                  onClick={() => setIsAddingCategory(true)}
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs text-[#8B95A1] hover:text-[#191F28] border border-dashed border-[#D1D6DB] hover:border-[#8B95A1] rounded-md transition-all cursor-pointer font-medium"
                 >
-                  <Users className="w-3 h-3" />
-                  <span>팀 프로젝트</span>
+                  <Plus className="w-3 h-3" />
+                  <span>새 카테고리</span>
+                </button>
+              ) : null}
+            </div>
+
+            {isAddingCategory && (
+              <div className="flex items-center gap-1.5 p-1 bg-[#F9FAFB] rounded-lg border border-[#E5E8EB] max-w-sm">
+                <Input
+                  value={newCategoryName}
+                  onChange={(e) => setNewCategoryName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleAddNewCategory();
+                    }
+                  }}
+                  placeholder="새 카테고리명"
+                  className="h-8 text-xs bg-white flex-1"
+                  autoFocus
+                />
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => handleAddNewCategory()}
+                  className="h-8 px-3 text-xs bg-[#191F28] hover:bg-[#333D4B] text-white rounded-md shadow-none"
+                >
+                  확인
+                </Button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsAddingCategory(false);
+                    setNewCategoryName("");
+                  }}
+                  className="p-1 text-[#8B95A1] hover:text-[#191F28]"
+                >
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </div>
-            </div>
+            )}
           </div>
+        </div>
 
-          {/* 속성 2: 카테고리 */}
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-4 py-1">
-            <span className="w-28 text-xs font-medium text-[#8B95A1] flex items-center gap-1.5 shrink-0 sm:pt-1">
-              <Tag className="w-3.5 h-3.5" />
-              <span>카테고리</span>
-            </span>
-            <div className="flex-1 space-y-2">
-              <div className="flex flex-wrap items-center gap-1.5">
-                {localCategories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    onClick={() => setCategory(cat.id)}
-                    className={cn(
-                      "px-2.5 py-1 text-xs rounded-md border text-center transition-all cursor-pointer",
-                      category === cat.id
-                        ? "bg-[#191F28] text-white border-[#191F28] font-semibold"
-                        : "bg-[#FAFAFA] text-[#4E5968] border-[#E5E8EB] hover:bg-[#F2F4F6] hover:text-[#191F28]"
-                    )}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
-                {!isAddingCategory ? (
-                  <button
-                    type="button"
-                    onClick={() => setIsAddingCategory(true)}
-                    className="inline-flex items-center gap-1 px-2 py-1 text-xs text-[#8B95A1] hover:text-[#191F28] border border-dashed border-[#D1D6DB] hover:border-[#8B95A1] rounded-md transition-all cursor-pointer"
-                  >
-                    <Plus className="w-3 h-3" />
-                    <span>추가</span>
-                  </button>
-                ) : null}
-              </div>
-
-              {isAddingCategory && (
-                <div className="flex items-center gap-1.5 p-1 bg-[#F9FAFB] rounded-lg border border-[#E5E8EB] max-w-sm">
-                  <Input
-                    value={newCategoryName}
-                    onChange={(e) => setNewCategoryName(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        handleAddNewCategory();
-                      }
-                    }}
-                    placeholder="새 카테고리명"
-                    className="h-7 text-xs bg-white flex-1"
-                    autoFocus
-                  />
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={() => handleAddNewCategory()}
-                    className="h-7 px-2.5 text-xs bg-[#191F28] hover:bg-[#333D4B] text-white rounded-md shadow-none"
-                  >
-                    확인
-                  </Button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsAddingCategory(false);
-                      setNewCategoryName("");
-                    }}
-                    className="p-1 text-[#8B95A1] hover:text-[#191F28]"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              )}
+        {/* 필드 5: 사용 도구 (외부 링크와 위치 변경! 입력창이 레이블과 같은 라인, 추가한 도구는 입력창 아래 위치) */}
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+          <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0 sm:pt-1.5 flex items-center gap-1.5">
+            <Wrench className="w-4 h-4 text-[#4E5968]" />
+            <span>사용 도구</span>
+          </label>
+          <div className="flex-1 space-y-2.5">
+            {/* 1행: 입력창이 [사용 도구]와 같은 라인에 위치 */}
+            <div className="flex items-center gap-2 max-w-md">
+              <Input
+                value={customToolInput}
+                onChange={(e) => setCustomToolInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddTool();
+                  }
+                }}
+                placeholder="도구명을 입력하세요"
+                className="h-8.5 text-xs bg-white border-[#E5E8EB] flex-1"
+              />
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={() => handleAddTool()}
+                className="h-8.5 px-3 text-xs font-medium text-[#4E5968] bg-transparent border-[#E5E8EB] hover:bg-[#F2F4F6] hover:text-[#191F28] rounded-lg shadow-none cursor-pointer shrink-0"
+              >
+                추가
+              </Button>
             </div>
-          </div>
 
-          {/* 속성 3: 외부 연결 링크 */}
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-4 py-1">
-            <span className="w-28 text-xs font-medium text-[#8B95A1] flex items-center gap-1.5 shrink-0 sm:pt-1.5">
-              <ExternalLink className="w-3.5 h-3.5" />
-              <span>외부 링크</span>
-            </span>
-            <div className="flex-1 space-y-2">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div>
-                  <Input
-                    value={externalUrl}
-                    onChange={(e) => {
-                      setExternalUrl(e.target.value);
-                      if (errors.externalUrl) {
-                        setErrors((prev) => ({ ...prev, externalUrl: undefined }));
-                      }
-                    }}
-                    onBlur={handleUrlBlur}
-                    placeholder="URL (예: https://figma.com/...)"
-                    className={cn(
-                      "h-8 text-xs bg-[#FAFAFA] hover:bg-white focus:bg-white border-[#E5E8EB]",
-                      errors.externalUrl && "border-[#E8344E]"
-                    )}
-                  />
-                  {errors.externalUrl && (
-                    <p className="text-[10px] text-[#E8344E] mt-1 font-medium">{errors.externalUrl}</p>
-                  )}
-                </div>
-                <div>
-                  <Input
-                    value={externalLabel}
-                    onChange={(e) => {
-                      setExternalLabel(e.target.value);
-                      if (errors.externalLabel) {
-                        setErrors((prev) => ({ ...prev, externalLabel: undefined }));
-                      }
-                    }}
-                    onBlur={handleLabelBlur}
-                    placeholder="버튼 문구 (예: Figma 프로토타입)"
-                    className={cn(
-                      "h-8 text-xs bg-[#FAFAFA] hover:bg-white focus:bg-white border-[#E5E8EB]",
-                      errors.externalLabel && "border-[#E8344E]"
-                    )}
-                  />
-                  {errors.externalLabel && (
-                    <p className="text-[10px] text-[#E8344E] mt-1 font-medium">{errors.externalLabel}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 속성 4: 사용 도구 */}
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-4 py-1">
-            <span className="w-28 text-xs font-medium text-[#8B95A1] flex items-center gap-1.5 shrink-0 sm:pt-1.5">
-              <Wrench className="w-3.5 h-3.5" />
-              <span>사용 도구</span>
-            </span>
-            <div className="flex-1 space-y-2">
-              {/* 선택된 태그 목록 */}
-              <div className="flex flex-wrap items-center gap-1.5 min-h-[28px]">
+            {/* 2행: 추가한 도구들은 검색창 아래에 추가 */}
+            {selectedTools.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5 pt-1">
                 {selectedTools.map((tool) => (
                   <span
                     key={tool}
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#F2F4F6] text-[#333D4B] border border-[#E5E8EB]"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-[#F2F4F6] text-[#333D4B] border border-[#E5E8EB]"
                   >
                     <span>{tool}</span>
                     <button
                       type="button"
                       onClick={() => handleRemoveTool(tool)}
-                      className="text-[#8B95A1] hover:text-[#E8344E] transition-colors"
+                      className="text-[#8B95A1] hover:text-[#E8344E] transition-colors p-0.5 rounded-full"
                     >
                       <X className="w-3 h-3" />
                     </button>
                   </span>
                 ))}
               </div>
+            )}
 
-              {/* 도구 인라인 추가 */}
-              <div className="flex items-center gap-1.5 max-w-sm">
+            {/* 추천 도구 알약 */}
+            {suggestedTools.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1 pt-1">
+                <span className="text-[11px] text-[#8B95A1] mr-1">추천:</span>
+                {suggestedTools.map((tool) => (
+                  <button
+                    key={tool}
+                    type="button"
+                    onClick={() => {
+                      if (!selectedTools.includes(tool)) {
+                        setSelectedTools((prev) => [...prev, tool]);
+                        setCustomToolInput("");
+                      }
+                    }}
+                    className="text-[11px] px-2 py-0.5 rounded border border-[#E5E8EB] bg-[#FAFAFA] text-[#6B7684] hover:bg-[#F2F4F6] hover:text-[#191F28] transition-colors cursor-pointer"
+                  >
+                    +{tool}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 필드 6: 외부 연결 링크 (사용 도구 아래로 위치 변경) */}
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+          <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0 sm:pt-1.5 flex items-center gap-1.5">
+            <ExternalLink className="w-4 h-4 text-[#4E5968]" />
+            <span>외부 링크</span>
+          </label>
+          <div className="flex-1 space-y-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div>
                 <Input
-                  value={customToolInput}
-                  onChange={(e) => setCustomToolInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      handleAddTool();
+                  value={externalUrl}
+                  onChange={(e) => {
+                    setExternalUrl(e.target.value);
+                    if (errors.externalUrl) {
+                      setErrors((prev) => ({ ...prev, externalUrl: undefined }));
                     }
                   }}
-                  placeholder="도구명 입력 후 추가"
-                  className="h-7 text-xs bg-[#FAFAFA] hover:bg-white focus:bg-white border-[#E5E8EB] flex-1"
+                  onBlur={handleUrlBlur}
+                  placeholder="URL (예: https://figma.com/...)"
+                  className={cn(
+                    "h-8.5 text-xs bg-white border-[#E5E8EB]",
+                    errors.externalUrl && "border-[#E8344E]"
+                  )}
                 />
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleAddTool()}
-                  className="h-7 px-2.5 text-xs text-[#4E5968] bg-transparent border-[#E5E8EB] hover:bg-[#F2F4F6] hover:text-[#191F28] rounded-md shadow-none cursor-pointer"
-                >
-                  추가
-                </Button>
+                {errors.externalUrl && (
+                  <p className="text-[10px] text-[#E8344E] mt-1 font-medium">{errors.externalUrl}</p>
+                )}
               </div>
-
-              {/* 추천 도구 알약 */}
-              {suggestedTools.length > 0 && (
-                <div className="flex flex-wrap items-center gap-1 pt-1">
-                  <span className="text-[10px] text-[#8B95A1] mr-1">추천:</span>
-                  {suggestedTools.map((tool) => (
-                    <button
-                      key={tool}
-                      type="button"
-                      onClick={() => {
-                        if (!selectedTools.includes(tool)) {
-                          setSelectedTools((prev) => [...prev, tool]);
-                          setCustomToolInput("");
-                        }
-                      }}
-                      className="text-[10px] px-2 py-0.5 rounded border border-[#E5E8EB] bg-[#FAFAFA] text-[#6B7684] hover:bg-[#F2F4F6] hover:text-[#191F28] transition-colors cursor-pointer"
-                    >
-                      +{tool}
-                    </button>
-                  ))}
-                </div>
-              )}
+              <div>
+                <Input
+                  value={externalLabel}
+                  onChange={(e) => {
+                    setExternalLabel(e.target.value);
+                    if (errors.externalLabel) {
+                      setErrors((prev) => ({ ...prev, externalLabel: undefined }));
+                    }
+                  }}
+                  onBlur={handleLabelBlur}
+                  placeholder="버튼 문구 (예: Figma 프로토타입)"
+                  className={cn(
+                    "h-8.5 text-xs bg-white border-[#E5E8EB]",
+                    errors.externalLabel && "border-[#E8344E]"
+                  )}
+                />
+                {errors.externalLabel && (
+                  <p className="text-[10px] text-[#E8344E] mt-1 font-medium">{errors.externalLabel}</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
         {/* ======================================================== */}
-        {/* 4. 상세 정보 접기/펼치기 (노션 토글 블록 스타일) */}
+        {/* 3. 상세 정보 접기/펼치기 (노션 토글 블록 스타일) */}
         {/* ======================================================== */}
-        <div className="border-t border-[#F2F4F6] pt-3">
+        <div className="pt-2">
           <button
             type="button"
             onClick={() => setShowExtraFields(!showExtraFields)}
-            className="flex items-center gap-1.5 text-xs font-semibold text-[#8B95A1] hover:text-[#191F28] transition-colors p-1 -ml-1 rounded-md hover:bg-[#F2F4F6]"
+            className="flex items-center gap-1.5 text-xs font-semibold text-[#8B95A1] hover:text-[#191F28] transition-colors p-1.5 -ml-1 rounded-md hover:bg-[#F2F4F6]"
           >
             {showExtraFields ? (
               <ChevronUp className="w-3.5 h-3.5" />
@@ -742,41 +746,41 @@ export function ProjectInlineEditCard({
           </button>
 
           {showExtraFields && (
-            <div className="space-y-3.5 mt-3 pt-3 border-t border-[#F2F4F6] animate-in fade-in duration-150">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4">
-                <span className="w-28 text-xs font-medium text-[#8B95A1] shrink-0">
+            <div className="space-y-1 mt-2 pt-2 border-t border-[#F2F4F6] animate-in fade-in duration-150">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 py-3 border-b border-[#F2F4F6]">
+                <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0">
                   작업 기간
-                </span>
+                </label>
                 <Input
                   value={period}
                   onChange={(e) => setPeriod(e.target.value)}
                   placeholder="예: 2026.01 ~ 2026.03"
-                  className="h-8 text-xs bg-[#FAFAFA] hover:bg-white focus:bg-white border-[#E5E8EB] flex-1"
+                  className="h-8.5 text-xs bg-white border-[#E5E8EB] flex-1"
                 />
               </div>
 
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4">
-                <span className="w-28 text-xs font-medium text-[#8B95A1] shrink-0">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 py-3 border-b border-[#F2F4F6]">
+                <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0">
                   담당 역할 및 기여도
-                </span>
+                </label>
                 <Input
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   placeholder="예: 리드 프로덕트 디자이너 (기여도 80%)"
-                  className="h-8 text-xs bg-[#FAFAFA] hover:bg-white focus:bg-white border-[#E5E8EB] flex-1"
+                  className="h-8.5 text-xs bg-white border-[#E5E8EB] flex-1"
                 />
               </div>
 
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-4">
-                <span className="w-28 text-xs font-medium text-[#8B95A1] shrink-0 sm:pt-2">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-4 py-3 border-b border-[#F2F4F6]">
+                <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0 sm:pt-2">
                   상세 설명
-                </span>
+                </label>
                 <Textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={4}
                   placeholder="프로젝트의 배경, 해결하고자 한 문제, 구체적인 디자인 과정과 성과를 작성해주세요..."
-                  className="text-xs bg-[#FAFAFA] hover:bg-white focus:bg-white border-[#E5E8EB] flex-1 leading-relaxed"
+                  className="text-xs bg-white border-[#E5E8EB] flex-1 leading-relaxed"
                 />
               </div>
             </div>
@@ -784,9 +788,9 @@ export function ProjectInlineEditCard({
         </div>
 
         {/* ======================================================== */}
-        {/* 5. 하단 액션 버튼: [취소] [수정 완료] */}
+        {/* 4. 하단 액션 버튼: [취소] [저장하기] (아이콘 삭제, 텍스트 저장하기로 변경) */}
         {/* ======================================================== */}
-        <div className="flex items-center justify-end gap-2 pt-4 border-t border-[#F2F4F6]">
+        <div className="flex items-center justify-end gap-2 pt-6">
           <Button
             type="button"
             variant="outline"
@@ -807,10 +811,7 @@ export function ProjectInlineEditCard({
                 <span>저장 중...</span>
               </>
             ) : (
-              <>
-                <Save className="w-3.5 h-3.5" />
-                <span>수정 완료</span>
-              </>
+              <span>저장하기</span>
             )}
           </Button>
         </div>

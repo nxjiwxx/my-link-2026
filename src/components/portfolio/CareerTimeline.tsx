@@ -3,7 +3,6 @@
 import React, { useState, useMemo } from "react";
 import { Briefcase, Plus, Pencil, Trash2, X } from "lucide-react";
 import { CareerItem } from "@/types/portfolio";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -103,13 +102,14 @@ export function CareerTimeline({
   };
 
   return (
-    <Card className="rounded-xl border border-[#E5E8EB] bg-white select-none shadow-none">
-      <CardHeader className="p-4 pb-2.5 flex flex-row items-center justify-between space-y-0">
+    <div className="w-full select-none">
+      {/* 섹션 상단 헤더 */}
+      <div className="flex items-center justify-between pb-3">
         <div className="flex items-center gap-1.5">
           <Briefcase className="w-4 h-4 text-[#4B5563]" />
-          <CardTitle className="text-sm font-semibold text-[#111827]">
+          <h3 className="text-sm font-bold text-[#191F28]">
             경력 및 활동
-          </CardTitle>
+          </h3>
         </div>
 
         {/* 경력 추가 버튼 (수정 권한이 있을 때만 표시) */}
@@ -128,14 +128,14 @@ export function CareerTimeline({
             <span>경력 추가</span>
           </Button>
         )}
-      </CardHeader>
+      </div>
 
-      <CardContent className="p-4 pt-2">
-        {/* 새 경력 인라인 추가 폼 */}
+      <div className="space-y-3.5 pt-1">
+        {/* 새 경력 인라인 추가 폼 (노션 / 첨부 이미지 스타일 리팩터링) */}
         {isAdding && (
-          <div className="mb-4 p-3.5 rounded-xl bg-[#F9FAFB] border-2 border-[#3182F6]/40 space-y-2.5 animate-in fade-in duration-150">
-            <div className="text-xs font-bold text-[#191F28] flex items-center justify-between">
-              <span>새 경력/활동 인라인 추가</span>
+          <div className="p-4 rounded-xl border border-[#E5E8EB] bg-[#FAFAFA] space-y-3 animate-in fade-in duration-150 mb-3">
+            <div className="text-xs font-bold text-[#191F28] flex items-center justify-between pb-2 border-b border-[#E5E8EB]">
+              <span>새 경력 및 활동 추가</span>
               <button
                 type="button"
                 onClick={() => setIsAdding(false)}
@@ -144,61 +144,76 @@ export function CareerTimeline({
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              <div>
-                <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                  기간 *
-                </label>
+
+            {/* 필드 1: 기간 */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 py-1.5 border-b border-[#F2F4F6]">
+              <label className="w-24 sm:w-28 text-xs font-bold text-[#191F28] shrink-0">
+                기간 <span className="text-[#E8344E]">*</span>
+              </label>
+              <div className="flex-1">
                 <Input
                   value={newPeriod}
                   onChange={(e) => setNewPeriod(e.target.value)}
-                  placeholder="예: 2024 ~ Present"
-                  className="h-8 text-xs bg-white"
+                  placeholder="예: 2024.03 ~ 현재 또는 2022.01 ~ 2023.12"
+                  className="h-8.5 text-xs bg-white border-[#E5E8EB]"
                   autoFocus
                 />
               </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                  직무명/역할 *
-                </label>
+            </div>
+
+            {/* 필드 2: 직무명 / 역할 */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 py-1.5 border-b border-[#F2F4F6]">
+              <label className="w-24 sm:w-28 text-xs font-bold text-[#191F28] shrink-0">
+                직무명/역할 <span className="text-[#E8344E]">*</span>
+              </label>
+              <div className="flex-1">
                 <Input
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  placeholder="예: Product Designer"
-                  className="h-8 text-xs bg-white"
+                  placeholder="예: Product Designer, UI/UX 디자이너"
+                  className="h-8.5 text-xs bg-white border-[#E5E8EB]"
                 />
               </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                  소속/회사/기관 <span className="text-[10px] text-[#8B95A1] font-normal">(선택)</span>
-                </label>
+            </div>
+
+            {/* 필드 3: 소속 / 기관 */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 py-1.5 border-b border-[#F2F4F6]">
+              <label className="w-24 sm:w-28 text-xs font-bold text-[#191F28] shrink-0">
+                소속/회사
+              </label>
+              <div className="flex-1">
                 <Input
                   value={newOrg}
                   onChange={(e) => setNewOrg(e.target.value)}
-                  placeholder="예: Viva Republica (Toss)"
-                  className="h-8 text-xs bg-white"
+                  placeholder="예: 토스, 당근, 프리랜서 등 (선택)"
+                  className="h-8.5 text-xs bg-white border-[#E5E8EB]"
                 />
               </div>
             </div>
-            <div>
-              <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                상세 설명 (선택)
+
+            {/* 필드 4: 상세 설명 */}
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-3 py-1.5">
+              <label className="w-24 sm:w-28 text-xs font-bold text-[#191F28] shrink-0 pt-2">
+                상세 설명
               </label>
-              <Textarea
-                value={newDesc}
-                onChange={(e) => setNewDesc(e.target.value)}
-                placeholder="주요 업무, 성과 또는 수상 내역을 입력하세요"
-                rows={2}
-                className="text-xs bg-white"
-              />
+              <div className="flex-1">
+                <Textarea
+                  value={newDesc}
+                  onChange={(e) => setNewDesc(e.target.value)}
+                  placeholder="주요 업무, 성과 또는 활동 내역을 입력하세요"
+                  rows={3}
+                  className="text-xs bg-white border-[#E5E8EB] resize-none"
+                />
+              </div>
             </div>
-            <div className="flex justify-end gap-1.5 pt-1">
+
+            <div className="flex justify-end gap-2 pt-2 border-t border-[#E5E8EB]">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsAdding(false)}
-                className="h-7 px-2.5 text-xs text-[#6B7684]"
+                className="h-8 px-3 text-xs text-[#4E5968] border-[#E5E8EB] hover:bg-[#F2F4F6] rounded-lg cursor-pointer"
               >
                 취소
               </Button>
@@ -206,9 +221,9 @@ export function CareerTimeline({
                 type="button"
                 size="sm"
                 onClick={handleSaveNew}
-                className="h-7 px-3 text-xs bg-[#3182F6] hover:bg-[#1B64DA] text-white"
+                className="h-8 px-4 text-xs font-semibold bg-[#191F28] hover:bg-[#333D4B] text-white rounded-lg shadow-none cursor-pointer"
               >
-                추가 완료
+                저장하기
               </Button>
             </div>
           </div>
@@ -224,10 +239,10 @@ export function CareerTimeline({
               return (
                 <div key={career.id} className="relative">
                   {/* 타임라인 불릿 닷 */}
-                  <div className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-[#3182F6] shadow-none" />
-                  <div className="p-3.5 rounded-xl bg-[#F9FAFB] border-2 border-[#3182F6]/40 space-y-2.5 animate-in fade-in duration-150">
-                    <div className="text-xs font-bold text-[#191F28] flex items-center justify-between">
-                      <span>경력 정보 인라인 수정</span>
+                  <div className="absolute -left-[21px] top-3 h-2.5 w-2.5 rounded-full border-2 border-white bg-[#191F28] shadow-none" />
+                  <div className="p-4 rounded-xl border border-[#E5E8EB] bg-[#FAFAFA] space-y-3 animate-in fade-in duration-150 mb-3">
+                    <div className="text-xs font-bold text-[#191F28] flex items-center justify-between pb-2 border-b border-[#E5E8EB]">
+                      <span>경력 정보 수정</span>
                       <button
                         type="button"
                         onClick={handleCancelEdit}
@@ -236,60 +251,76 @@ export function CareerTimeline({
                         <X className="w-3.5 h-3.5" />
                       </button>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      <div>
-                        <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                          기간 *
-                        </label>
+
+                    {/* 필드 1: 기간 */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 py-1.5 border-b border-[#F2F4F6]">
+                      <label className="w-24 sm:w-28 text-xs font-bold text-[#191F28] shrink-0">
+                        기간 <span className="text-[#E8344E]">*</span>
+                      </label>
+                      <div className="flex-1">
                         <Input
                           value={editPeriod}
                           onChange={(e) => setEditPeriod(e.target.value)}
-                          placeholder="기간"
-                          className="h-8 text-xs bg-white"
+                          placeholder="예: 2024.03 ~ 현재"
+                          className="h-8.5 text-xs bg-white border-[#E5E8EB]"
+                          autoFocus
                         />
                       </div>
-                      <div>
-                        <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                          직무명 *
-                        </label>
+                    </div>
+
+                    {/* 필드 2: 직무명 / 역할 */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 py-1.5 border-b border-[#F2F4F6]">
+                      <label className="w-24 sm:w-28 text-xs font-bold text-[#191F28] shrink-0">
+                        직무명/역할 <span className="text-[#E8344E]">*</span>
+                      </label>
+                      <div className="flex-1">
                         <Input
                           value={editTitle}
                           onChange={(e) => setEditTitle(e.target.value)}
                           placeholder="직무명"
-                          className="h-8 text-xs bg-white"
+                          className="h-8.5 text-xs bg-white border-[#E5E8EB]"
                         />
                       </div>
-                      <div>
-                        <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                          소속/회사명 <span className="text-[10px] text-[#8B95A1] font-normal">(선택)</span>
-                        </label>
+                    </div>
+
+                    {/* 필드 3: 소속 / 회사 */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 py-1.5 border-b border-[#F2F4F6]">
+                      <label className="w-24 sm:w-28 text-xs font-bold text-[#191F28] shrink-0">
+                        소속/회사
+                      </label>
+                      <div className="flex-1">
                         <Input
                           value={editOrg}
                           onChange={(e) => setEditOrg(e.target.value)}
-                          placeholder="소속/회사"
-                          className="h-8 text-xs bg-white"
+                          placeholder="소속/회사 (선택)"
+                          className="h-8.5 text-xs bg-white border-[#E5E8EB]"
                         />
                       </div>
                     </div>
-                    <div>
-                      <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
+
+                    {/* 필드 4: 상세 설명 */}
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-3 py-1.5">
+                      <label className="w-24 sm:w-28 text-xs font-bold text-[#191F28] shrink-0 pt-2">
                         상세 설명
                       </label>
-                      <Textarea
-                        value={editDesc}
-                        onChange={(e) => setEditDesc(e.target.value)}
-                        placeholder="상세 설명"
-                        rows={2}
-                        className="text-xs bg-white"
-                      />
+                      <div className="flex-1">
+                        <Textarea
+                          value={editDesc}
+                          onChange={(e) => setEditDesc(e.target.value)}
+                          placeholder="상세 설명"
+                          rows={3}
+                          className="text-xs bg-white border-[#E5E8EB] resize-none"
+                        />
+                      </div>
                     </div>
-                    <div className="flex justify-end gap-1.5 pt-1">
+
+                    <div className="flex justify-end gap-2 pt-2 border-t border-[#E5E8EB]">
                       <Button
                         type="button"
                         variant="outline"
                         size="sm"
                         onClick={handleCancelEdit}
-                        className="h-7 px-2.5 text-xs text-[#6B7684]"
+                        className="h-8 px-3 text-xs text-[#4E5968] border-[#E5E8EB] hover:bg-[#F2F4F6] rounded-lg cursor-pointer"
                       >
                         취소
                       </Button>
@@ -297,9 +328,9 @@ export function CareerTimeline({
                         type="button"
                         size="sm"
                         onClick={() => handleSaveEdit(career.id)}
-                        className="h-7 px-3 text-xs bg-[#3182F6] hover:bg-[#1B64DA] text-white"
+                        className="h-8 px-4 text-xs font-semibold bg-[#191F28] hover:bg-[#333D4B] text-white rounded-lg shadow-none cursor-pointer"
                       >
-                        수정 완료
+                        저장하기
                       </Button>
                     </div>
                   </div>
@@ -327,7 +358,7 @@ export function CareerTimeline({
                       )}
                     </div>
                     {career.description && (
-                      <p className="text-[11px] text-[#6B7280] leading-relaxed mt-0.5">
+                      <p className="text-[11px] text-[#6B7280] leading-relaxed mt-0.5 whitespace-pre-line">
                         {career.description}
                       </p>
                     )}
@@ -365,7 +396,7 @@ export function CareerTimeline({
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

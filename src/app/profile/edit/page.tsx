@@ -597,201 +597,215 @@ export default function ProfileEditPage() {
           <div className="w-9" />
         </header>
 
-        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-8">
           {/* ======================================================== */}
-          {/* 1. 디자인 기본 프로필 (카드 형식 대신 배경 위 라인으로 구분) */}
+          {/* 1. 디자인 기본 프로필 (첨부 이미지 스타일: 좌측 볼드 레이블, 우측 박스 인풋) */}
           {/* ======================================================== */}
-          <div className="pt-1 pb-6 border-b border-[#E5E8EB] space-y-4">
-            <div className="flex items-center justify-between pb-1">
-              <span className="text-xs font-bold text-[#191F28]">
+          <div className="space-y-1">
+            <div className="pb-2 border-b border-[#E5E8EB]">
+              <h2 className="text-sm font-bold text-[#191F28]">
                 기본 프로필
-              </span>
+              </h2>
             </div>
 
-            {/* 원형 아바타 (클릭 시 이미지 변경) */}
-            <div className="flex flex-col items-center justify-center pt-1 pb-2">
-              <div
-                className="relative group cursor-pointer"
-                onClick={() => fileInputRef.current?.click()}
-                title="프로필 사진 변경 (클릭)"
-              >
-                <Avatar
-                  src={avatarUrl}
-                  alt={name}
-                  fallback={name.slice(0, 1) || "P"}
-                  size="xl"
-                  className="w-24 h-24 ring-4 ring-white shadow-none transition-opacity group-hover:opacity-90"
-                />
-
-                {/* 우측 하단 카메라 아이콘 뱃지 */}
-                <div className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-full bg-white text-[#4E5968] border border-[#E5E8EB] shadow-none group-hover:text-[#191F28] transition-colors">
-                  <Camera className="w-3.5 h-3.5" />
-                </div>
-
-                {/* 호버 오버레이 */}
-                <div className="absolute inset-0 rounded-full bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[11px] font-semibold gap-1">
-                  <Camera className="w-5 h-5" />
-                  <span>변경</span>
-                </div>
-              </div>
-
-              {/* 숨겨진 로컬 파일 인풋 */}
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleAvatarFileChange}
-                className="hidden"
-              />
-
-              {/* 이미지 삭제하기 텍스트 버튼 */}
-              {avatarUrl && (
-                <div className="mt-2.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setAvatarUrl("");
-                      showToast("프로필 사진이 기본 이미지로 초기화되었어요.");
-                    }}
-                    className="text-xs font-semibold text-[#8B95A1] hover:text-[#E8344E] hover:underline transition-colors cursor-pointer"
-                  >
-                    이미지 삭제하기
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* 프로필 텍스트 필드 그룹 */}
-            <div className="space-y-3 pt-2">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                    이름 *
-                  </label>
-                  <Input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="이름"
-                    className="h-9 text-xs bg-white"
+            {/* 행 0: 프로필 사진 */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 py-4 border-b border-[#F2F4F6]">
+              <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0">
+                프로필 사진
+              </label>
+              <div className="flex-1 flex items-center gap-4">
+                <div
+                  className="relative group cursor-pointer shrink-0"
+                  onClick={() => fileInputRef.current?.click()}
+                  title="프로필 사진 변경 (클릭)"
+                >
+                  <Avatar
+                    src={avatarUrl}
+                    alt={name}
+                    fallback={name.slice(0, 1) || "P"}
+                    size="xl"
+                    className="w-20 h-20 ring-2 ring-[#E5E8EB] shadow-none transition-opacity group-hover:opacity-90"
                   />
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="block text-[11px] font-semibold text-[#6B7684]">
-                      사용자 이름
-                    </label>
-                    <span className="text-[10px] text-[#8B95A1]">
-                      영문, 숫자, 언더스코어(_)
-                    </span>
+                  <div className="absolute inset-0 rounded-full bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[10px] font-semibold gap-1">
+                    <Camera className="w-4 h-4" />
+                    <span>변경</span>
                   </div>
-                  <div className="relative flex items-center">
-                    <span className="absolute left-2.5 text-xs text-[#8B95A1] font-mono pointer-events-none">
-                      @
-                    </span>
-                    <Input
-                      value={username}
-                      onChange={handleUsernameChange}
-                      placeholder="username"
-                      className={`h-9 text-xs pl-6 pr-8 bg-white font-mono transition-colors ${
-                        usernameStatus === "taken" || usernameStatus === "invalid"
-                          ? "border-[#E8344E] focus-visible:ring-[#E8344E]/20"
-                          : usernameStatus === "available" || usernameStatus === "mine"
-                          ? "border-[#00B06B] focus-visible:ring-[#00B06B]/20"
-                          : ""
-                      }`}
-                    />
-                    <div className="absolute right-2.5 flex items-center pointer-events-none">
-                      {usernameStatus === "checking" && (
-                        <Loader2 className="w-3.5 h-3.5 text-[#3182F6] animate-spin" />
-                      )}
-                      {usernameStatus === "available" && (
-                        <Check className="w-3.5 h-3.5 text-[#00B06B]" />
-                      )}
-                      {usernameStatus === "mine" && (
-                        <Check className="w-3.5 h-3.5 text-[#3182F6]" />
-                      )}
-                      {usernameStatus === "taken" && (
-                        <X className="w-3.5 h-3.5 text-[#E8344E]" />
-                      )}
-                      {usernameStatus === "invalid" && (
-                        <AlertCircle className="w-3.5 h-3.5 text-[#E8344E]" />
-                      )}
-                    </div>
-                  </div>
-                  {/* 실시간 중복 체크 피드백 안내 문구 */}
-                  {usernameFeedback && (
-                    <div className="mt-1 flex items-center gap-1">
-                      <span
-                        className={`text-[11px] font-medium transition-colors ${
-                          usernameStatus === "taken" || usernameStatus === "invalid"
-                            ? "text-[#E8344E]"
-                            : usernameStatus === "available"
-                            ? "text-[#00B06B]"
-                            : usernameStatus === "mine"
-                            ? "text-[#3182F6]"
-                            : "text-[#8B95A1]"
-                        }`}
-                      >
-                        {usernameFeedback}
-                      </span>
-                    </div>
-                  )}
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                  직함 / 포지션
-                </label>
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="h-8 px-3 text-xs font-medium text-[#191F28] border-[#E5E8EB] hover:bg-[#F2F4F6] rounded-lg cursor-pointer"
+                    >
+                      <Camera className="w-3.5 h-3.5 mr-1" />
+                      <span>사진 업로드</span>
+                    </Button>
+                    {avatarUrl && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setAvatarUrl("");
+                          showToast("프로필 사진이 기본 이미지로 초기화되었어요.");
+                        }}
+                        className="h-8 px-2.5 text-xs text-[#E8344E] hover:bg-[#FEECEF] rounded-lg cursor-pointer"
+                      >
+                        삭제
+                      </Button>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-[#8B95A1]">
+                    JPG, PNG, GIF 파일 지원 (권장 1:1 비율)
+                  </p>
+                </div>
+
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarFileChange}
+                  className="hidden"
+                />
+              </div>
+            </div>
+
+            {/* 행 1: 이름 */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+              <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0">
+                이름 <span className="text-[#E8344E]">*</span>
+              </label>
+              <div className="flex-1">
+                <Input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="디자이너 이름을 입력하세요"
+                  className="h-9 text-xs sm:text-sm bg-white border-[#E5E8EB]"
+                />
+              </div>
+            </div>
+
+            {/* 행 2: 사용자 이름 (Username) */}
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+              <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0 sm:pt-2">
+                사용자 이름 (@)
+              </label>
+              <div className="flex-1 space-y-1">
+                <div className="relative flex items-center">
+                  <span className="absolute left-2.5 text-xs text-[#8B95A1] font-mono pointer-events-none">
+                    @
+                  </span>
+                  <Input
+                    value={username}
+                    onChange={handleUsernameChange}
+                    placeholder="username (영문, 숫자, _)"
+                    className={`h-9 text-xs sm:text-sm pl-6 pr-8 bg-white font-mono border-[#E5E8EB] transition-colors ${
+                      usernameStatus === "taken" || usernameStatus === "invalid"
+                        ? "border-[#E8344E] focus-visible:ring-[#E8344E]/20"
+                        : usernameStatus === "available" || usernameStatus === "mine"
+                        ? "border-[#00B06B] focus-visible:ring-[#00B06B]/20"
+                        : ""
+                    }`}
+                  />
+                  <div className="absolute right-2.5 flex items-center pointer-events-none">
+                    {usernameStatus === "checking" && (
+                      <Loader2 className="w-3.5 h-3.5 text-[#3182F6] animate-spin" />
+                    )}
+                    {usernameStatus === "available" && (
+                      <Check className="w-3.5 h-3.5 text-[#00B06B]" />
+                    )}
+                    {usernameStatus === "mine" && (
+                      <Check className="w-3.5 h-3.5 text-[#3182F6]" />
+                    )}
+                    {usernameStatus === "taken" && (
+                      <X className="w-3.5 h-3.5 text-[#E8344E]" />
+                    )}
+                    {usernameStatus === "invalid" && (
+                      <AlertCircle className="w-3.5 h-3.5 text-[#E8344E]" />
+                    )}
+                  </div>
+                </div>
+                {usernameFeedback && (
+                  <p
+                    className={`text-[11px] font-medium transition-colors ${
+                      usernameStatus === "taken" || usernameStatus === "invalid"
+                        ? "text-[#E8344E]"
+                        : usernameStatus === "available"
+                        ? "text-[#00B06B]"
+                        : usernameStatus === "mine"
+                        ? "text-[#3182F6]"
+                        : "text-[#8B95A1]"
+                    }`}
+                  >
+                    {usernameFeedback}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* 행 3: 직함 / 포지션 */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+              <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0">
+                직함 / 포지션
+              </label>
+              <div className="flex-1">
                 <Input
                   value={roleTitle}
                   onChange={(e) => setRoleTitle(e.target.value)}
                   placeholder="예: Product & Visual Designer"
-                  className="h-9 text-xs bg-white"
+                  className="h-9 text-xs sm:text-sm bg-white border-[#E5E8EB]"
                 />
               </div>
+            </div>
 
-              <div>
-                <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                  소개글 (Bio)
-                </label>
+            {/* 행 4: 소개글 (Bio) */}
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+              <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0 sm:pt-2">
+                소개글 (Bio)
+              </label>
+              <div className="flex-1">
                 <Textarea
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
-                  rows={3}
-                  placeholder="디자이너 소개글을 입력하세요."
-                  className="text-xs bg-white leading-relaxed"
+                  rows={4}
+                  placeholder="디자이너 소개글을 입력하세요 (경력 목표, 디자인 철학 등)"
+                  className="text-xs sm:text-sm bg-white border-[#E5E8EB] leading-relaxed"
                 />
               </div>
             </div>
           </div>
 
           {/* ======================================================== */}
-          {/* 2. 소셜 채널 링크 관리 (추가 시 목록 생성 & 아이콘 자동)  */}
+          {/* 2. 소셜 채널 링크 관리 (첨부 이미지 스타일) */}
           {/* ======================================================== */}
-          <div className="bg-white rounded-2xl border border-[#E5E8EB] p-5 shadow-none space-y-3.5">
-            <div className="flex items-center justify-between border-b border-[#F2F4F6] pb-2.5">
+          <div className="space-y-1">
+            <div className="flex items-center justify-between pb-2 border-b border-[#E5E8EB]">
               <div className="flex items-center gap-1.5">
                 <Globe className="w-4 h-4 text-[#191F28]" />
-                <h3 className="text-xs sm:text-sm font-bold text-[#191F28]">
+                <h2 className="text-sm font-bold text-[#191F28]">
                   소셜 채널 링크
-                </h3>
+                </h2>
               </div>
               <span className="text-[11px] text-[#8B95A1] font-mono">
                 {socialList.length}개 등록됨
               </span>
             </div>
 
-            {/* 등록된 소셜 링크 목록 (사용자가 추가했을 때만 생성) */}
+            {/* 등록된 소셜 링크 목록 */}
             {socialList.length > 0 ? (
-              <div className="space-y-2">
+              <div className="divide-y divide-[#F2F4F6]">
                 {socialList.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between p-2.5 rounded-xl border border-[#E5E8EB] bg-[#F9FAFB] hover:border-[#D1D6DB] transition-all"
+                    className="flex items-center justify-between py-3 gap-2"
                   >
-                    <div className="flex items-center gap-2.5 min-w-0 flex-1 mr-2">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-[#E5E8EB]/80 shrink-0 shadow-none">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      {/* 동그라미 형태의 아이콘 컨테이너 */}
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white border border-[#E5E8EB] shrink-0">
                         {renderSocialIcon(item.iconType, "w-4 h-4")}
                       </div>
                       <div className="min-w-0 flex-1">
@@ -807,243 +821,231 @@ export default function ProfileEditPage() {
                     <button
                       type="button"
                       onClick={() => handleRequestRemoveSocial(item)}
-                      className="p-1.5 rounded-lg text-[#8B95A1] hover:text-[#E8344E] hover:bg-[#FEECEF] transition-colors shrink-0"
+                      className="p-1.5 rounded-lg text-[#8B95A1] hover:text-[#E8344E] hover:bg-[#FEECEF] transition-colors shrink-0 cursor-pointer"
                       title="소셜 링크 삭제"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 ))}
               </div>
             ) : (
               !isAddingSocial && (
-                <div className="py-4 text-center rounded-xl bg-[#F9FAFB] border border-dashed border-[#E5E8EB] p-4">
+                <div className="py-6 text-center">
                   <p className="text-xs text-[#8B95A1]">
                     등록된 소셜 링크가 없습니다.
-                  </p>
-                  <p className="text-[11px] text-[#B0B8C1] mt-0.5">
-                    링크를 추가하면 메인 프로필에 해당 소셜 버튼이 표시됩니다.
                   </p>
                 </div>
               )
             )}
 
-            {/* 링크 추가 인라인 폼 (isAddingSocial 상태) */}
+            {/* 새 소셜 링크 추가 입력 영역 */}
             {isAddingSocial ? (
-              <div className="p-3.5 rounded-xl bg-[#FAFAFA] border border-[#E5E8EB] space-y-2.5 animate-in fade-in duration-150">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-[#191F28]">
-                    새 소셜 링크 추가
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsAddingSocial(false);
-                      setNewSocialInput("");
-                    }}
-                    className="text-[#8B95A1] hover:text-[#191F28]"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
+              <div className="py-3.5 border-t border-[#F2F4F6] space-y-2.5 animate-in fade-in duration-150">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
+                  <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0">
+                    새 링크 URL
+                  </label>
+                  <div className="flex-1 flex items-center gap-2">
+                    <Input
+                      value={newSocialInput}
+                      onChange={(e) => setNewSocialInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleAddSocialItem();
+                        }
+                      }}
+                      placeholder="https://instagram.com/아이디, 깃허브 등"
+                      className="h-9 text-xs sm:text-sm bg-white border-[#E5E8EB] flex-1"
+                      autoFocus
+                    />
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={handleAddSocialItem}
+                      disabled={!newSocialInput.trim()}
+                      className="h-9 px-3.5 text-xs font-semibold bg-[#191F28] hover:bg-[#333D4B] text-white rounded-lg cursor-pointer shrink-0"
+                    >
+                      추가
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setIsAddingSocial(false);
+                        setNewSocialInput("");
+                      }}
+                      className="h-9 px-3 text-xs text-[#6B7684] border-[#E5E8EB] rounded-lg shrink-0 cursor-pointer"
+                    >
+                      취소
+                    </Button>
+                  </div>
                 </div>
 
-                <div>
-                  <Input
-                    value={newSocialInput}
-                    onChange={(e) => setNewSocialInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        handleAddSocialItem();
-                      }
-                    }}
-                    placeholder="URL 입력 (예: https://instagram.com/아이디, 깃허브, 비핸스 등)"
-                    className="h-8.5 text-xs bg-white border-[#E5E8EB] focus:border-[#191F28] rounded-xl"
-                    autoFocus
-                  />
-                </div>
-
-                {/* 입력에 따른 자동 채널 감지 프리뷰 */}
                 {currentPreview && (
-                  <div className="flex items-center gap-1.5 p-2 rounded-lg bg-white border border-[#E5E8EB] text-xs">
+                  <div className="flex items-center gap-2 sm:ml-36 pl-4 text-xs">
                     <span className="text-[11px] text-[#8B95A1]">감지된 채널:</span>
-                    <div className="flex items-center gap-1 font-semibold text-[#191F28]">
+                    <div className="flex items-center gap-1.5 font-bold text-[#191F28]">
                       {renderSocialIcon(currentPreview.iconType, "w-3.5 h-3.5")}
                       <span>{currentPreview.name}</span>
                     </div>
                   </div>
                 )}
+              </div>
+            ) : (
+              <div className="pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsAddingSocial(true)}
+                  className="h-8.5 px-3 text-xs font-medium text-[#4E5968] bg-transparent border-[#E5E8EB] hover:bg-[#F2F4F6] hover:text-[#191F28] rounded-lg gap-1.5 shadow-none cursor-pointer transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>소셜 채널 링크 추가</span>
+                </Button>
+              </div>
+            )}
+          </div>
 
-                <div className="flex justify-end gap-1.5 pt-1">
+          {/* ======================================================== */}
+          {/* 3. 이력서 (Resume) 링크 관리 (첨부 이미지 스타일) */}
+          {/* ======================================================== */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between pb-2 border-b border-[#E5E8EB]">
+              <div className="flex items-center gap-1.5">
+                <FileText className="w-4 h-4 text-[#191F28]" />
+                <h2 className="text-sm font-bold text-[#191F28]">
+                  이력서 (Resume) 관리
+                </h2>
+              </div>
+              <span className="text-[11px] text-[#8B95A1]">선택 항목</span>
+            </div>
+
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+              <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0 sm:pt-1.5">
+                이력서 링크
+              </label>
+              <div className="flex-1 space-y-2.5">
+                {/* 케이스 A: 이미 이력서가 등록되어 있는 경우 */}
+                {resumePdfUrl && !isAddingResume ? (
+                  <div className="p-3 rounded-xl border border-[#E5E8EB] bg-[#FAFAFA] space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 min-w-0 flex-1 mr-2">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white border border-[#E5E8EB] text-[#191F28] shrink-0">
+                          <FileText className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <a
+                            href={resumePdfUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-[#191F28] font-mono hover:underline truncate block"
+                          >
+                            {resumePdfUrl}
+                          </a>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setResumeTempInput(resumePdfUrl);
+                            setIsAddingResume(true);
+                          }}
+                          className="p-1 rounded text-[#8B95A1] hover:text-[#191F28] hover:bg-[#F2F4F6] transition-colors cursor-pointer"
+                          title="이력서 링크 수정"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleRemoveResume}
+                          className="p-1 rounded text-[#8B95A1] hover:text-[#EF4444] hover:bg-[#FEF2F2] transition-colors cursor-pointer"
+                          title="이력서 삭제"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                    <p className="text-[10px] text-[#8B95A1]">
+                      * 메인 프로필에 &apos;이력서 다운로드&apos; 버튼이 노출되고 있습니다.
+                    </p>
+                  </div>
+                ) : null}
+
+                {/* 케이스 B: 이력서 링크 추가 또는 수정 중일 때 */}
+                {isAddingResume ? (
+                  <div className="p-3.5 rounded-xl bg-[#FAFAFA] border border-[#E5E8EB] space-y-2.5 animate-in fade-in duration-150">
+                    <div className="flex items-center justify-between pb-1 border-b border-[#E5E8EB]">
+                      <span className="text-xs font-bold text-[#191F28]">
+                        {resumePdfUrl ? "이력서 링크 수정" : "이력서 링크 등록"}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setIsAddingResume(false)}
+                        className="text-[#8B95A1] hover:text-[#191F28]"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    <div>
+                      <Input
+                        value={resumeTempInput}
+                        onChange={(e) => setResumeTempInput(e.target.value)}
+                        placeholder="https://... (예: Google Drive 또는 Notion 이력서 링크)"
+                        className="h-8.5 text-xs bg-white border-[#E5E8EB]"
+                        autoFocus
+                      />
+                    </div>
+                    <p className="text-[10px] text-[#8B95A1]">
+                      PDF 파일 주소나 Notion, 구글 드라이브 공유 링크를 입력하세요.
+                    </p>
+
+                    <div className="flex justify-end gap-1.5 pt-1">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setIsAddingResume(false)}
+                        className="h-7.5 px-3 text-xs text-[#4E5968] border-[#E5E8EB] hover:bg-[#F2F4F6] rounded-lg cursor-pointer"
+                      >
+                        취소
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={handleApplyResume}
+                        className="h-7.5 px-3.5 text-xs bg-[#191F28] hover:bg-[#333D4B] text-white rounded-lg shadow-none cursor-pointer"
+                      >
+                        확인
+                      </Button>
+                    </div>
+                  </div>
+                ) : null}
+
+                {/* 케이스 C: 등록된 이력서가 없고 추가 모드도 아닐 때 */}
+                {!resumePdfUrl && !isAddingResume ? (
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      setIsAddingSocial(false);
-                      setNewSocialInput("");
+                      setResumeTempInput("");
+                      setIsAddingResume(true);
                     }}
-                    className="h-7.5 px-3 text-xs text-[#6B7684] rounded-lg"
+                    className="h-8.5 px-3 text-xs font-medium text-[#4E5968] bg-transparent border-[#E5E8EB] hover:bg-[#F2F4F6] hover:text-[#191F28] rounded-lg gap-1.5 shadow-none cursor-pointer transition-colors"
                   >
-                    취소
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>이력서 링크 등록</span>
                   </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={handleAddSocialItem}
-                    disabled={!newSocialInput.trim()}
-                    className="h-7.5 px-3.5 text-xs bg-[#191F28] hover:bg-[#333D4B] text-white rounded-lg cursor-pointer"
-                  >
-                    추가
-                  </Button>
-                </div>
+                ) : null}
               </div>
-            ) : (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setIsAddingSocial(true)}
-                className="w-full h-9 rounded-xl border border-dashed border-[#D1D5DB] hover:border-[#191F28] text-[#4E5968] hover:text-[#191F28] hover:bg-[#FAFAFA] text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>소셜 채널 링크 추가하기</span>
-              </Button>
-            )}
-          </div>
-
-          {/* ======================================================== */}
-          {/* 3. 이력서 (Resume) PDF 관리 */}
-          {/* ======================================================== */}
-          <div className="bg-white rounded-2xl border border-[#E5E8EB] p-4 sm:p-5 shadow-none space-y-3.5">
-            <div className="flex items-center justify-between border-b border-[#F2F4F6] pb-2.5">
-              <div className="flex items-center gap-1.5">
-                <FileText className="w-4 h-4 text-[#4E5968]" />
-                <h3 className="text-xs sm:text-sm font-bold text-[#191F28]">
-                  이력서 (Resume) 관리
-                </h3>
-              </div>
-              <span className="text-[11px] text-[#8B95A1]">선택 항목</span>
             </div>
-
-            {/* 케이스 A: 이미 이력서가 등록되어 있는 경우 */}
-            {resumePdfUrl ? (
-              <div className="p-3.5 rounded-xl border border-[#E5E8EB] bg-[#FAFAFA] space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 min-w-0 flex-1 mr-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-[#E5E8EB] text-[#191F28] shrink-0">
-                      <FileText className="w-4 h-4" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <span className="text-xs font-semibold text-[#191F28] block">
-                        등록된 이력서 링크
-                      </span>
-                      <a
-                        href={resumePdfUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[11px] text-[#4E5968] hover:text-[#191F28] hover:underline truncate block font-mono"
-                      >
-                        {resumePdfUrl}
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-1 shrink-0">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setResumeTempInput(resumePdfUrl);
-                        setIsAddingResume(true);
-                      }}
-                      className="p-1.5 rounded-lg text-[#8B95A1] hover:text-[#191F28] hover:bg-[#F2F4F6] transition-colors cursor-pointer"
-                      title="이력서 링크 수정"
-                    >
-                      <Edit2 className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleRemoveResume}
-                      className="p-1.5 rounded-lg text-[#8B95A1] hover:text-[#EF4444] hover:bg-[#FEF2F2] transition-colors cursor-pointer"
-                      title="이력서 삭제"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-
-                <p className="text-[10px] text-[#8B95A1]">
-                  * 메인 프로필에 '이력서 다운로드' 버튼이 노출되고 있습니다.
-                </p>
-              </div>
-            ) : null}
-
-            {/* 케이스 B: 이력서가 없거나, 수정 모드일 때 입력 폼 */}
-            {isAddingResume ? (
-              <div className="p-3.5 rounded-xl bg-[#FAFAFA] border border-[#E5E8EB] space-y-2.5 animate-in fade-in duration-150">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-[#191F28]">
-                    {resumePdfUrl ? "이력서 링크 수정" : "이력서 링크 등록"}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setIsAddingResume(false)}
-                    className="text-[#8B95A1] hover:text-[#191F28]"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
-                <div>
-                  <Input
-                    value={resumeTempInput}
-                    onChange={(e) => setResumeTempInput(e.target.value)}
-                    placeholder="https://... (예: Google Drive 또는 Notion 이력서 링크)"
-                    className="h-8.5 text-xs bg-white border-[#E5E8EB] focus:border-[#191F28] rounded-xl"
-                    autoFocus
-                  />
-                </div>
-                <p className="text-[10px] text-[#8B95A1]">
-                  PDF 파일 주소나 Notion, 구글 드라이브 공유 링크를 입력하세요.
-                </p>
-
-                <div className="flex justify-end gap-1.5 pt-1">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setIsAddingResume(false)}
-                    className="h-7.5 px-3 text-xs text-[#6B7684] rounded-lg"
-                  >
-                    취소
-                  </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={handleApplyResume}
-                    className="h-7.5 px-3.5 text-xs bg-[#191F28] hover:bg-[#333D4B] text-white rounded-lg cursor-pointer"
-                  >
-                    확인
-                  </Button>
-                </div>
-              </div>
-            ) : !resumePdfUrl ? (
-              <div className="space-y-2">
-                <p className="text-[11px] text-[#8B95A1] leading-relaxed">
-                  이력서는 선택사항입니다. 공유할 이력서가 있다면 버튼을 눌러 링크를 등록해보세요.
-                </p>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsAddingResume(true)}
-                  className="w-full h-9 rounded-xl border border-dashed border-[#D1D5DB] hover:border-[#191F28] text-[#4E5968] hover:text-[#191F28] hover:bg-[#FAFAFA] text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>이력서 추가하기</span>
-                </Button>
-              </div>
-            ) : null}
           </div>
 
           {/* 하단 저장 및 취소 액션 버튼 */}

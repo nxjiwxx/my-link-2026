@@ -381,270 +381,27 @@ export function AddLinkModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-md w-full max-h-[90vh] overflow-y-auto p-0 rounded-[24px] border border-[#E5E8EB] bg-white shadow-none">
+      <DialogContent className="sm:max-w-lg w-full max-h-[90vh] overflow-y-auto p-0 rounded-2xl border border-[#E5E8EB] bg-white shadow-none">
         {/* 모달 상단 헤더 */}
-        <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-md px-6 pt-6 pb-4 border-b border-[#F2F4F6]">
-          <DialogHeader className="text-left space-y-1">
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F2F4F6] text-[#191F28]">
-                <Link2 className="h-4 w-4" />
-              </div>
-              <DialogTitle className="text-base sm:text-lg font-bold text-[#191F28]">
-                새 작업물 링크 추가
-              </DialogTitle>
+        <div className="sticky top-0 z-20 bg-white/95 backdrop-blur-md px-6 py-4 border-b border-[#F2F4F6] flex items-center justify-between select-none">
+          <div className="flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#F2F4F6] text-[#191F28]">
+              <Link2 className="h-4 w-4" />
             </div>
-            <DialogDescription className="text-xs text-[#8B95A1] pl-10">
-              포트폴리오에 등록할 프로젝트 정보와 외부 링크를 입력하세요.
-            </DialogDescription>
-          </DialogHeader>
+            <DialogTitle className="text-sm sm:text-base font-bold text-[#191F28]">
+              새 작업물 링크 추가
+            </DialogTitle>
+          </div>
         </div>
 
         {/* 폼 본문 */}
-        <form onSubmit={handleSubmit} className="px-6 py-4 space-y-5">
-          {/* 1. 작업 제목 */}
-          <div>
-            <label className="block text-xs font-bold text-[#191F28] mb-1.5">
-              작업 제목 <span className="text-[#E8344E]">*</span>
-            </label>
-            <Input
-              value={title}
-              onChange={(e) => {
-                setTitle(e.target.value);
-                if (errors.title) setErrors({ ...errors, title: undefined });
-              }}
-              placeholder="예: Toss 송금 인터랙션 리뉴얼"
-              className={cn(
-                "h-10 text-xs sm:text-sm",
-                errors.title &&
-                  "border-[#E8344E] focus-visible:border-[#E8344E] focus-visible:ring-[#E8344E]"
-              )}
-            />
-            {errors.title && (
-              <p className="text-[11px] text-[#E8344E] mt-1">{errors.title}</p>
-            )}
-          </div>
-
-          {/* 2. 카테고리 (유저 직접 추가 지원) & 작업 구분 */}
-          <div className="space-y-3">
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-bold text-[#191F28] flex items-center gap-1">
-                  <Tag className="w-3.5 h-3.5 text-[#191F28]" />
-                  <span>카테고리 선택</span>
-                  <span className="text-[#E8344E]">*</span>
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setIsAddingCategory(!isAddingCategory)}
-                  className="text-[11px] text-[#191F28] font-semibold hover:underline flex items-center gap-0.5"
-                >
-                  <Plus className="w-3 h-3" />
-                  <span>새 카테고리 추가</span>
-                </button>
-              </div>
-
-              {/* 새 카테고리 직접 입력 폼 */}
-              {isAddingCategory && (
-                <div className="flex items-center gap-1.5 mb-2.5 p-2 bg-[#F9FAFB] rounded-xl border border-[#E5E8EB]">
-                  <Input
-                    value={newCategoryName}
-                    onChange={(e) => setNewCategoryName(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        handleAddNewCategory();
-                      }
-                    }}
-                    placeholder="새 카테고리명 (예: 패션, 산업디자인, 일러스트)"
-                    className="h-8 text-xs bg-white flex-1"
-                    autoFocus
-                  />
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={() => handleAddNewCategory()}
-                    className="h-8 px-3 text-xs bg-[#191F28] hover:bg-[#333D4B] text-white"
-                  >
-                    추가
-                  </Button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsAddingCategory(false);
-                      setNewCategoryName("");
-                    }}
-                    className="p-1 text-[#8B95A1] hover:text-[#191F28]"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              )}
-
-              {/* 카테고리 선택 칩 목록 */}
-              <div className="flex flex-wrap gap-1.5">
-                {localCategories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    onClick={() => setCategory(cat.id)}
-                    className={cn(
-                      "py-1.5 px-3 text-xs font-bold rounded-xl border text-center transition-all",
-                      category === cat.id
-                        ? "bg-[#191F28] text-white border-[#191F28] shadow-none"
-                        : "bg-[#F9FAFB] text-[#4E5968] border-[#E5E8EB] hover:bg-[#F2F4F6]"
-                    )}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* 작업 구분 (개인 vs 팀) */}
-            <div>
-              <label className="block text-xs font-bold text-[#191F28] mb-1.5">
-                작업 구분 (개인 / 팀) <span className="text-[#E8344E]">*</span>
-              </label>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setProjectType("solo")}
-                  className={cn(
-                    "flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border text-xs font-bold transition-all",
-                    projectType === "solo"
-                      ? "bg-[#191F28] text-white border-[#191F28] shadow-none"
-                      : "bg-[#F9FAFB] text-[#6B7684] border-[#E5E8EB] hover:bg-[#F2F4F6]"
-                  )}
-                >
-                  <User className="w-3.5 h-3.5" />
-                  <span>개인 프로젝트</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setProjectType("team")}
-                  className={cn(
-                    "flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border text-xs font-bold transition-all",
-                    projectType === "team"
-                      ? "bg-[#191F28] text-white border-[#191F28] shadow-none"
-                      : "bg-[#F9FAFB] text-[#6B7684] border-[#E5E8EB] hover:bg-[#F2F4F6]"
-                  )}
-                >
-                  <Users className="w-3.5 h-3.5" />
-                  <span>팀 프로젝트</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* 3. 한 줄 소개 */}
-          <div>
-            <label className="block text-xs font-bold text-[#191F28] mb-1.5">
-              한 줄 소개 <span className="text-[#E8344E]">*</span>
-            </label>
-            <Input
-              value={summary}
-              onChange={(e) => {
-                setSummary(e.target.value);
-                if (errors.summary) setErrors({ ...errors, summary: undefined });
-              }}
-              placeholder="작업물의 핵심 내용이나 역할을 한 줄로 요약해주세요"
-              className={cn(
-                "h-10 text-xs sm:text-sm",
-                errors.summary &&
-                  "border-[#E8344E] focus-visible:border-[#E8344E] focus-visible:ring-[#E8344E]"
-              )}
-            />
-            {errors.summary && (
-              <p className="text-[11px] text-[#E8344E] mt-1">{errors.summary}</p>
-            )}
-          </div>
-
-          {/* 4. 외부 연결 링크 (URL 및 버튼 문구 입력 검증) */}
-          <div className="rounded-2xl border border-[#E5E8EB] bg-[#F9FAFB] p-3.5 space-y-3">
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-1.5 text-xs font-bold text-[#191F28]">
-                <ExternalLink className="w-3.5 h-3.5 text-[#191F28]" />
-                <span>외부 연결 링크</span>
-              </label>
-              <span className="text-[10px] text-[#8B95A1]">선택 (Figma, Behance 등)</span>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="text-[11px] font-semibold text-[#6B7684]">
-                  링크 URL
-                </label>
-                {externalUrl.trim() && !errors.externalUrl && (
-                  <span className="text-[10px] font-medium text-[#00A854] flex items-center gap-0.5">
-                    <Check className="w-3 h-3" />
-                    유효한 URL
-                  </span>
-                )}
-              </div>
-              <Input
-                value={externalUrl}
-                onChange={(e) => {
-                  setExternalUrl(e.target.value);
-                  if (errors.externalUrl) {
-                    setErrors((prev) => ({ ...prev, externalUrl: undefined }));
-                  }
-                }}
-                onBlur={handleUrlBlur}
-                placeholder="https://... (예: https://figma.com/@project)"
-                className={cn(
-                  "h-9 text-xs bg-white",
-                  errors.externalUrl &&
-                    "border-[#E8344E] focus-visible:border-[#E8344E] focus-visible:ring-[#E8344E]"
-                )}
-              />
-              {errors.externalUrl && (
-                <p className="text-[11px] text-[#E8344E] mt-1">
-                  {errors.externalUrl}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                링크 버튼 문구 (유저 입력 링크명)
-              </label>
-              <Input
-                value={externalLabel}
-                onChange={(e) => {
-                  setExternalLabel(e.target.value);
-                  if (errors.externalLabel) {
-                    setErrors((prev) => ({ ...prev, externalLabel: undefined }));
-                  }
-                }}
-                onBlur={handleLabelBlur}
-                placeholder="버튼에 표시할 링크명을 입력하세요 (예: Figma 프로토타입 확인하기)"
-                className={cn(
-                  "h-9 text-xs bg-white",
-                  errors.externalLabel &&
-                    "border-[#E8344E] focus-visible:border-[#E8344E] focus-visible:ring-[#E8344E]"
-                )}
-              />
-              {errors.externalLabel && (
-                <p className="text-[11px] text-[#E8344E] mt-1">
-                  {errors.externalLabel}
-                </p>
-              )}
-            </div>
-
-            <p className="text-[10px] text-[#8B95A1] leading-relaxed">
-              * 외부 링크를 등록할 경우, 링크 URL과 버튼 문구를 모두 입력해야 합니다.
-            </p>
-          </div>
-
-          {/* 5. 대표 썸네일 이미지 (추천 이미지 제거, 유저 업로드 및 URL 직접 입력만 지원) */}
-          <div>
-            <label className="block text-xs font-bold text-[#191F28] mb-1.5">
-              대표 썸네일 이미지
-            </label>
-
-            {/* 이미지 미리보기 및 삭제 버튼 */}
+        <form onSubmit={handleSubmit} className="px-6 py-4 space-y-1">
+          {/* ======================================================== */}
+          {/* 1. 커버 / 대표 썸네일 */}
+          {/* ======================================================== */}
+          <div className="space-y-2 pb-4 border-b border-[#F2F4F6]">
             {thumbnailUrl ? (
-              <div className="relative rounded-xl overflow-hidden border border-[#E5E8EB] bg-[#F2F4F6] aspect-[16/9] mb-2.5 group">
+              <div className="relative rounded-xl overflow-hidden border border-[#E5E8EB] bg-[#F9FAFB] aspect-[16/9] group shadow-none">
                 <img
                   src={thumbnailUrl}
                   alt="업로드된 썸네일"
@@ -654,121 +411,288 @@ export function AddLinkModal({
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-2.5 py-1.5 bg-white text-xs font-bold text-[#191F28] rounded-lg shadow-none hover:bg-[#F2F4F6]"
+                    className="px-3 py-1.5 bg-white text-xs font-medium text-[#191F28] rounded-md hover:bg-[#F2F4F6] cursor-pointer shadow-none transition-colors"
                   >
                     이미지 변경
                   </button>
                   <button
                     type="button"
                     onClick={() => setThumbnailUrl("")}
-                    className="px-2.5 py-1.5 bg-[#E8344E] text-xs font-bold text-white rounded-lg shadow-none hover:bg-[#D02640]"
+                    className="px-3 py-1.5 bg-[#E8344E] text-xs font-medium text-white rounded-md hover:bg-[#D02640] cursor-pointer shadow-none transition-colors"
                   >
                     삭제
                   </button>
                 </div>
               </div>
-            ) : null}
+            ) : (
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="border border-dashed border-[#D1D6DB] hover:border-[#8B95A1] bg-[#FAFAFA] hover:bg-[#F2F4F6] rounded-xl p-5 sm:p-6 flex flex-col items-center justify-center gap-1.5 cursor-pointer transition-all text-center"
+              >
+                <div className="w-8 h-8 rounded-full bg-white border border-[#E5E8EB] flex items-center justify-center text-[#8B95A1]">
+                  <Upload className="w-4 h-4" />
+                </div>
+                <div className="space-y-0.5">
+                  <p className="text-xs font-semibold text-[#191F28]">
+                    대표 썸네일 추가
+                  </p>
+                  <p className="text-[11px] text-[#8B95A1]">
+                    클릭하여 사진 파일 업로드 (권장 16:9 비율)
+                  </p>
+                </div>
+              </div>
+            )}
 
-            {/* 유저 이미지 추가 방식: 파일 업로드 & URL 입력 */}
-            <div className="space-y-2">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleFileUpload}
-                className="hidden"
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+
+            <div className="flex items-center gap-2 pt-1">
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isCompressing}
+                onClick={() => fileInputRef.current?.click()}
+                className="h-8 px-2.5 text-xs text-[#4E5968] bg-transparent border-[#E5E8EB] hover:bg-[#F2F4F6] flex items-center gap-1.5 shrink-0 rounded-lg cursor-pointer shadow-none"
+              >
+                <Upload className="w-3.5 h-3.5" />
+                <span>{isCompressing ? "최적화 중..." : "파일 선택"}</span>
+              </Button>
+              <Input
+                value={thumbnailUrl}
+                onChange={(e) => setThumbnailUrl(e.target.value)}
+                placeholder="또는 이미지 주소(URL) 직접 붙여넣기"
+                className="h-8 text-xs flex-1 bg-transparent border-[#E5E8EB] hover:bg-white focus:bg-white"
               />
-              <div className="flex gap-2">
-                <Button
+            </div>
+          </div>
+
+          {/* ======================================================== */}
+          {/* 2. 첨부 이미지 스타일 입력 필드 테이블 (좌측 볼드 레이블, 우측 인풋) */}
+          {/* ======================================================== */}
+
+          {/* 필드 1: 작업 제목 */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+            <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0">
+              작업 제목 <span className="text-[#E8344E]">*</span>
+            </label>
+            <div className="flex-1">
+              <Input
+                value={title}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                  if (errors.title) setErrors({ ...errors, title: undefined });
+                }}
+                placeholder="작업 제목을 입력하세요"
+                className={cn(
+                  "h-9 text-xs sm:text-sm bg-white border-[#E5E8EB]",
+                  errors.title && "border-[#E8344E]"
+                )}
+              />
+              {errors.title && (
+                <p className="text-[11px] text-[#E8344E] mt-1 font-medium">{errors.title}</p>
+              )}
+            </div>
+          </div>
+
+          {/* 필드 2: 한 줄 소개 */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+            <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0">
+              한 줄 소개 <span className="text-[#E8344E]">*</span>
+            </label>
+            <div className="flex-1">
+              <Input
+                value={summary}
+                onChange={(e) => {
+                  setSummary(e.target.value);
+                  if (errors.summary) setErrors({ ...errors, summary: undefined });
+                }}
+                placeholder="작업물의 핵심 소개를 한 줄로 입력하세요"
+                className={cn(
+                  "h-9 text-xs sm:text-sm bg-white border-[#E5E8EB]",
+                  errors.summary && "border-[#E8344E]"
+                )}
+              />
+              {errors.summary && (
+                <p className="text-[11px] text-[#E8344E] mt-1 font-medium">{errors.summary}</p>
+              )}
+            </div>
+          </div>
+
+          {/* 필드 3: 작업 구분 */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+            <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0 flex items-center gap-1.5">
+              <User className="w-4 h-4 text-[#4E5968]" />
+              <span>작업 구분</span>
+              <span className="text-[#E8344E]">*</span>
+            </label>
+            <div className="flex-1">
+              <div className="inline-flex rounded-lg bg-[#F2F4F6] p-0.5 border border-[#E5E8EB]/60">
+                <button
                   type="button"
-                  variant="outline"
-                  disabled={isCompressing}
-                  onClick={() => fileInputRef.current?.click()}
-                  className="h-9 px-3 text-xs text-[#191F28] border-[#E5E8EB] hover:bg-[#F2F4F6] flex items-center gap-1.5 shrink-0 disabled:opacity-50"
+                  onClick={() => setProjectType("solo")}
+                  className={cn(
+                    "flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer",
+                    projectType === "solo"
+                      ? "bg-white text-[#191F28] font-bold shadow-none"
+                      : "text-[#6B7684] hover:text-[#191F28]"
+                  )}
                 >
-                  <Upload className="w-3.5 h-3.5 text-[#191F28]" />
-                  <span>{isCompressing ? "이미지 최적화 중..." : "내 기기에서 파일 선택"}</span>
-                </Button>
-                <Input
-                  value={thumbnailUrl}
-                  onChange={(e) => setThumbnailUrl(e.target.value)}
-                  placeholder="또는 이미지 주소(URL) 직접 입력"
-                  className="h-9 text-xs flex-1"
-                />
+                  <User className="w-3.5 h-3.5" />
+                  <span>개인 프로젝트</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setProjectType("team")}
+                  className={cn(
+                    "flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer",
+                    projectType === "team"
+                      ? "bg-white text-[#191F28] font-bold shadow-none"
+                      : "text-[#6B7684] hover:text-[#191F28]"
+                  )}
+                >
+                  <Users className="w-3.5 h-3.5" />
+                  <span>팀 프로젝트</span>
+                </button>
               </div>
             </div>
           </div>
 
-          {/* 6. 사용 도구 (미리 제시하는 도구 제거, 유저 입력 도구 + 이전 사용 도구 추천) */}
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="text-xs font-bold text-[#191F28] flex items-center gap-1">
-                <Wrench className="w-3.5 h-3.5 text-[#191F28]" />
-                <span>사용 도구</span>
-              </label>
-              <span className="text-[10px] text-[#8B95A1]">
-                카드에는 상위 2개, 상세에는 전체 노출
-              </span>
-            </div>
-
-            {/* 현재 선택된 도구 뱃지 목록 */}
-            {selectedTools.length > 0 ? (
-              <div className="flex flex-wrap gap-1.5 mb-2 p-2 bg-[#F9FAFB] rounded-xl border border-[#E5E8EB]">
-                {selectedTools.map((tool) => (
-                  <Badge
-                    key={tool}
-                    variant="neutral"
-                    className="bg-white text-[#191F28] border border-[#E5E8EB] pl-2 pr-1.5 py-1 text-xs font-bold flex items-center gap-1 shadow-none"
+          {/* 필드 4: 카테고리 */}
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+            <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0 sm:pt-1.5 flex items-center gap-1.5">
+              <Tag className="w-4 h-4 text-[#4E5968]" />
+              <span>카테고리</span>
+              <span className="text-[#E8344E]">*</span>
+            </label>
+            <div className="flex-1 space-y-2">
+              <div className="flex flex-wrap items-center gap-1.5">
+                {localCategories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setCategory(cat.id)}
+                    className={cn(
+                      "px-3 py-1.5 text-xs rounded-md border text-center transition-all cursor-pointer font-medium",
+                      category === cat.id
+                        ? "bg-[#191F28] text-white border-[#191F28] font-bold"
+                        : "bg-[#FAFAFA] text-[#4E5968] border-[#E5E8EB] hover:bg-[#F2F4F6] hover:text-[#191F28]"
+                    )}
                   >
-                    <span>{tool}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveTool(tool)}
-                      className="hover:text-[#E8344E] rounded-full p-0.5"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </Badge>
+                    {cat.label}
+                  </button>
                 ))}
+                {!isAddingCategory ? (
+                  <button
+                    type="button"
+                    onClick={() => setIsAddingCategory(true)}
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs text-[#8B95A1] hover:text-[#191F28] border border-dashed border-[#D1D6DB] hover:border-[#8B95A1] rounded-md transition-all cursor-pointer font-medium"
+                  >
+                    <Plus className="w-3 h-3" />
+                    <span>새 카테고리</span>
+                  </button>
+                ) : null}
               </div>
-            ) : (
-              <p className="text-[11px] text-[#8B95A1] mb-2">
-                직접 도구를 입력하거나 이전에 추가했던 도구를 선택하세요.
-              </p>
-            )}
 
-            {/* 도구 직접 입력 인풋 */}
-            <div className="flex gap-1.5 mb-2.5">
-              <Input
-                value={customToolInput}
-                onChange={(e) => setCustomToolInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleAddTool();
-                  }
-                }}
-                placeholder="도구명을 입력하세요 (예: Figma, CLO 3D, Rhino, Photoshop)"
-                className="h-8 text-xs flex-1"
-              />
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                onClick={() => handleAddTool()}
-                className="h-8 px-3 text-xs text-[#191F28] border-[#E5E8EB] hover:bg-[#F2F4F6]"
-              >
-                추가
-              </Button>
+              {isAddingCategory && (
+                <div className="flex items-center gap-1.5 p-1 bg-[#F9FAFB] rounded-lg border border-[#E5E8EB] max-w-sm">
+                  <Input
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleAddNewCategory();
+                      }
+                    }}
+                    placeholder="새 카테고리명"
+                    className="h-8 text-xs bg-white flex-1"
+                    autoFocus
+                  />
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => handleAddNewCategory()}
+                    className="h-8 px-3 text-xs bg-[#191F28] hover:bg-[#333D4B] text-white rounded-md shadow-none"
+                  >
+                    확인
+                  </Button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsAddingCategory(false);
+                      setNewCategoryName("");
+                    }}
+                    className="p-1 text-[#8B95A1] hover:text-[#191F28]"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
             </div>
+          </div>
 
-            {/* 관련 도구 추천 목록 */}
-            {suggestedTools.length > 0 && (
-              <div className="space-y-1">
-                <span className="text-[11px] font-semibold text-[#8B95A1] block">
-                  {customToolInput.trim() ? "관련 추천 도구 (클릭하여 추가):" : "추천 도구:"}
-                </span>
-                <div className="flex flex-wrap gap-1.5">
+          {/* 필드 5: 사용 도구 (레이블과 같은 라인에 입력창, 아래에 추가된 칩들과 추천 도구들) */}
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+            <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0 sm:pt-1.5 flex items-center gap-1.5">
+              <Wrench className="w-4 h-4 text-[#4E5968]" />
+              <span>사용 도구</span>
+            </label>
+            <div className="flex-1 space-y-2.5">
+              {/* 1행: 입력창이 [사용 도구]와 같은 라인에 위치 */}
+              <div className="flex items-center gap-2 max-w-md">
+                <Input
+                  value={customToolInput}
+                  onChange={(e) => setCustomToolInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleAddTool();
+                    }
+                  }}
+                  placeholder="도구명을 입력하세요"
+                  className="h-8.5 text-xs bg-white border-[#E5E8EB] flex-1"
+                />
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleAddTool()}
+                  className="h-8.5 px-3 text-xs font-medium text-[#4E5968] bg-transparent border-[#E5E8EB] hover:bg-[#F2F4F6] hover:text-[#191F28] rounded-lg shadow-none cursor-pointer shrink-0"
+                >
+                  추가
+                </Button>
+              </div>
+
+              {/* 2행: 추가한 도구들은 검색창 아래에 추가 */}
+              {selectedTools.length > 0 && (
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  {selectedTools.map((tool) => (
+                    <span
+                      key={tool}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-[#F2F4F6] text-[#333D4B] border border-[#E5E8EB]"
+                    >
+                      <span>{tool}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveTool(tool)}
+                        className="text-[#8B95A1] hover:text-[#E8344E] transition-colors p-0.5 rounded-full"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* 추천 도구 알약 */}
+              {suggestedTools.length > 0 && (
+                <div className="flex flex-wrap items-center gap-1 pt-1">
+                  <span className="text-[11px] text-[#8B95A1] mr-1">추천:</span>
                   {suggestedTools.map((tool) => (
                     <button
                       key={tool}
@@ -779,67 +703,121 @@ export function AddLinkModal({
                           setCustomToolInput("");
                         }
                       }}
-                      className="text-[11px] px-2.5 py-0.5 rounded-lg border border-[#E5E8EB] bg-[#F9FAFB] text-[#4E5968] hover:bg-[#191F28] hover:text-white transition-all flex items-center gap-1 cursor-pointer"
+                      className="text-[11px] px-2 py-0.5 rounded border border-[#E5E8EB] bg-[#FAFAFA] text-[#6B7684] hover:bg-[#F2F4F6] hover:text-[#191F28] transition-colors cursor-pointer"
                     >
-                      <Plus className="w-2.5 h-2.5" />
-                      <span>{tool}</span>
+                      +{tool}
                     </button>
                   ))}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
-          {/* 7. 상세 정보 추가 입력 (접기/펼치기 아코디언) */}
-          <div className="border-t border-[#F2F4F6] pt-3">
+          {/* 필드 6: 외부 연결 링크 */}
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-4 py-3.5 border-b border-[#F2F4F6]">
+            <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0 sm:pt-1.5 flex items-center gap-1.5">
+              <ExternalLink className="w-4 h-4 text-[#4E5968]" />
+              <span>외부 링크</span>
+            </label>
+            <div className="flex-1 space-y-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div>
+                  <Input
+                    value={externalUrl}
+                    onChange={(e) => {
+                      setExternalUrl(e.target.value);
+                      if (errors.externalUrl) {
+                        setErrors((prev) => ({ ...prev, externalUrl: undefined }));
+                      }
+                    }}
+                    onBlur={handleUrlBlur}
+                    placeholder="URL (예: https://figma.com/...)"
+                    className={cn(
+                      "h-8.5 text-xs bg-white border-[#E5E8EB]",
+                      errors.externalUrl && "border-[#E8344E]"
+                    )}
+                  />
+                  {errors.externalUrl && (
+                    <p className="text-[10px] text-[#E8344E] mt-1 font-medium">{errors.externalUrl}</p>
+                  )}
+                </div>
+                <div>
+                  <Input
+                    value={externalLabel}
+                    onChange={(e) => {
+                      setExternalLabel(e.target.value);
+                      if (errors.externalLabel) {
+                        setErrors((prev) => ({ ...prev, externalLabel: undefined }));
+                      }
+                    }}
+                    onBlur={handleLabelBlur}
+                    placeholder="버튼 문구 (예: Figma 프로토타입)"
+                    className={cn(
+                      "h-8.5 text-xs bg-white border-[#E5E8EB]",
+                      errors.externalLabel && "border-[#E8344E]"
+                    )}
+                  />
+                  {errors.externalLabel && (
+                    <p className="text-[10px] text-[#E8344E] mt-1 font-medium">{errors.externalLabel}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ======================================================== */}
+          {/* 3. 상세 정보 접기/펼치기 (노션 토글 블록 스타일) */}
+          {/* ======================================================== */}
+          <div className="pt-2">
             <button
               type="button"
               onClick={() => setShowExtraFields(!showExtraFields)}
-              className="flex items-center justify-between w-full py-1 text-xs font-semibold text-[#6B7684] hover:text-[#191F28] transition-colors"
+              className="flex items-center gap-1.5 text-xs font-semibold text-[#8B95A1] hover:text-[#191F28] transition-colors p-1.5 -ml-1 rounded-md hover:bg-[#F2F4F6]"
             >
-              <span>상세 정보 추가 입력 (기간, 역할, 상세 설명)</span>
               {showExtraFields ? (
-                <ChevronUp className="w-4 h-4" />
+                <ChevronUp className="w-3.5 h-3.5" />
               ) : (
-                <ChevronDown className="w-4 h-4" />
+                <ChevronDown className="w-3.5 h-3.5" />
               )}
+              <span>상세 속성 {showExtraFields ? "접기" : "더보기 (작업 기간, 담당 역할, 상세 설명)"}</span>
             </button>
 
             {showExtraFields && (
-              <div className="space-y-3.5 mt-3 pt-2 bg-[#F9FAFB] p-3 rounded-2xl border border-[#E5E8EB]">
-                <div>
-                  <label className="block text-[11px] font-bold text-[#191F28] mb-1">
+              <div className="space-y-1 mt-2 pt-2 border-t border-[#F2F4F6] animate-in fade-in duration-150">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 py-3 border-b border-[#F2F4F6]">
+                  <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0">
                     작업 기간
                   </label>
                   <Input
                     value={period}
                     onChange={(e) => setPeriod(e.target.value)}
                     placeholder="예: 2026.01 ~ 2026.03"
-                    className="h-8 text-xs bg-white"
+                    className="h-8.5 text-xs bg-white border-[#E5E8EB] flex-1"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-[#191F28] mb-1">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 py-3 border-b border-[#F2F4F6]">
+                  <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0">
                     담당 역할 및 기여도
                   </label>
                   <Input
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
                     placeholder="예: Lead Product Designer (기여도 100%)"
-                    className="h-8 text-xs bg-white"
+                    className="h-8.5 text-xs bg-white border-[#E5E8EB] flex-1"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-[#191F28] mb-1">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-4 py-3 border-b border-[#F2F4F6]">
+                  <label className="w-28 sm:w-36 text-xs sm:text-sm font-bold text-[#191F28] shrink-0 sm:pt-2">
                     상세 케이스 스터디 설명
                   </label>
                   <Textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                    rows={4}
                     placeholder="상세 다이얼로그 모달에서 보여줄 디자인 의도, 문제 해결 과정, 성과 등을 입력해주세요"
-                    className="text-xs bg-white min-h-[70px]"
+                    className="text-xs bg-white border-[#E5E8EB] flex-1 leading-relaxed"
                   />
                 </div>
               </div>
@@ -847,19 +825,19 @@ export function AddLinkModal({
           </div>
 
           {/* 모달 하단 버튼 */}
-          <div className="sticky bottom-0 z-10 bg-white/95 backdrop-blur-md pt-3 pb-2 -mx-6 px-6 border-t border-[#F2F4F6] flex items-center justify-end gap-2">
+          <div className="sticky bottom-0 z-20 bg-white/95 backdrop-blur-md pt-3 pb-2 -mx-6 px-6 border-t border-[#F2F4F6] flex items-center justify-end gap-2">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="h-10 px-4 rounded-xl text-xs font-semibold text-[#4E5968] border-[#E5E8EB] hover:bg-[#F2F4F6]"
+              className="h-9 px-4 text-xs font-medium text-[#6B7684] bg-transparent border-[#E5E8EB] hover:bg-[#F2F4F6] hover:text-[#191F28] rounded-lg shadow-none cursor-pointer transition-colors"
             >
               취소
             </Button>
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="h-10 px-5 rounded-xl text-xs font-bold bg-[#191F28] hover:bg-[#333D4B] text-white active:scale-[0.98] transition-all shadow-none flex items-center gap-1.5 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="h-9 px-5 text-xs font-semibold bg-[#191F28] hover:bg-[#333D4B] text-white rounded-lg shadow-none flex items-center gap-1.5 active:scale-[0.98] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
                 <>
@@ -867,10 +845,7 @@ export function AddLinkModal({
                   <span>저장 및 갱신 중...</span>
                 </>
               ) : (
-                <>
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>링크 추가하기</span>
-                </>
+                <span>링크 추가하기</span>
               )}
             </Button>
           </div>

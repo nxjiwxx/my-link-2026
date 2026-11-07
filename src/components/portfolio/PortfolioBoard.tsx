@@ -810,18 +810,38 @@ export function PortfolioBoard({
           )}
         </section>
 
-        {/* 5. 디자이너 사용 도구 숙련도 & 6. 경력 및 활동 타임라인 블록 */}
-        <section className="px-4 sm:px-6 mt-6 space-y-5 w-full">
-          <ToolProficiencyBars
-            tools={profile.toolProficiencies || []}
-            onUpdateTools={isOwner ? handleUpdateTools : undefined}
-            onRequestDelete={
-              isOwner
-                ? (tool) => setDeleteTarget({ type: "tool", data: tool })
-                : undefined
-            }
-            isReadOnly={!isOwner}
-          />
+        {/* 구분선 1: 프로젝트와 사용 도구 숙련도 사이 */}
+        {((profile.toolProficiencies && profile.toolProficiencies.length > 0) || isOwner) && (
+          <div className="px-4 sm:px-6 my-7">
+            <div className="border-t border-[#E5E8EB]" />
+          </div>
+        )}
+
+        {/* 5. 디자이너 사용 도구 숙련도 */}
+        {((profile.toolProficiencies && profile.toolProficiencies.length > 0) || isOwner) && (
+          <section className="px-4 sm:px-6 w-full">
+            <ToolProficiencyBars
+              tools={profile.toolProficiencies || []}
+              onUpdateTools={isOwner ? handleUpdateTools : undefined}
+              onRequestDelete={
+                isOwner
+                  ? (tool) => setDeleteTarget({ type: "tool", data: tool })
+                  : undefined
+              }
+              isReadOnly={!isOwner}
+            />
+          </section>
+        )}
+
+        {/* 구분선 2: 사용 도구 숙련도와 경력 및 활동 사이 */}
+        {((profile.careers && profile.careers.length > 0) || isOwner) && (
+          <div className="px-4 sm:px-6 my-7">
+            <div className="border-t border-[#E5E8EB]" />
+          </div>
+        )}
+
+        {/* 6. 경력 및 활동 타임라인 블록 */}
+        <section className="px-4 sm:px-6 w-full">
           <CareerTimeline
             careers={profile.careers || []}
             onUpdateCareers={isOwner ? handleUpdateCareers : undefined}
@@ -835,7 +855,7 @@ export function PortfolioBoard({
 
           {/* 경력 및 활동 하단: 내 페이지 만들러가기 텍스트 버튼 (그레이스케일 80의 약간 흐릿한 컬러) */}
           {(showCreateProjectButton ?? (isDynamicRoute || isPublicView)) && (
-            <div className="pt-3 pb-2 flex justify-center">
+            <div className="pt-6 pb-2 flex justify-center">
               <button
                 type="button"
                 onClick={() => router.push("/")}

@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { Wrench, Plus, Pencil, Trash2, Check, X, Save } from "lucide-react";
 import { ToolProficiency } from "@/types/portfolio";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getMatchingToolSuggestions } from "@/lib/toolSuggestions";
@@ -284,13 +283,14 @@ export function ToolProficiencyBars({
   };
 
   return (
-    <Card className="rounded-xl border border-[#E5E8EB] bg-white select-none shadow-none">
-      <CardHeader className="p-4 pb-2.5 flex flex-row items-center justify-between space-y-0">
+    <div className="w-full select-none">
+      {/* 섹션 상단 헤더 */}
+      <div className="flex items-center justify-between pb-3">
         <div className="flex items-center gap-1.5">
           <Wrench className="w-4 h-4 text-[#4B5563]" />
-          <CardTitle className="text-sm font-semibold text-[#111827]">
+          <h3 className="text-sm font-bold text-[#191F28]">
             사용 도구 숙련도
-          </CardTitle>
+          </h3>
         </div>
 
         {/* 도구 추가 버튼 (수정 권한이 있을 때만 표시) */}
@@ -309,13 +309,13 @@ export function ToolProficiencyBars({
             <span>도구 추가</span>
           </Button>
         )}
-      </CardHeader>
+      </div>
 
-      <CardContent className="p-4 pt-1 space-y-3.5">
-        {/* 새 도구 인라인 추가 폼 */}
+      <div className="space-y-3.5 pt-1">
+        {/* 새 도구 인라인 추가 폼 (노션 / 첨부 이미지 스타일 리팩터링) */}
         {isAdding && (
-          <div className="p-3 rounded-xl bg-[#F9FAFB] border-2 border-[#3182F6]/40 space-y-2.5 animate-in fade-in duration-150">
-            <div className="text-xs font-bold text-[#191F28] flex items-center justify-between">
+          <div className="p-4 rounded-xl border border-[#E5E8EB] bg-[#FAFAFA] space-y-3 animate-in fade-in duration-150 mb-3">
+            <div className="text-xs font-bold text-[#191F28] flex items-center justify-between pb-2 border-b border-[#E5E8EB]">
               <span>새 도구 숙련도 추가</span>
               <button
                 type="button"
@@ -325,33 +325,29 @@ export function ToolProficiencyBars({
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              <div>
-                <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                  도구 이름 *
-                </label>
-                <div className="relative flex items-center">
-                  <div className="absolute left-2.5 flex items-center justify-center w-4 h-4 pointer-events-none text-[#8B95A1]">
-                    <Wrench className="w-3.5 h-3.5 text-[#8B95A1]" />
-                  </div>
-                  <Input
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                    placeholder="예: Figma, Framer, Photoshop, Claude"
-                    className="h-8 text-xs bg-white pl-8 font-medium"
-                    autoFocus
-                  />
-                </div>
-                {/* 추천 도구 칩 (입력 시 관련 툴만 가로 1줄로 최대 4개 제안) */}
+
+            {/* 필드 1: 도구 이름 */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 py-1.5">
+              <label className="w-24 sm:w-28 text-xs font-bold text-[#191F28] shrink-0">
+                도구 이름 <span className="text-[#E8344E]">*</span>
+              </label>
+              <div className="flex-1 space-y-1.5">
+                <Input
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  placeholder="예: Figma, Framer, Photoshop, Claude"
+                  className="h-8.5 text-xs bg-white border-[#E5E8EB]"
+                  autoFocus
+                />
                 {newToolSuggestions.length > 0 && (
-                  <div className="mt-1.5 flex items-center gap-1.5 flex-nowrap overflow-x-auto no-scrollbar py-0.5">
+                  <div className="flex items-center gap-1.5 flex-nowrap overflow-x-auto no-scrollbar py-0.5">
                     <span className="text-[10px] text-[#8B95A1] font-medium shrink-0">추천:</span>
                     {newToolSuggestions.slice(0, 4).map((sug) => (
                       <button
                         key={sug}
                         type="button"
                         onClick={() => setNewName(sug)}
-                        className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-md bg-white border border-[#E5E8EB] text-[#4E5968] hover:text-[#3182F6] hover:border-[#3182F6] transition-colors cursor-pointer shrink-0"
+                        className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-md bg-white border border-[#E5E8EB] text-[#4E5968] hover:text-[#191F28] hover:border-[#191F28] transition-colors cursor-pointer shrink-0"
                       >
                         <ToolFavicon name={sug} />
                         <span>{sug}</span>
@@ -360,54 +356,61 @@ export function ToolProficiencyBars({
                   </div>
                 )}
               </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                  숙련도 ({newLevel}%)
-                </label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
+            </div>
+
+            {/* 필드 2: 숙련도 */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 py-1.5">
+              <label className="w-24 sm:w-28 text-xs font-bold text-[#191F28] shrink-0">
+                숙련도 ({newLevel}%)
+              </label>
+              <div className="flex-1 flex items-center gap-3">
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={newLevel}
+                  onChange={(e) => setNewLevel(Math.min(100, Math.max(0, Number(e.target.value))))}
+                  className="flex-1 accent-[#191F28] cursor-pointer"
+                />
+                <div className="flex items-center gap-1 shrink-0">
+                  <Input
+                    type="number"
+                    min={0}
+                    max={100}
                     value={newLevel}
-                    onChange={(e) => setNewLevel(Math.min(100, Math.max(0, Number(e.target.value))))}
-                    className="flex-1 accent-[#3182F6] cursor-pointer"
+                    onChange={(e) => {
+                      const val = e.target.value === "" ? 0 : Number(e.target.value);
+                      setNewLevel(Math.min(100, Math.max(0, val)));
+                    }}
+                    className="w-16 h-8 text-xs font-mono font-bold text-center px-1 bg-white border-[#E5E8EB]"
                   />
-                  <div className="flex items-center gap-0.5 shrink-0">
-                    <Input
-                      type="number"
-                      min={0}
-                      max={100}
-                      value={newLevel}
-                      onChange={(e) => {
-                        const val = e.target.value === "" ? 0 : Number(e.target.value);
-                        setNewLevel(Math.min(100, Math.max(0, val)));
-                      }}
-                      className="w-16 h-8 text-xs font-mono font-bold text-center px-1 bg-white"
-                    />
-                    <span className="text-xs font-bold text-[#3182F6]">%</span>
-                  </div>
+                  <span className="text-xs font-bold text-[#4E5968]">%</span>
                 </div>
               </div>
             </div>
-            <div>
-              <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                경험 연차 / 수준 (선택)
+
+            {/* 필드 3: 경험 연차 / 수준 */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 py-1.5">
+              <label className="w-24 sm:w-28 text-xs font-bold text-[#191F28] shrink-0">
+                경험 연차
               </label>
-              <Input
-                value={newExperience}
-                onChange={(e) => setNewExperience(e.target.value)}
-                placeholder="예: 고급 · 4년차, 실무 프로젝트 5회 이상"
-                className="h-8 text-xs bg-white"
-              />
+              <div className="flex-1">
+                <Input
+                  value={newExperience}
+                  onChange={(e) => setNewExperience(e.target.value)}
+                  placeholder="예: 고급 · 4년차, 실무 프로젝트 5회 이상"
+                  className="h-8.5 text-xs bg-white border-[#E5E8EB]"
+                />
+              </div>
             </div>
-            <div className="flex justify-end gap-1.5 pt-1">
+
+            <div className="flex justify-end gap-1.5 pt-2 border-t border-[#E5E8EB]">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsAdding(false)}
-                className="h-7 px-2.5 text-xs text-[#6B7684]"
+                className="h-8 px-3 text-xs text-[#6B7684] border-[#E5E8EB] hover:bg-[#F2F4F6] rounded-lg"
               >
                 취소
               </Button>
@@ -415,9 +418,9 @@ export function ToolProficiencyBars({
                 type="button"
                 size="sm"
                 onClick={handleSaveNew}
-                className="h-7 px-3 text-xs bg-[#3182F6] hover:bg-[#1B64DA] text-white"
+                className="h-8 px-4 text-xs font-semibold bg-[#191F28] hover:bg-[#333D4B] text-white rounded-lg cursor-pointer"
               >
-                추가 완료
+                추가하기
               </Button>
             </div>
           </div>
@@ -428,14 +431,14 @@ export function ToolProficiencyBars({
           const isCurrentlyEditing = editingIndex === index;
 
           if (isCurrentlyEditing) {
-            /* 인라인 편집 폼 */
+            /* 인라인 편집 폼 (노션 / 첨부 이미지 스타일 리팩터링) */
             return (
               <div
                 key={`edit-${tool.name}-${index}`}
-                className="p-3 rounded-xl bg-[#F9FAFB] border-2 border-[#3182F6]/40 space-y-2.5 animate-in fade-in duration-150"
+                className="p-4 rounded-xl border border-[#E5E8EB] bg-[#FAFAFA] space-y-3 animate-in fade-in duration-150 my-2"
               >
-                <div className="text-xs font-bold text-[#191F28] flex items-center justify-between">
-                  <span>도구 정보 인라인 수정</span>
+                <div className="text-xs font-bold text-[#191F28] flex items-center justify-between pb-2 border-b border-[#E5E8EB]">
+                  <span>도구 정보 수정</span>
                   <button
                     type="button"
                     onClick={handleCancelEdit}
@@ -444,32 +447,28 @@ export function ToolProficiencyBars({
                     <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <div>
-                    <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                      도구 이름 *
-                    </label>
-                    <div className="relative flex items-center">
-                      <div className="absolute left-2.5 flex items-center justify-center w-4 h-4 pointer-events-none text-[#8B95A1]">
-                        <Wrench className="w-3.5 h-3.5 text-[#8B95A1]" />
-                      </div>
-                      <Input
-                        value={editName}
-                        onChange={(e) => setEditName(e.target.value)}
-                        placeholder="도구 이름"
-                        className="h-8 text-xs bg-white pl-8 font-medium"
-                      />
-                    </div>
-                    {/* 추천 도구 칩 (입력 시 관련 툴만 가로 1줄로 최대 4개 제안) */}
+
+                {/* 필드 1: 도구 이름 */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 py-1.5">
+                  <label className="w-24 sm:w-28 text-xs font-bold text-[#191F28] shrink-0">
+                    도구 이름 <span className="text-[#E8344E]">*</span>
+                  </label>
+                  <div className="flex-1 space-y-1.5">
+                    <Input
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      placeholder="도구 이름"
+                      className="h-8.5 text-xs bg-white border-[#E5E8EB]"
+                    />
                     {editToolSuggestions.length > 0 && (
-                      <div className="mt-1.5 flex items-center gap-1.5 flex-nowrap overflow-x-auto no-scrollbar py-0.5">
+                      <div className="flex items-center gap-1.5 flex-nowrap overflow-x-auto no-scrollbar py-0.5">
                         <span className="text-[10px] text-[#8B95A1] font-medium shrink-0">추천:</span>
                         {editToolSuggestions.slice(0, 4).map((sug) => (
                           <button
                             key={sug}
                             type="button"
                             onClick={() => setEditName(sug)}
-                            className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-md bg-white border border-[#E5E8EB] text-[#4E5968] hover:text-[#3182F6] hover:border-[#3182F6] transition-colors cursor-pointer shrink-0"
+                            className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-md bg-white border border-[#E5E8EB] text-[#4E5968] hover:text-[#191F28] hover:border-[#191F28] transition-colors cursor-pointer shrink-0"
                           >
                             <ToolFavicon name={sug} />
                             <span>{sug}</span>
@@ -478,54 +477,61 @@ export function ToolProficiencyBars({
                       </div>
                     )}
                   </div>
-                  <div>
-                    <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                      숙련도 ({editLevel}%)
-                    </label>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
+                </div>
+
+                {/* 필드 2: 숙련도 */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 py-1.5">
+                  <label className="w-24 sm:w-28 text-xs font-bold text-[#191F28] shrink-0">
+                    숙련도 ({editLevel}%)
+                  </label>
+                  <div className="flex-1 flex items-center gap-3">
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={editLevel}
+                      onChange={(e) => setEditLevel(Math.min(100, Math.max(0, Number(e.target.value))))}
+                      className="flex-1 accent-[#191F28] cursor-pointer"
+                    />
+                    <div className="flex items-center gap-1 shrink-0">
+                      <Input
+                        type="number"
+                        min={0}
+                        max={100}
                         value={editLevel}
-                        onChange={(e) => setEditLevel(Math.min(100, Math.max(0, Number(e.target.value))))}
-                        className="flex-1 accent-[#3182F6] cursor-pointer"
+                        onChange={(e) => {
+                          const val = e.target.value === "" ? 0 : Number(e.target.value);
+                          setEditLevel(Math.min(100, Math.max(0, val)));
+                        }}
+                        className="w-16 h-8 text-xs font-mono font-bold text-center px-1 bg-white border-[#E5E8EB]"
                       />
-                      <div className="flex items-center gap-0.5 shrink-0">
-                        <Input
-                          type="number"
-                          min={0}
-                          max={100}
-                          value={editLevel}
-                          onChange={(e) => {
-                            const val = e.target.value === "" ? 0 : Number(e.target.value);
-                            setEditLevel(Math.min(100, Math.max(0, val)));
-                          }}
-                          className="w-16 h-8 text-xs font-mono font-bold text-center px-1 bg-white"
-                        />
-                        <span className="text-xs font-bold text-[#3182F6]">%</span>
-                      </div>
+                      <span className="text-xs font-bold text-[#4E5968]">%</span>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <label className="block text-[11px] font-semibold text-[#6B7684] mb-1">
-                    경험 연차 / 수준 (선택)
+
+                {/* 필드 3: 경험 연차 */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 py-1.5">
+                  <label className="w-24 sm:w-28 text-xs font-bold text-[#191F28] shrink-0">
+                    경험 연차
                   </label>
-                  <Input
-                    value={editExperience}
-                    onChange={(e) => setEditExperience(e.target.value)}
-                    placeholder="예: 고급 · 4년차"
-                    className="h-8 text-xs bg-white"
-                  />
+                  <div className="flex-1">
+                    <Input
+                      value={editExperience}
+                      onChange={(e) => setEditExperience(e.target.value)}
+                      placeholder="예: 고급 · 4년차"
+                      className="h-8.5 text-xs bg-white border-[#E5E8EB]"
+                    />
+                  </div>
                 </div>
-                <div className="flex justify-end gap-1.5 pt-1">
+
+                <div className="flex justify-end gap-1.5 pt-2 border-t border-[#E5E8EB]">
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     onClick={handleCancelEdit}
-                    className="h-7 px-2.5 text-xs text-[#6B7684]"
+                    className="h-8 px-3 text-xs text-[#6B7684] border-[#E5E8EB] hover:bg-[#F2F4F6] rounded-lg"
                   >
                     취소
                   </Button>
@@ -533,9 +539,9 @@ export function ToolProficiencyBars({
                     type="button"
                     size="sm"
                     onClick={() => handleSaveEdit(index)}
-                    className="h-7 px-3 text-xs bg-[#3182F6] hover:bg-[#1B64DA] text-white"
+                    className="h-8 px-4 text-xs font-semibold bg-[#191F28] hover:bg-[#333D4B] text-white rounded-lg cursor-pointer"
                   >
-                    수정 완료
+                    저장하기
                   </Button>
                 </div>
               </div>
@@ -605,7 +611,7 @@ export function ToolProficiencyBars({
             등록된 도구 숙련도가 없습니다. 상단 버튼을 눌러 추가해보세요.
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
