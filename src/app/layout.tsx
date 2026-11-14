@@ -2,7 +2,16 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000");
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "MyPortfolio | 디자이너를 위한 올인원 포트폴리오 아카이빙",
   description: "디자이너를 위한 올인원 포트폴리오 아카이빙 서비스입니다. 작업물 링크, 케이스 스터디 및 이력서를 간편하게 관리하세요.",
   openGraph: {
@@ -10,6 +19,11 @@ export const metadata: Metadata = {
     description: "Google 로그인으로 나만의 작업물 링크와 포트폴리오를 클라우드에 안전하게 보관하세요.",
     type: "website",
     locale: "ko_KR",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MyPortfolio | 디자이너 포트폴리오 아카이빙",
+    description: "Google 로그인으로 나만의 작업물 링크와 포트폴리오를 클라우드에 안전하게 보관하세요.",
   },
 };
 

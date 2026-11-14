@@ -1,0 +1,172 @@
+import { ImageResponse } from "next/og";
+import {
+  OG_COLORS,
+  OG_CONTENT_TYPE,
+  OG_SIZE,
+  getOgUserProfile,
+  loadLocalOgFonts,
+} from "@/lib/og";
+
+export const dynamic = "force-dynamic";
+export const alt = "My Portfolio";
+export const size = OG_SIZE;
+export const contentType = OG_CONTENT_TYPE;
+
+export default async function UsernameOpenGraphImage({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}) {
+  const resolvedParams = await params;
+  const profile = await getOgUserProfile(resolvedParams?.username || "designer");
+  const fonts = await loadLocalOgFonts();
+
+  const userId = profile.username || "User";
+  const initialChar = userId.slice(0, 1).toUpperCase();
+
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          backgroundColor: "#FFFFFF",
+          fontFamily: "Pretendard, sans-serif",
+          padding: "76px 100px",
+        }}
+      >
+        {/* 상단: My Portfolio */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "Syne, sans-serif",
+              fontSize: 34,
+              fontWeight: 800,
+              color: OG_COLORS.navy900,
+              letterSpacing: "-0.03em",
+            }}
+          >
+            My Portfolio
+          </span>
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={OG_COLORS.orange}
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M7 17L17 7" />
+            <path d="M7 7h10v10" />
+          </svg>
+        </div>
+
+        {/* 중앙: 프로필 사진 + 메인 타이틀 ([userid] 의 Portfolio) */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 48,
+          }}
+        >
+          {/* 프로필 사진 */}
+          <div
+            style={{
+              width: 170,
+              height: 170,
+              borderRadius: 9999,
+              overflow: "hidden",
+              border: `4px solid ${OG_COLORS.navy900}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: OG_COLORS.navy900,
+              flexShrink: 0,
+            }}
+          >
+            {profile.avatarDataUrl ? (
+              <img
+                src={profile.avatarDataUrl}
+                alt={userId}
+                width={170}
+                height={170}
+                style={{
+                  width: 170,
+                  height: 170,
+                  borderRadius: 9999,
+                  objectFit: "cover",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  color: "#FFFFFF",
+                  fontFamily: "Syne, sans-serif",
+                  fontSize: 76,
+                  fontWeight: 800,
+                }}
+              >
+                {initialChar}
+              </div>
+            )}
+          </div>
+
+          {/* 메인 타이틀 : [userid] 의 Portfolio */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
+            <div
+              style={{
+                fontSize: 66,
+                fontWeight: 700,
+                color: OG_COLORS.navy900,
+                letterSpacing: "-0.03em",
+                lineHeight: 1.15,
+                display: "flex",
+                flexWrap: "wrap",
+              }}
+            >
+              <span>{userId}</span>
+              <span style={{ color: OG_COLORS.navy700 }}>&nbsp;의&nbsp;</span>
+              <span style={{ color: OG_COLORS.orange }}>Portfolio</span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                marginTop: 16,
+                fontSize: 30,
+                fontWeight: 500,
+                color: OG_COLORS.navy500,
+              }}
+            >
+              {profile.roleTitle}
+            </div>
+          </div>
+        </div>
+
+        {/* 하단 여백 및 미니멀 정돈 */}
+        <div style={{ height: 20 }} />
+      </div>
+    ),
+    {
+      ...size,
+      fonts: fonts.length > 0 ? fonts : undefined,
+    }
+  );
+}
