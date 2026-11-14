@@ -17,9 +17,12 @@ export async function generateMetadata({
   return {
     title,
     description,
+    alternates: { canonical: `/projects/${encodeURIComponent(project.id)}` },
     openGraph: {
       title,
       description,
+      url: `/projects/${encodeURIComponent(project.id)}`,
+      siteName: "MyPortfolio",
       type: "article",
       locale: "ko_KR",
     },
