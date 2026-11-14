@@ -66,7 +66,7 @@ export function CalendarBlockCard({ block }: CalendarBlockCardProps) {
     <Card className="overflow-hidden border border-[#E5E8EB] bg-white rounded-2xl">
       <CardHeader className="p-4 pb-2 flex flex-row items-center justify-between space-y-0">
         <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#E8F3FF] text-[#3182F6]">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#FFF2EE] text-[#FF5A36]">
             <CalendarIcon className="w-4 h-4" />
           </div>
           <CardTitle className="text-sm font-bold text-[#191F28]">
@@ -148,15 +148,15 @@ export function CalendarBlockCard({ block }: CalendarBlockCardProps) {
                     className={cn(
                       "relative flex flex-col items-center justify-center h-8 rounded-lg font-medium transition-all",
                       isSelected
-                        ? "bg-[#3182F6] text-white font-bold shadow-xs"
+                        ? "bg-[#FF5A36] text-white font-bold shadow-xs"
                         : hasEvent
-                        ? "bg-[#E8F3FF] text-[#3182F6] font-bold hover:bg-[#D5E9FF]"
+                        ? "bg-[#FFF2EE] text-[#FF5A36] font-bold hover:bg-[#D5E9FF]"
                         : "text-[#191F28] hover:bg-[#F2F4F6]"
                     )}
                   >
                     <span>{day}</span>
                     {hasEvent && !isSelected && (
-                      <span className="absolute bottom-1 h-1 w-1 rounded-full bg-[#3182F6]" />
+                      <span className="absolute bottom-1 h-1 w-1 rounded-full bg-[#FF5A36]" />
                     )}
                   </button>
                 );
@@ -168,7 +168,7 @@ export function CalendarBlockCard({ block }: CalendarBlockCardProps) {
               <div className="text-xs font-semibold text-[#8B95A1] mb-2 flex items-center justify-between">
                 <span>{selectedDate} 일정</span>
                 {selectedEvents.length > 0 && (
-                  <span className="text-[#3182F6]">{selectedEvents.length}개</span>
+                  <span className="text-[#FF5A36]">{selectedEvents.length}개</span>
                 )}
               </div>
 
@@ -201,7 +201,7 @@ export function CalendarBlockCard({ block }: CalendarBlockCardProps) {
                           href={ev.linkUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-[#3182F6] hover:underline"
+                          className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-[#FF5A36] hover:underline"
                         >
                           상세보기 바로가기
                           <ExternalLink className="w-3 h-3" />
@@ -227,7 +227,7 @@ export function CalendarBlockCard({ block }: CalendarBlockCardProps) {
               >
                 <div className="flex items-center justify-between gap-2 mb-1.5">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-[#3182F6] font-mono">
+                    <span className="text-xs font-bold text-[#FF5A36] font-mono">
                       {ev.date}
                     </span>
                     {ev.time && (
@@ -254,7 +254,7 @@ export function CalendarBlockCard({ block }: CalendarBlockCardProps) {
                     href={ev.linkUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#3182F6] hover:underline"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#FF5A36] hover:underline"
                   >
                     일정 참여 및 확인하기
                     <ExternalLink className="w-3 h-3" />

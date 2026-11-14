@@ -20,7 +20,7 @@ export function TextBlockCard({ block, className }: TextBlockCardProps) {
       )}
     >
       <div className="flex items-center gap-2 mb-2">
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#E8F3FF] text-[#3182F6]">
+        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#FFF2EE] text-[#FF5A36]">
           <Megaphone className="w-4 h-4" />
         </div>
         <span className="text-sm font-bold text-[#191F28]">{block.title}</span>

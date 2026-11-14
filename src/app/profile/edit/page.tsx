@@ -75,7 +75,7 @@ function detectSocialChannel(rawInput: string): {
       key: "email",
       name: "이메일 (Email)",
       iconType: "email",
-      color: "#3182F6",
+      color: "#FF5A36",
       formattedUrl: emailAddr,
     };
   }
@@ -385,7 +385,7 @@ export default function ProfileEditPage() {
       case "dribbble":
         return <DribbbleIcon className={`${className} text-[#EA4C89]`} />;
       case "email":
-        return <MailIcon className={`${className} text-[#3182F6]`} />;
+        return <MailIcon className={`${className} text-[#FF5A36]`} />;
       case "youtube":
         return <YoutubeIcon className={`${className} text-[#FF0000]`} />;
       default:
@@ -713,13 +713,13 @@ export default function ProfileEditPage() {
                   />
                   <div className="absolute right-2.5 flex items-center pointer-events-none">
                     {usernameStatus === "checking" && (
-                      <Loader2 className="w-3.5 h-3.5 text-[#3182F6] animate-spin" />
+                      <Loader2 className="w-3.5 h-3.5 text-[#FF5A36] animate-spin" />
                     )}
                     {usernameStatus === "available" && (
                       <Check className="w-3.5 h-3.5 text-[#00B06B]" />
                     )}
                     {usernameStatus === "mine" && (
-                      <Check className="w-3.5 h-3.5 text-[#3182F6]" />
+                      <Check className="w-3.5 h-3.5 text-[#FF5A36]" />
                     )}
                     {usernameStatus === "taken" && (
                       <X className="w-3.5 h-3.5 text-[#E8344E]" />
@@ -737,7 +737,7 @@ export default function ProfileEditPage() {
                         : usernameStatus === "available"
                         ? "text-[#00B06B]"
                         : usernameStatus === "mine"
-                        ? "text-[#3182F6]"
+                        ? "text-[#FF5A36]"
                         : "text-[#8B95A1]"
                     }`}
                   >

@@ -10,7 +10,7 @@ const Progress = React.forwardRef<
     value?: number;
     indicatorColor?: string;
   }
->(({ className, value = 0, indicatorColor = "bg-[#3182F6]", ...props }, ref) => (
+>(({ className, value = 0, indicatorColor = "bg-[#FF5A36]", ...props }, ref) => (
   <ProgressPrimitive.Root
     ref={ref}
     value={value}

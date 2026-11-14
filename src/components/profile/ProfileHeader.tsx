@@ -60,7 +60,7 @@ export function ProfileHeader({
         {isVerified && (
           <div
             title="인증된 크리에이터"
-            className="absolute bottom-0 right-0 flex h-6 w-6 items-center justify-center rounded-full bg-[#3182F6] text-white ring-2 ring-white shadow-xs"
+            className="absolute bottom-0 right-0 flex h-6 w-6 items-center justify-center rounded-full bg-[#FF5A36] text-white ring-2 ring-white shadow-xs"
           >
             <Check className="w-3.5 h-3.5 stroke-[3]" />
           </div>
@@ -132,7 +132,7 @@ export function ProfileHeader({
             href={`mailto:${socialLinks.email}`}
             title="비즈니스 제휴 이메일"
             aria-label="이메일 문의"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#E5E8EB] bg-white text-[#191F28] hover:border-[#3182F6] hover:text-[#3182F6] hover:bg-[#FAFAFA] active:scale-95 transition-all shadow-xs"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#E5E8EB] bg-white text-[#191F28] hover:border-[#FF5A36] hover:text-[#FF5A36] hover:bg-[#FAFAFA] active:scale-95 transition-all shadow-xs"
           >
             <MailIcon className="w-4 h-4" />
           </a>

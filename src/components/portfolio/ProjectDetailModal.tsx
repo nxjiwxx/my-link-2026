@@ -84,7 +84,7 @@ export function ProjectDetailModal({
         {/* 상단 미세 스크롤 진행률 바 (스크롤바 대신 읽은 위치를 시각화) */}
         <div className="absolute top-0 left-0 right-0 h-1 z-30 bg-[#F2F4F6]">
           <div
-            className="h-full bg-[#3182F6] transition-all duration-150"
+            className="h-full bg-[#FF5A36] transition-all duration-150"
             style={{ width: `${scrollProgress}%` }}
           />
         </div>
@@ -104,7 +104,7 @@ export function ProjectDetailModal({
             />
             {/* 좌측 상단 카테고리 뱃지 */}
             <div className="absolute top-3 left-3 flex items-center gap-1.5">
-              <Badge variant="primary" className="bg-[#3182F6] text-white shadow-none">
+              <Badge variant="primary" className="bg-[#FF5A36] text-white shadow-none">
                 {project.categoryLabel}
               </Badge>
               {/* 팀 / 개인 프로젝트 구분 뱃지 */}
@@ -113,7 +113,7 @@ export function ProjectDetailModal({
                 className="bg-black/60 backdrop-blur-md text-white border-0 shadow-none flex items-center gap-1 text-[11px]"
               >
                 {isTeam ? (
-                  <Users className="w-3 h-3 text-[#3182F6]" />
+                  <Users className="w-3 h-3 text-[#FF5A36]" />
                 ) : (
                   <User className="w-3 h-3 text-[#EAFBF2]" />
                 )}
@@ -126,13 +126,13 @@ export function ProjectDetailModal({
           <div className="p-6 pt-4 space-y-4 pb-14">
             <DialogHeader className="text-left space-y-2">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-[#3182F6]">
+                <span className="text-xs font-bold text-[#FF5A36]">
                   {project.categoryLabel}
                 </span>
                 <span className="text-[#E5E8EB]">·</span>
                 <span className="text-xs font-semibold text-[#4E5968] flex items-center gap-1">
                   {isTeam ? (
-                    <Users className="w-3 h-3 text-[#3182F6]" />
+                    <Users className="w-3 h-3 text-[#FF5A36]" />
                   ) : (
                     <User className="w-3 h-3 text-[#8B95A1]" />
                   )}
@@ -155,7 +155,7 @@ export function ProjectDetailModal({
                 <span className="font-mono">{project.period}</span>
               </div>
 
-              <div className="flex items-center gap-1.5 rounded-lg bg-[#E8F3FF] px-2.5 py-1 text-xs font-semibold text-[#3182F6]">
+              <div className="flex items-center gap-1.5 rounded-lg bg-[#FFF2EE] px-2.5 py-1 text-xs font-semibold text-[#FF5A36]">
                 <Award className="w-3.5 h-3.5" />
                 <span>{project.role}</span>
               </div>
@@ -164,7 +164,7 @@ export function ProjectDetailModal({
             {/* 프로젝트 상세 배경 및 해결 과정 */}
             <div className="rounded-xl bg-[#F9FAFB] p-4 border border-[#E5E8EB]">
               <h4 className="text-xs font-bold text-[#191F28] mb-1.5 flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-[#3182F6]" />
+                <Layers className="w-3.5 h-3.5 text-[#FF5A36]" />
                 디자인 배경 및 해결 과정
               </h4>
               <p className="text-xs text-[#4E5968] leading-relaxed break-keep whitespace-pre-line">
@@ -215,7 +215,7 @@ export function ProjectDetailModal({
                   rel="noopener noreferrer"
                   className="w-full"
                 >
-                  <Button className="w-full h-12 rounded-xl bg-[#3182F6] hover:bg-[#1B64DA] text-white font-bold text-xs sm:text-sm active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-none">
+                  <Button className="w-full h-12 rounded-xl bg-[#FF5A36] hover:bg-[#E84E2B] text-white font-bold text-xs sm:text-sm active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-none">
                     <span>{project.externalLink.label}</span>
                     <ArrowUpRight className="w-4 h-4" />
                   </Button>
@@ -250,7 +250,7 @@ export function ProjectDetailModal({
               className="pointer-events-auto flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#191F28]/85 text-white text-[10px] font-semibold backdrop-blur-md shadow-none border border-white/20 hover:bg-[#191F28] transition-all animate-bounce"
             >
               <span>아래로 스크롤하여 더 보기</span>
-              <ChevronDown className="w-3 h-3 text-[#3182F6]" />
+              <ChevronDown className="w-3 h-3 text-[#FF5A36]" />
             </button>
           </div>
         )}

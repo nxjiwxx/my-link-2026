@@ -49,7 +49,7 @@ export function ShareModal({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-sm rounded-[24px] p-6 text-center select-none border border-[#E5E8EB]">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#E8F3FF] text-[#3182F6] mb-1">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFF2EE] text-[#FF5A36] mb-1">
           <QrCode className="w-6 h-6" />
         </div>
 
@@ -102,7 +102,7 @@ export function ShareModal({
           <Button
             size="sm"
             onClick={handleCopy}
-            className="shrink-0 h-8 rounded-lg bg-[#3182F6] px-3 text-xs font-bold text-white hover:bg-[#1B64DA] active:scale-95 transition-all shadow-none"
+            className="shrink-0 h-8 rounded-lg bg-[#FF5A36] px-3 text-xs font-bold text-white hover:bg-[#E84E2B] active:scale-95 transition-all shadow-none"
           >
             {copied ? (
               <>

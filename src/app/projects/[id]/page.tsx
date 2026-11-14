@@ -71,9 +71,11 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
     }, 2400);
   };
 
-  // 소유자 여부 판단
+  // 소유자 여부 판단 (프리뷰 모드에서는 방문자 시점 확인을 위해 편집 권한 비활성화)
   const isOwner = Boolean(
-    user && (resolvedOwnerUid ? user.uid === resolvedOwnerUid : true)
+    fromSource !== "preview" &&
+      user &&
+      (resolvedOwnerUid ? user.uid === resolvedOwnerUid : true)
   );
 
   // 프로젝트 데이터 로드 (소유자 식별 및 Firestore 동기화)
@@ -316,12 +318,12 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
             <div className="px-5 sm:px-8 py-6 sm:py-8 space-y-6">
               {/* 카테고리 & 프로젝트 구분 뱃지 */}
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-bold text-[#3182F6] bg-[#3182F6]/10 px-2.5 py-1 rounded-md">
+                <span className="text-xs font-bold text-[#FF5A36] bg-[#FF5A36]/10 px-2.5 py-1 rounded-md">
                   {project.categoryLabel}
                 </span>
                 <span className="text-xs font-medium text-[#6B7684] bg-[#F2F4F6] px-2.5 py-1 rounded-md flex items-center gap-1">
                   {isTeam ? (
-                    <Users className="w-3 h-3 text-[#3182F6]" />
+                    <Users className="w-3 h-3 text-[#FF5A36]" />
                   ) : (
                     <User className="w-3 h-3 text-[#6B7684]" />
                   )}

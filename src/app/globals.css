@@ -1,4 +1,5 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&family=Syne:wght@700;800&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -9,48 +10,48 @@
   /* Pretendard Font Stack */
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
   
-  /* Toss Design System (TDS) Canonical Color Tokens */
-  --tds-blue-500: #3182F6;
-  --tds-blue-600: #1B64DA;
-  --tds-blue-50: #E8F3FF;
+  /* MyPortfolio Design System Color Tokens (80% Deep Navy, 20% Sunset Orange) */
+  --tds-blue-500: #FF5A36;
+  --tds-blue-600: #E84E2B;
+  --tds-blue-50: #FFF2EE;
   
-  --tds-grey-900: #191F28;
-  --tds-grey-800: #333D4B;
-  --tds-grey-700: #4E5968;
-  --tds-grey-600: #6B7684;
-  --tds-grey-500: #8B95A1;
-  --tds-grey-400: #B0B8C1;
-  --tds-grey-300: #D1D6DB;
-  --tds-grey-200: #E5E8EB;
-  --tds-grey-100: #F2F4F6;
-  --tds-grey-50: #F9FAFB;
+  --tds-grey-900: #0A192F;
+  --tds-grey-800: #1E293B;
+  --tds-grey-700: #334155;
+  --tds-grey-600: #475569;
+  --tds-grey-500: #64748B;
+  --tds-grey-400: #94A3B8;
+  --tds-grey-300: #CBD5E1;
+  --tds-grey-200: #E2E8F0;
+  --tds-grey-100: #F1F5F9;
+  --tds-grey-50: #F8FAFC;
   
   --tds-red-500: #F04452;
-  --tds-orange-500: #FF8F1F;
-  --tds-orange-50: #FFF4E6;
+  --tds-orange-500: #FF5A36;
+  --tds-orange-50: #FFF2EE;
   --tds-green-500: #04C05E;
   --tds-green-50: #EAFBF2;
 
-  /* shadcn/ui mapped to TDS */
-  --background: #F2F4F6;
-  --foreground: #191F28;
+  /* shadcn/ui mapped to MyPortfolio Tokens */
+  --background: #FFFFFF;
+  --foreground: #0A192F;
   --card: #FFFFFF;
-  --card-foreground: #191F28;
+  --card-foreground: #0A192F;
   --popover: #FFFFFF;
-  --popover-foreground: #191F28;
-  --primary: #3182F6;
+  --popover-foreground: #0A192F;
+  --primary: #FF5A36;
   --primary-foreground: #FFFFFF;
-  --secondary: #F2F4F6;
-  --secondary-foreground: #191F28;
-  --muted: #F2F4F6;
-  --muted-foreground: #4E5968;
-  --accent: #E8F3FF;
-  --accent-foreground: #3182F6;
+  --secondary: #0A192F;
+  --secondary-foreground: #FFFFFF;
+  --muted: #F1F5F9;
+  --muted-foreground: #475569;
+  --accent: #FFF2EE;
+  --accent-foreground: #FF5A36;
   --destructive: #F04452;
   --destructive-foreground: #FFFFFF;
-  --border: #E5E8EB;
-  --input: #E5E8EB;
-  --ring: #3182F6;
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #FF5A36;
   --radius: 1rem;
 }
 
@@ -97,9 +98,9 @@
     -webkit-tap-highlight-color: transparent;
   }
   
-  html, body {
+  html, body, button, input, textarea, select {
     @apply bg-background text-foreground;
-    font-family: var(--font-sans);
+    font-family: var(--font-sans) !important;
     min-height: 100%;
     margin: 0;
     padding: 0;

@@ -133,7 +133,7 @@ export function ProjectCard({ project, viewMode, onClick, isOwner = false }: Pro
       {/* 이미지 오른쪽 텍스트 구조 */}
       <div className="flex-1 flex flex-col justify-between min-w-0 py-0.5">
         <div className="min-w-0">
-          <div className="text-[11px] sm:text-xs font-semibold text-[#3182F6] leading-none mb-1">
+          <div className="text-[11px] sm:text-xs font-semibold text-[#FF5A36] leading-none mb-1">
             {project.categoryLabel}
           </div>
           <h3 className="text-xs sm:text-[15px] font-semibold text-[#191F28] leading-snug truncate">

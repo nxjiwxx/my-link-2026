@@ -85,7 +85,7 @@ export function DeleteConfirmModal({
           )}
           <div className="min-w-0 flex-1">
             {categoryText && (
-              <span className="text-[10px] font-bold text-[#3182F6] block mb-0.5">
+              <span className="text-[10px] font-bold text-[#FF5A36] block mb-0.5">
                 {categoryText}
               </span>
             )}

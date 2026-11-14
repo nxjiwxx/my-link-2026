@@ -46,7 +46,7 @@ export function MapBlockCard({ block, onCopyAddress }: MapBlockCardProps) {
     <Card className="overflow-hidden border border-[#E5E8EB] bg-white rounded-2xl select-none">
       <CardHeader className="p-4 pb-2.5 flex flex-row items-center justify-between space-y-0">
         <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#E8F3FF] text-[#3182F6]">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#FFF2EE] text-[#FF5A36]">
             <MapPin className="w-4 h-4" />
           </div>
           <CardTitle className="text-sm font-bold text-[#191F28]">
@@ -115,7 +115,7 @@ export function MapBlockCard({ block, onCopyAddress }: MapBlockCardProps) {
 
             {/* 마커 핀 */}
             <div className="relative z-10 flex flex-col items-center animate-bounce duration-1000">
-              <div className="rounded-full bg-[#3182F6] text-white p-2.5 shadow-lg border-2 border-white">
+              <div className="rounded-full bg-[#FF5A36] text-white p-2.5 shadow-lg border-2 border-white">
                 <MapPin className="w-5 h-5" />
               </div>
               <div className="bg-[#191F28] text-white text-[10px] font-bold px-2 py-0.5 rounded-md mt-1 shadow-md whitespace-nowrap">
@@ -154,7 +154,7 @@ export function MapBlockCard({ block, onCopyAddress }: MapBlockCardProps) {
           <Button
             type="button"
             onClick={handleDirections}
-            className="w-full h-11 rounded-xl text-xs font-bold text-white bg-[#3182F6] hover:bg-[#1B64DA] active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-xs"
+            className="w-full h-11 rounded-xl text-xs font-bold text-white bg-[#FF5A36] hover:bg-[#E84E2B] active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-xs"
           >
             <Navigation className="w-4 h-4" />
             <span>길찾기</span>

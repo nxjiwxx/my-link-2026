@@ -24,7 +24,7 @@ interface LinkBlockCardProps {
 export function LinkBlockCard({ block, className, onClick }: LinkBlockCardProps) {
   // 아이콘 맵
   const renderIcon = (iconName?: string) => {
-    const iconProps = { className: "w-5 h-5 text-[#3182F6]" };
+    const iconProps = { className: "w-5 h-5 text-[#FF5A36]" };
     switch (iconName?.toLowerCase()) {
       case "calendar":
         return <Calendar {...iconProps} />;
@@ -77,14 +77,14 @@ export function LinkBlockCard({ block, className, onClick }: LinkBlockCardProps)
     >
       <div className="flex items-center gap-3.5 min-w-0 pr-2">
         {/* 좌측 아이콘 컨테이너 */}
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#F2F4F6] group-hover:bg-[#E8F3FF] transition-colors duration-200">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#F2F4F6] group-hover:bg-[#FFF2EE] transition-colors duration-200">
           {renderIcon(block.icon)}
         </div>
 
         {/* 중앙 텍스트 영역 */}
         <div className="flex flex-col min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-[15px] font-bold text-[#191F28] group-hover:text-[#3182F6] transition-colors truncate">
+            <span className="text-[15px] font-bold text-[#191F28] group-hover:text-[#FF5A36] transition-colors truncate">
               {block.title}
             </span>
             {renderBadge(block.badge)}
@@ -98,7 +98,7 @@ export function LinkBlockCard({ block, className, onClick }: LinkBlockCardProps)
       </div>
 
       {/* 우측 링크 열기 화살표 아이콘 */}
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#B0B8C1] group-hover:text-[#3182F6] group-hover:bg-[#F2F4F6] transition-all">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#B0B8C1] group-hover:text-[#FF5A36] group-hover:bg-[#F2F4F6] transition-all">
         <ArrowUpRight className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
       </div>
     </a>

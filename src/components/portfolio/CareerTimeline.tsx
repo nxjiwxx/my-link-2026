@@ -370,7 +370,7 @@ export function CareerTimeline({
                       <button
                         type="button"
                         onClick={() => handleStartEdit(career)}
-                        className="p-1 rounded text-[#8B95A1] hover:text-[#3182F6] hover:bg-[#E8F3FF] transition-colors"
+                        className="p-1 rounded text-[#8B95A1] hover:text-[#FF5A36] hover:bg-[#FFF2EE] transition-colors"
                         title="경력 수정"
                       >
                         <Pencil className="w-3 h-3" />

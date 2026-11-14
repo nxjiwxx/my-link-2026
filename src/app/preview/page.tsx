@@ -19,7 +19,7 @@ export default function PreviewPage() {
   if (isLoading || (!user && !isLoading)) {
     return (
       <div className="min-h-screen w-full flex items-center justify-center bg-[#F9FAFB]">
-        <div className="w-5 h-5 border-2 border-[#3182F6]/30 border-t-[#3182F6] rounded-full animate-spin" />
+        <div className="w-5 h-5 border-2 border-[#FF5A36]/30 border-t-[#FF5A36] rounded-full animate-spin" />
       </div>
     );
   }

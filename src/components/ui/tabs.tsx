@@ -43,7 +43,7 @@ const TabsContent = React.forwardRef<
   <TabsPrimitive.Panel
     ref={ref}
     className={cn(
-      "mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3182F6]",
+      "mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A36]",
       className
     )}
     {...props}

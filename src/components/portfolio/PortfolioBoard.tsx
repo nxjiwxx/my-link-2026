@@ -142,12 +142,15 @@ export function PortfolioBoard({
   }, [isPreview, isDemo, effectiveIdentifier, initialTargetUid, user, resolvedOwnerUid]);
 
   const isOwner = useMemo(() => {
+    // /preview 라우트는 다른 사람이 내 링크를 볼 때 어떻게 보이는지 확인하는 방문자 시점 뷰이므로
+    // 모든 추가/편집/삭제 권한을 비활성화함
+    if (isPreview) return false;
     if (isDemo) return false;
     if (isPublicView) {
       return Boolean(user && resolvedOwnerUid && user.uid === resolvedOwnerUid);
     }
     return Boolean(user);
-  }, [isDemo, isPublicView, user, resolvedOwnerUid]);
+  }, [isPreview, isDemo, isPublicView, user, resolvedOwnerUid]);
 
   // 통합 삭제 확인 모달 대상 및 진행 상태
   const [deleteTarget, setDeleteTarget] = useState<DeleteTarget>(null);
@@ -869,11 +872,11 @@ export function PortfolioBoard({
 
         {/* 9. 심플 미니멀 푸터 */}
         <footer className="mt-12 mb-4 flex flex-col items-center justify-center text-center px-4 select-none">
-          <span className="text-xs font-semibold text-[#6B7280]">
-            My Link
+          <span className="text-xs font-bold text-[#0A192F] font-['Syne',sans-serif]">
+            My Portfolio
           </span>
-          <p className="mt-1 text-[11px] text-[#9CA3AF]">
-            Development in One Link · Showcase your git, blog, and more
+          <p className="mt-1 text-[11px] text-[#64748B]">
+            All-in-One Portfolio Hub · 나만의 포폴 링크를 큐레이션하다
           </p>
         </footer>
       </main>

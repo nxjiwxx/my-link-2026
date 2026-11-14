@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { LogOut, User, Copy, BarChart2, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { GoogleIcon } from "@/components/ui/icons";
@@ -31,6 +31,7 @@ export function TopNavHeader({
   hideProfileMenu = false,
   isPreview = false,
 }: TopNavHeaderProps) {
+  const router = useRouter();
   const { user, userProfile, isLoading, signInWithGoogle, logout } = useAuth();
   const searchParams = useSearchParams();
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
@@ -119,24 +120,36 @@ export function TopNavHeader({
       aria-label="상단 헤더 바"
       className="w-full flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-3.5 bg-white border-b border-[#E5E8EB] sticky top-0 z-30 select-none"
     >
-      {/* 좌측: My Link 및 소유자 미리보기 뒤로가기 버튼 */}
-      <div className="flex items-center gap-1.5">
+      {/* 좌측: My Portfolio 및 소유자 미리보기 뒤로가기 버튼 */}
+      <div className="flex items-center gap-2">
         {showBackButton && (
-          <Link
-            href="/"
-            title="수정 가능한 내 페이지로 돌아가기"
-            aria-label="수정 가능한 내 페이지로 돌아가기"
-            className="flex items-center justify-center p-1.5 -ml-1 rounded-lg text-[#4E5968] hover:text-[#191F28] hover:bg-[#F2F4F6] transition-colors"
+          <button
+            type="button"
+            onClick={() => {
+              if (typeof window !== "undefined" && window.history.length > 1) {
+                router.back();
+              } else {
+                router.push("/");
+              }
+            }}
+            title="이전 화면으로 돌아가기"
+            aria-label="이전 화면으로 돌아가기"
+            className="flex items-center justify-center p-1.5 -ml-1 rounded-lg text-[#475569] hover:text-[#0A192F] hover:bg-[#F1F5F9] transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
-          </Link>
+          </button>
         )}
         <Link
           href="/"
-          className="text-[17px] sm:text-lg font-bold text-[#191F28] tracking-tight hover:opacity-80 transition-opacity"
+          className="text-[17px] sm:text-lg font-bold text-[#0A192F] tracking-tight hover:opacity-80 transition-opacity font-['Syne',sans-serif]"
         >
-          My Link
+          My Portfolio
         </Link>
+        {isPreview && (
+          <span className="text-[11px] font-bold text-[#FF5A36] bg-[#FFF2EE] px-2 py-0.5 rounded-full ml-1 select-none">
+            미리보기
+          </span>
+        )}
       </div>
 
       {/* 우측: 사용자 프로필 아바타 (드롭다운) 또는 비로그인 로그인 버튼 (라우팅 페이지 등에서 숨김 가능) */}
@@ -179,7 +192,7 @@ export function TopNavHeader({
                   <Link
                     href="/preview"
                     onClick={() => setIsDropdownOpen(false)}
-                    className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-[#3182F6] hover:bg-[#F2F4F6] transition-colors"
+                    className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-[#FF5A36] hover:bg-[#F2F4F6] transition-colors"
                   >
                     <span>내 페이지 보기</span>
                     <span className="text-[10px] font-mono text-[#8B95A1]">
@@ -203,7 +216,7 @@ export function TopNavHeader({
                     onClick={() => setIsDropdownOpen(false)}
                     className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-[#4E5968] hover:bg-[#F2F4F6] hover:text-[#191F28] transition-colors"
                   >
-                    <BarChart2 className="w-3.5 h-3.5 text-[#3182F6]" />
+                    <BarChart2 className="w-3.5 h-3.5 text-[#FF5A36]" />
                     <span>통계 대시보드</span>
                   </Link>
 

@@ -161,7 +161,7 @@ export default function MyPage() {
     return (
       <div className="min-h-screen w-full bg-[#F2F4F6] flex items-center justify-center">
         <div className="flex flex-col items-center gap-2">
-          <RefreshCw className="w-6 h-6 animate-spin text-[#3182F6]" />
+          <RefreshCw className="w-6 h-6 animate-spin text-[#FF5A36]" />
           <span className="text-xs text-[#8B95A1]">계정 정보를 불러오는 중...</span>
         </div>
       </div>
@@ -180,14 +180,14 @@ export default function MyPage() {
                 href="/"
                 className="flex items-center gap-1.5 text-[15px] font-bold text-[#191F28]"
               >
-                <span className="w-6 h-6 rounded-lg bg-[#3182F6] flex items-center justify-center text-white text-xs font-black">
-                  M
+                <span className="w-6 h-6 rounded-lg bg-[#FF5A36] flex items-center justify-center text-white text-xs font-black">
+                  P
                 </span>
-                <span>MyLink</span>
+                <span>MyPortfolio</span>
               </Link>
               <Link
                 href="/landing"
-                className="text-xs font-semibold text-[#3182F6] hover:underline"
+                className="text-xs font-semibold text-[#FF5A36] hover:underline"
               >
                 서비스 소개
               </Link>
@@ -195,7 +195,7 @@ export default function MyPage() {
 
             {/* 비로그인 안내 카드 */}
             <div className="px-5 py-12 flex-1 flex flex-col items-center justify-center text-center">
-              <div className="w-16 h-16 rounded-3xl bg-[#E8F3FF] text-[#3182F6] flex items-center justify-center mb-4 shadow-none">
+              <div className="w-16 h-16 rounded-3xl bg-[#FFF2EE] text-[#FF5A36] flex items-center justify-center mb-4 shadow-none">
                 <Lock className="w-8 h-8" />
               </div>
 
@@ -204,7 +204,7 @@ export default function MyPage() {
               </h1>
               <p className="mt-2 text-xs text-[#4E5968] leading-relaxed max-w-xs break-keep">
                 Google 계정으로 로그인하시면 내 포트폴리오 관리,
-                <code className="mx-1 px-1.5 py-0.5 rounded bg-[#F2F4F6] text-[#3182F6] font-mono text-[11px]">
+                <code className="mx-1 px-1.5 py-0.5 rounded bg-[#F2F4F6] text-[#FF5A36] font-mono text-[11px]">
                   users/{`{uid}`}/links
                 </code>
                 클라우드 동기화 및 공개 설정을 자유롭게 변경할 수 있습니다.
@@ -213,7 +213,7 @@ export default function MyPage() {
               <div className="mt-6 w-full max-w-xs space-y-2.5">
                 <Button
                   onClick={handleGoogleLogin}
-                  className="w-full h-12 rounded-2xl bg-[#3182F6] hover:bg-[#1B64DA] text-white font-bold text-sm shadow-none flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full h-12 rounded-2xl bg-[#FF5A36] hover:bg-[#E84E2B] text-white font-bold text-sm shadow-none flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center">
                     <GoogleIcon className="w-3.5 h-3.5" />
@@ -249,12 +249,12 @@ export default function MyPage() {
                 href="/"
                 className="flex items-center gap-1.5 text-[15px] font-bold text-[#191F28] hover:opacity-85 transition-opacity"
               >
-                <span className="w-6 h-6 rounded-lg bg-[#3182F6] flex items-center justify-center text-white text-xs font-black shadow-none">
-                  M
+                <span className="w-6 h-6 rounded-lg bg-[#FF5A36] flex items-center justify-center text-white text-xs font-black shadow-none">
+                  P
                 </span>
-                <span className="tracking-tight">MyLink</span>
+                <span className="tracking-tight">MyPortfolio</span>
               </Link>
-              <span className="text-[11px] font-semibold text-[#8B95A1] px-2 py-0.5 rounded-full bg-[#F2F4F6]">
+              <span className="text-[11px] font-semibold text-[#64748B] px-2 py-0.5 rounded-full bg-[#F1F5F9]">
                 마이페이지
               </span>
             </div>
@@ -287,14 +287,14 @@ export default function MyPage() {
                   alt={profile.name}
                   fallback={profile.name.slice(0, 1)}
                   size="lg"
-                  className="w-14 h-14 ring-2 ring-[#3182F6]/20 shadow-none shrink-0"
+                  className="w-14 h-14 ring-2 ring-[#FF5A36]/20 shadow-none shrink-0"
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
                     <h1 className="text-base font-bold text-[#191F28] truncate">
                       {profile.name}
                     </h1>
-                    <span className="text-[11px] font-bold text-[#3182F6] bg-[#E8F3FF] px-1.5 py-0.5 rounded-full">
+                    <span className="text-[11px] font-bold text-[#FF5A36] bg-[#FFF2EE] px-1.5 py-0.5 rounded-full">
                       ✓ 인증됨
                     </span>
                   </div>
@@ -308,7 +308,7 @@ export default function MyPage() {
 
                 <Link
                   href="/profile/edit"
-                  className="flex h-8 px-2.5 items-center justify-center gap-1 rounded-xl bg-[#F2F4F6] hover:bg-[#E8F3FF] text-[#4E5968] hover:text-[#3182F6] text-xs font-bold transition-all shrink-0"
+                  className="flex h-8 px-2.5 items-center justify-center gap-1 rounded-xl bg-[#F2F4F6] hover:bg-[#FFF2EE] text-[#4E5968] hover:text-[#FF5A36] text-xs font-bold transition-all shrink-0"
                 >
                   <Settings className="w-3.5 h-3.5" />
                   <span>수정</span>
@@ -321,11 +321,11 @@ export default function MyPage() {
                   <span className="font-semibold text-[#4E5968]">
                     포트폴리오 완성도
                   </span>
-                  <span className="font-bold text-[#3182F6] font-mono">
+                  <span className="font-bold text-[#FF5A36] font-mono">
                     {completionScore}%
                   </span>
                 </div>
-                <Progress value={completionScore} indicatorColor="bg-[#3182F6]" />
+                <Progress value={completionScore} indicatorColor="bg-[#FF5A36]" />
                 <p className="mt-1.5 text-[11px] text-[#8B95A1]">
                   {completionScore === 100
                     ? "🎉 모든 필수 항목이 완벽하게 등록되었습니다!"
@@ -336,7 +336,7 @@ export default function MyPage() {
               {/* 내 포트폴리오 고유 URL 복사 바 (Base UI Tooltip 적용) */}
               <div className="mt-3.5 flex items-center justify-between p-2.5 rounded-2xl bg-[#F9FAFB] border border-[#E5E8EB]">
                 <div className="flex items-center gap-1.5 min-w-0">
-                  <Globe className="w-3.5 h-3.5 text-[#3182F6] shrink-0" />
+                  <Globe className="w-3.5 h-3.5 text-[#FF5A36] shrink-0" />
                   <span className="text-xs font-mono text-[#333D4B] truncate">
                     mylink.io/@{profile.handle || "designer"}
                   </span>
@@ -348,7 +348,7 @@ export default function MyPage() {
                     className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-[#D1D6DB] text-xs font-bold text-[#191F28] hover:bg-[#F2F4F6] active:scale-95 transition-all cursor-pointer shrink-0"
                   >
                     {isCopied ? (
-                      <Check className="w-3 h-3 text-[#3182F6]" />
+                      <Check className="w-3 h-3 text-[#FF5A36]" />
                     ) : (
                       <Copy className="w-3 h-3 text-[#4E5968]" />
                     )}
@@ -392,7 +392,7 @@ export default function MyPage() {
                 <div className="grid grid-cols-2 gap-2.5">
                   <div className="p-3.5 rounded-2xl bg-white border border-[#E5E8EB] shadow-none">
                     <div className="flex items-center gap-1.5 text-xs text-[#8B95A1] font-medium">
-                      <Layers className="w-3.5 h-3.5 text-[#3182F6]" />
+                      <Layers className="w-3.5 h-3.5 text-[#FF5A36]" />
                       <span>등록된 작업물</span>
                     </div>
                     <div className="text-xl font-bold text-[#191F28] mt-1 font-mono">
@@ -405,7 +405,7 @@ export default function MyPage() {
 
                   <div className="p-3.5 rounded-2xl bg-white border border-[#E5E8EB] shadow-none">
                     <div className="flex items-center gap-1.5 text-xs text-[#8B95A1] font-medium">
-                      <FolderGit2 className="w-3.5 h-3.5 text-[#3182F6]" />
+                      <FolderGit2 className="w-3.5 h-3.5 text-[#FF5A36]" />
                       <span>보유 도구</span>
                     </div>
                     <div className="text-xl font-bold text-[#191F28] mt-1 font-mono">
@@ -418,7 +418,7 @@ export default function MyPage() {
 
                   <div className="p-3.5 rounded-2xl bg-white border border-[#E5E8EB] shadow-none">
                     <div className="flex items-center gap-1.5 text-xs text-[#8B95A1] font-medium">
-                      <Calendar className="w-3.5 h-3.5 text-[#3182F6]" />
+                      <Calendar className="w-3.5 h-3.5 text-[#FF5A36]" />
                       <span>경력 및 활동</span>
                     </div>
                     <div className="text-xl font-bold text-[#191F28] mt-1 font-mono">
@@ -431,7 +431,7 @@ export default function MyPage() {
 
                   <div className="p-3.5 rounded-2xl bg-white border border-[#E5E8EB] shadow-none">
                     <div className="flex items-center gap-1.5 text-xs text-[#8B95A1] font-medium">
-                      <FileText className="w-3.5 h-3.5 text-[#3182F6]" />
+                      <FileText className="w-3.5 h-3.5 text-[#FF5A36]" />
                       <span>이력서 PDF</span>
                     </div>
                     <div className="text-sm font-bold text-[#191F28] mt-1.5 truncate">
@@ -441,17 +441,17 @@ export default function MyPage() {
                 </div>
 
                 {/* Firestore 클라우드 동기화 상태 카드 */}
-                <div className="p-4 rounded-3xl bg-gradient-to-br from-[#E8F3FF]/70 to-white border border-[#3182F6]/20">
-                  <div className="flex items-center gap-2 text-xs font-bold text-[#3182F6]">
+                <div className="p-4 rounded-3xl bg-gradient-to-br from-[#FFF2EE]/70 to-white border border-[#FF5A36]/20">
+                  <div className="flex items-center gap-2 text-xs font-bold text-[#FF5A36]">
                     <ShieldCheck className="w-4 h-4" />
                     <span>개인화 클라우드 동기화 활성화됨</span>
                   </div>
                   <p className="mt-1 text-xs text-[#4E5968] leading-relaxed break-keep">
                     회원님의 데이터는 Firestore 보안 경로에 안전하게 격리되어 보관됩니다.
                   </p>
-                  <div className="mt-2.5 px-3 py-1.5 rounded-xl bg-white/80 border border-[#3182F6]/20 font-mono text-[11px] text-[#3182F6] flex items-center justify-between">
+                  <div className="mt-2.5 px-3 py-1.5 rounded-xl bg-white/80 border border-[#FF5A36]/20 font-mono text-[11px] text-[#FF5A36] flex items-center justify-between">
                     <span className="truncate">users/{user.uid}/links</span>
-                    <span className="text-[10px] bg-[#3182F6] text-white px-1.5 py-0.5 rounded-md shrink-0">
+                    <span className="text-[10px] bg-[#FF5A36] text-white px-1.5 py-0.5 rounded-md shrink-0">
                       LIVE
                     </span>
                   </div>
@@ -466,7 +466,7 @@ export default function MyPage() {
                   </span>
                   <Link
                     href="/"
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#3182F6] hover:underline"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#FF5A36] hover:underline"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>새 링크 추가</span>
@@ -482,7 +482,7 @@ export default function MyPage() {
                     {links.map((link) => (
                       <div
                         key={link.id}
-                        className="flex items-center justify-between p-3 rounded-2xl bg-white border border-[#E5E8EB] hover:border-[#3182F6]/40 transition-colors"
+                        className="flex items-center justify-between p-3 rounded-2xl bg-white border border-[#E5E8EB] hover:border-[#FF5A36]/40 transition-colors"
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
                           {link.thumbnailUrl && (
@@ -505,7 +505,7 @@ export default function MyPage() {
                         <div className="flex items-center gap-1.5 shrink-0 ml-2">
                           <Link
                             href={`/projects/${link.id}`}
-                            className="p-1.5 rounded-lg bg-[#F2F4F6] hover:bg-[#E8F3FF] text-[#4E5968] hover:text-[#3182F6] text-xs transition-colors"
+                            className="p-1.5 rounded-lg bg-[#F2F4F6] hover:bg-[#FFF2EE] text-[#4E5968] hover:text-[#FF5A36] text-xs transition-colors"
                             title="상세 및 수정"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
@@ -524,7 +524,7 @@ export default function MyPage() {
                     </p>
                     <Link
                       href="/"
-                      className="mt-3 inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#3182F6] text-white text-xs font-bold shadow-none hover:bg-[#1B64DA] transition-all"
+                      className="mt-3 inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#FF5A36] text-white text-xs font-bold shadow-none hover:bg-[#E84E2B] transition-all"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>작업물 추가하러 가기</span>
@@ -644,11 +644,11 @@ export default function MyPage() {
                       </AccordionTrigger>
                       <AccordionContent>
                         회원님의 프로젝트 링크 데이터는 Firebase Firestore의
-                        <code className="mx-1 px-1 py-0.5 rounded bg-[#F2F4F6] text-[#3182F6] font-mono font-semibold">
+                        <code className="mx-1 px-1 py-0.5 rounded bg-[#F2F4F6] text-[#FF5A36] font-mono font-semibold">
                           users/{user.uid}/links
                         </code>
                         컬렉션에 실시간 저장됩니다. 프로필 정보는
-                        <code className="mx-1 px-1 py-0.5 rounded bg-[#F2F4F6] text-[#3182F6] font-mono font-semibold">
+                        <code className="mx-1 px-1 py-0.5 rounded bg-[#F2F4F6] text-[#FF5A36] font-mono font-semibold">
                           users/{user.uid}/profile
                         </code>
                         에 안전하게 격리되어 보관됩니다.
@@ -686,12 +686,12 @@ export default function MyPage() {
           <footer className="mt-8 mb-4 flex flex-col items-center justify-center text-center px-4 select-none">
             <Link
               href="/landing"
-              className="text-xs font-semibold text-[#3182F6] hover:underline"
+              className="text-xs font-semibold text-[#FF5A36] hover:underline"
             >
-              MyLink 서비스 소개 보기
+              MyPortfolio 서비스 소개 보기
             </Link>
-            <p className="mt-1 text-[11px] text-[#B0B8C1]">
-              © 2026 MyLink. 디자이너를 위한 올인원 포트폴리오 아카이빙
+            <p className="mt-1 text-[11px] text-[#94A3B8]">
+              © 2026 MyPortfolio. 디자이너를 위한 올인원 포트폴리오 아카이빙
             </p>
           </footer>
         </main>

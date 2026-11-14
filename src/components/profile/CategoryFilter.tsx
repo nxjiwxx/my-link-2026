@@ -49,7 +49,7 @@ export function CategoryFilter({
               className={cn(
                 "transition-all duration-150 py-0.5",
                 isActive
-                  ? "text-[#3182F6] font-bold underline underline-offset-4 decoration-2"
+                  ? "text-[#FF5A36] font-bold underline underline-offset-4 decoration-2"
                   : "text-[#4E5968] font-medium hover:text-[#191F28]"
               )}
             >

@@ -23,6 +23,7 @@ function MainContent() {
 
   const handleGoogleLogin = async () => {
     if (user) {
+      router.push("/mypage");
       return;
     }
     setIsLoggingIn(true);
@@ -69,9 +70,10 @@ function MainContent() {
     );
   }
 
-  // 3. 로그인을 하지 않은 사용자가 메인에 접근한 경우 (자신의 페이지를 만들려는 목적)
+  // 3. 로그인을 하지 않은 사용자가 메인에 접근한 경우 (또는 landing=true 쿼리)
   //    -> 초기 랜딩페이지 표시 + Continue with Google CTA
-  if (!user) {
+  const isLandingRequested = searchParams.get("landing") === "true";
+  if (!user || isLandingRequested) {
     return (
       <>
         <LandingHero
@@ -92,7 +94,7 @@ export default function MainPage() {
     <Suspense
       fallback={
         <div className="min-h-screen w-full flex items-center justify-center bg-[#F9FAFB]">
-          <div className="w-5 h-5 border-2 border-[#3182F6]/30 border-t-[#3182F6] rounded-full animate-spin" />
+          <div className="w-5 h-5 border-2 border-[#FF5A36]/30 border-t-[#FF5A36] rounded-full animate-spin" />
         </div>
       }
     >

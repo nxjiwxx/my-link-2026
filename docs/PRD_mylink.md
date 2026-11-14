@@ -1,25 +1,25 @@
-# [PRD] 마이링크 (MyLink) 제품 요구사항 정의서
+# [PRD] 마이포폴 (MyPortfolio) 제품 요구사항 정의서
 ## — 디자이너를 위한 올인원 포트폴리오 아카이빙 서비스 —
 
-> **문서 버전:** v2.0.0 (서비스 타겟 피벗: 인플루언서 ➔ 디자이너 포트폴리오 아카이빙 전면 개편)  
-> **작성일:** 2026-10-02  
+> **문서 버전:** v2.1.0 (서비스 명칭 개편: 마이링크 ➔ 마이포폴(MyPortfolio), 딥 네이비 80% & 선셋 오렌지 20% 오픈 캔버스 디자인 시스템 정립)  
+> **최종 수정일:** 2026-11-15  
 > **상태:** 기획 확정 (Approved for Development)  
-> **프로젝트:** MyLink (Next.js + Tailwind CSS + shadcn/ui(TDS Style) 기반 디자이너 포트폴리오 서비스)  
+> **프로젝트:** MyPortfolio (Next.js 16 + Tailwind CSS + Syne & Pretendard 기반 디자이너 포트폴리오 서비스)  
 
 ---
 
 ## 1. 프로젝트 개요 (Overview)
 
 ### 1.1 서비스 소개
-**마이링크 (MyLink)**는 모든 분야(UI/UX, 그래픽, 브랜딩, 제품, 일러스트 등)의 디자이너들이 자신의 작업물과 커리어를 가장 세련되고 간결하게 아카이빙하고 공유할 수 있는 **디자이너 특화 올인원 포트폴리오 아카이빙 및 멀티 링크 서비스**입니다.  
-무겁고 관리가 어려운 개인 웹사이트 구축이나 파편화된 외부 링크(Figma, Behance, Dribbble, Notion, LinkedIn)의 한계를 극복하고, 채용 담당자와 클라이언트에게 최적화된 단일 모바일 반응형 페이지(`mylink.io/@designer`)를 제공합니다.
+**마이포폴 (MyPortfolio)**은 모든 분야(UI/UX, 그래픽, 브랜딩, 3D, 제품, 일러스트 등)의 디자이너들이 자신의 작업물과 커리어를 가장 세련되고 간결하게 아카이빙하고 공유할 수 있는 **디자이너 특화 올인원 포트폴리오 아카이빙 및 멀티 링크 서비스**입니다.  
+무겁고 관리가 어려운 개인 웹사이트 구축이나 파편화된 외부 링크(Figma, Behance, Dribbble, Notion, LinkedIn)의 한계를 극복하고, 채용 담당자와 클라이언트에게 최적화된 단일 모바일 반응형 페이지(`myportfolio.io/@designer`)를 제공합니다.
 
 ### 1.2 핵심 가치 제안 (Value Proposition)
-1. **3분 완성 초간편 포트폴리오:** 개발 지식 없이도 프로젝트 썸네일, 설명, 사용 툴을 등록하여 감각적인 포트폴리오 페이지 구축.
+1. **3분 완성 초간편 아카이빙:** 개발 지식 없이도 프로젝트 썸네일, 설명, 사용 툴(#Figma, #Blender)을 등록하여 감각적인 포트폴리오 페이지 구축.
 2. **다채로운 뷰 모드 & 필터링:** 방문자 취향에 따라 **그리드 뷰 ↔ 리스트 뷰 전환 토글** 및 **카테고리 필터(UI/UX, Branding 등)** 제공.
 3. **하이브리드 프로젝트 뷰어:** 페이지 내에서 **상세 팝업 모달(작업 배경, 기여도, 이미지)** 확인 후, 필요 시 외부 원본(Figma 프로토타입, Behance)으로 즉시 연결.
 4. **원클릭 이력서 다운로드 & 협업 연결:** PDF 포트폴리오/이력서 다운로드 및 직관적인 연락 채널 제공.
-5. **shadcn/ui + 토스 디자인 시스템(TDS)의 정갈한 미학:** 과도한 장식을 배제하고 디자이너의 작업물이 가장 돋보이도록 설계된 미니멀 UI.
+5. **MyPortfolio 디자인 시스템 (80% 딥 네이비 & 20% 선셋 오렌지 오픈 캔버스):** 카드 박스(Box) 형태의 제약을 벗어나 순수 화이트 캔버스 위에 딥 네이비(`#0A192F`)의 묵직한 신뢰감과 선셋 오렌지(`#FF5A36`)의 감각적인 포인트를 결합하여 작업물이 가장 돋보이도록 설계.
 
 ---
 
@@ -40,9 +40,9 @@
 ```mermaid
 flowchart TD
     subgraph LandingAndAuth["1. 랜딩 & 인증 정책 (신규 제작자)"]
-        L0["메인 접속 (/) - 비로그인"] --> L1["초기 랜딩 페이지 노출"]
-        L1 --> L2["헤드라인 & 설명 문구 확인"]
-        L2 --> L3["[Continue with Google] 3초 로그인"]
+        L0["메인 접속 (/) - 비로그인"] --> L1["My Portfolio 랜딩 페이지 노출"]
+        L1 --> L2["헤드라인 & 3대 핵심 기능 확인"]
+        L2 --> L3["[지금 시작하기] /login 이동 후 3초 Google 로그인"]
         L3 --> D1["내 포트폴리오 관리 보드 즉시 개설"]
     end
 
@@ -54,7 +54,7 @@ flowchart TD
     end
 
     subgraph RecruiterExploration["3. 채용 담당자 탐색 시나리오 (강유진) - 로그인 불필요"]
-        R1["공유 링크 접속 (mylink.io/@dohyun)"] -->|랜딩 & 로그인 생략! 다이렉트 렌더링| R2["스킬 뱃지 및 프로필 개요 확인"]
+        R1["공유 링크 접속 (myportfolio.io/@dohyun)"] -->|랜딩 & 로그인 생략! 다이렉트 렌더링| R2["스킬 뱃지 및 프로필 개요 확인"]
         R2 --> R3["'UI/UX' 카테고리 탭 클릭해 필터링"]
         R3 --> R4["그리드 뷰 ➔ 리스트 뷰로 전환해 설명 확인"]
         R4 --> R5["대표 프로젝트 클릭 ➔ 상세 모달 & 결과물 확인"]
@@ -62,226 +62,40 @@ flowchart TD
     end
 
     subgraph ViralGrowth["4. 디자이너 간 바이럴 루프"]
-        V1["방문 디자이너가 정갈한 레이아웃 확인"] --> V2["상단 '나도 내 링크 만들기' 클릭"]
-        V2 --> L3
+        V1["방문 디자이너가 정갈한 레이아웃 확인"] --> V2["하단 'Made with MyPortfolio' 클릭"]
+        V2 --> L1
     end
 
     D5 -->|링크드인/이력서 기재| R1
     R1 --> V1
 ```
 
-#### 시나리오 1: [미니멀 랜딩 및 온보딩] 3초 만에 올인원 포트폴리오 시작하기
-* **랜딩 페이지 진입:** 로그인하지 않은 사용자가 메인에 접근하면, 헤더와 부가 설명, 샘플 링크가 배제된 채 헤드라인(`Development in One Link. Showcase your git, blog, and more.`)과 중앙의 `[Continue with Google]` 버튼만 정갈하게 표시됩니다.
-* **원클릭 구글 로그인:** 중앙의 `[Continue with Google]` 버튼을 클릭하여 별도 회원가입 절차 없이 3초 만에 소셜 로그인을 완료하고, 즉시 자신만의 포트폴리오 보드로 전환됩니다.
-* **클린 슬레이트 시작:** 최초 로그인 시 타인의 더미 데이터(Figma 95%, Toss 등) 없이 빈 상태로 시작하며, 본인만의 프로젝트와 스킬셋을 입력할 수 있습니다.
-* **프로필 아바타 드롭다운:** 상단 우측 아바타 아이콘을 클릭하여 원클릭으로 프로필 편집, 내 고유 링크(`/@handle`) 복사, 로그아웃을 수행합니다.
+---
 
-#### 시나리오 2: [타인 링크 열람] 채용 담당자의 로그인 없는 다이렉트 열람
-* **행동:** 채용 담당자 유진은 지원서의 `mylink.io/@dohyun` 링크를 클릭합니다.
-* **Zero-Gate 원칙:** **로그인을 요구하거나 초기 랜딩 페이지가 뜨지 않고, 지원자의 링크 페이지가 즉시 열립니다.**
-* 상단에서 도현의 핵심 스킬과 전문 분야를 5초 만에 파악하고, **[UI/UX] 카테고리 탭**을 눌러 회사 직무와 연관된 프로젝트만 모아봅니다.
-* **[목록/카드 토글 버튼]**을 눌러 상세 요약 리스트 형태로 바꾼 뒤 관심 있는 앱 디자인 프로젝트를 탭합니다.
-* 페이지를 벗어나지 않고 **프로젝트 상세 모달**이 열려 기여도(100%), 디자인 의도, 고해상도 목업을 확인하고, 모달 내 **[Figma 프로토타입 바로가기]** 버튼을 통해 실제 인터랙션을 테스트합니다.
-* 만족한 유진은 상단의 **[이력서 다운로드]**를 받아 사내 공유하고, [이메일] 버튼으로 면접 제안을 보냅니다.
-* 상단 우측의 **[나도 내 링크 만들기]**를 통해 채용 담당자나 동료 디자이너도 자연스럽게 서비스에 가입하는 바이럴 선순환이 형성됩니다.
+## 3. 핵심 디자인 & 시스템 규격 (System Specification)
+
+### 3.1 브랜드 아이덴티티
+- **서비스 공식 명칭:** 마이포폴 (MyPortfolio)
+- **도메인 / 식별자:** `myportfolio.io/@{username}`
+
+### 3.2 컬러 시스템 (80:20 배색 원칙)
+- **Base (80%):** 딥 네이비 (`#0A192F` / `#1E293B`) — 메인 타이틀, 헤더, 묵직한 CTA
+- **Accent (20%):** 선셋 오렌지 (`#FF5A36`, Hover: `#E84E2B`, Weak: `#FFF2EE`) — 하단 전환 CTA, 로고 심볼 화살표, 텍스트 하이라이트
+- **Canvas:** 순백색 화이트 (`#FFFFFF`) — 갇힌 카드 박스 스타일 배제
+- **Neutral Surface:** 뉴트럴 슬레이트 (`#F1F5F9`, `#E2E8F0`, `#CBD5E1`)
+
+### 3.3 타이포그래피 계층
+- **Brand & Display Hero:** `Syne` (ExtraBold 800) — 현대적이고 유니크한 기하학적 형태감
+- **Korean Headline & Body:** `Pretendard` (Black 900, Bold 700, SemiBold 600, Regular 400)
 
 ---
 
-## 3. Phase 1 핵심 개발 범위 (Current MVP Scope)
+## 4. 핵심 기능 목록 (Core Features)
 
-### 3.1 제외 기능 (Out of Scope for Phase 1)
-- ❌ 회원가입 / 로그인 / 서버 인증 (Phase 3)
-- ❌ 관리자 대시보드 화면 (Phase 2)
-- ❌ 방문자 통계(PV/클릭수 트래킹) (Phase 3)
-- ❌ 서버 데이터베이스 및 파일 스토리지 서버 (Phase 3)
-- ❌ 기존 인플루언서용 블록: **공구 달력, 오프라인 팝업 카카오 지도, 배너 광고 제외**
-
-### 3.2 집중 개발 기능 (In Scope for Phase 1)
-- ✅ **로컬 스토리지 데이터 관리자 (`storage.ts`):** 디자이너 포트폴리오 Mock 데이터 초기화 및 get/set 유틸리티
-- ✅ **shadcn/ui + 토스 디자인 시스템(TDS) 통합:**
-  - `components.json` 설정 기반 `@/components/ui/*` 활용
-  - 토스 블루 포인트(`#3182F6`), Grey-900 텍스트, Grey-100 서피스, 16px 곡률
-- ✅ **디자이너 프로필 헤더:**
-  - 아바타 이미지, 디자이너 이름, 직함/전문 분야 한 줄 바이오
-  - **공식 소셜 로고 버튼 바:** Behance, LinkedIn, GitHub, Instagram, Email 등 각 소셜의 공식 로고가 들어있는 원형 아이콘 버튼
-  - **이력서/포트폴리오 PDF 다운로드 CTA 버튼**
-- ✅ **프로젝트 카테고리 필터 탭 (`CategoryTabs`):**
-  - All(전체), UI/UX, Branding, Graphic, 3D/Motion 필터링
-- ✅ **뷰 모드 토글 컨트롤 (`ViewModeToggle`):**
-  - **그리드 뷰 (2열 비주얼 썸네일 카드)** ↔ **리스트 뷰 (1열 와이드 상세 요약 카드)** 실시간 전환
-- ✅ **프로젝트 쇼케이스 카드 (`ProjectCard`):**
-  - **팀/개인 프로젝트 구분 명시:** 각 프로젝트 카드에 '팀 프로젝트' / '개인 프로젝트' 뱃지 노출
-  - 썸네일 이미지, 프로젝트 제목, 요약 설명, 카테고리 뱃지, 사용 툴 아이콘
-- ✅ **사용 도구 숙련도 프로그레스 바 (`ToolProficiencyBars`):**
-  - **배치 위치:** 프로젝트 카드와 경력 및 활동 카드 사이
-  - 뱃지 형태가 아닌, 도구 로고와 도구명(Figma, Protopie, Adobe CC, Blender 등) 좌측 노출 및 숙련도 퍼센트(%)와 부드러운 프로그레스 바 표시
-- ✅ **하이브리드 프로젝트 상세 모달 (`ProjectDetailModal`):**
-  - 팀/개인 프로젝트 여부 및 기여도 명시
-  - **스크롤바 없는 다이얼로그:** 기본 브라우저 스크롤바를 완전히 제거하고, 상단 읽기 진행률 라인과 하단 그라디언트 페이드 및 인터랙티브 스크롤 안내 힌트로 스크롤 가능 여부 표현
-  - 외부 원본 링크 액션: Figma 프로토타입 열기, Behance 상세 케이스 스터디 바로가기
-- ✅ **경력 및 활동 타임라인 블록 (`CareerTimeline`):**
-  - 재직 회사, 수상 이력, 주요 전시/프로젝트 연도별 타임라인
-- ✅ **작업물 링크 추가 다이얼로그 (`AddLinkModal`):**
-  - 서버 미연동 상태에서 브라우저 로컬 상태(`localStorage`) 기반으로 즉시 작업물/링크 추가 및 삭제 지원
-  - 다이얼로그 기반 등록 폼: 카테고리(UI/UX, 브랜딩 등), 팀/개인 구분, 작업 제목, 한 줄 소개, 외부 링크(Figma/Behance), 썸네일 이미지 및 5종 추천 프리셋, 사용 툴 선택 및 직접 입력, 추가 상세 정보 지원
-
----
-
-## 4. 로컬 스토리지 데이터 구조 (Storage Schema)
-
-브라우저의 `localStorage` 키 `mylink_designer_portfolio`에 저장되는 데이터 스키마:
-
-```typescript
-// types/portfolio.ts
-
-export type ProjectCategory = 'all' | 'uiux' | 'branding' | 'graphic' | 'motion';
-export type ViewMode = 'grid' | 'list';
-
-export interface SocialLinks {
-  behance?: string;
-  dribbble?: string;
-  linkedin?: string;
-  github?: string;
-  email?: string;
-  instagram?: string;
-}
-
-export interface ProjectItem {
-  id: string;
-  title: string;
-  category: ProjectCategory;
-  categoryLabel: string; // 예: "UI/UX Design"
-  summary: string;
-  thumbnailUrl: string;
-  detailImages?: string[];
-  period: string; // 예: "2026.03 ~ 2026.05"
-  role: string; // 예: "Product Lead (기여도 80%)"
-  tools: string[]; // ["Figma", "Protopie"]
-  description: string;
-  externalLink?: {
-    label: string; // 예: "Figma Prototype"
-    url: string;
-  };
-  orderIndex: number;
-}
-
-export interface CareerItem {
-  id: string;
-  period: string; // 예: "2024 ~ Present"
-  title: string; // 예: "Product Designer"
-  organization: string; // 예: "Viva Republica (Toss)"
-  description?: string;
-}
-
-export interface DesignerProfileData {
-  handle: string; // "dohyun"
-  name: string; // "이도현"
-  roleTitle: string; // "Product & Visual Designer"
-  bio: string; // "문제를 시각적으로 해결하는 4년차 프로덕트 디자이너입니다."
-  avatarUrl: string;
-  resumePdfUrl?: string; // 이력서 PDF 다운로드 링크
-  socialLinks: SocialLinks;
-  skills: string[]; // ["Figma", "Photoshop", "Illustrator", "Blender", "HTML/CSS"]
-  projects: ProjectItem[];
-  careers: CareerItem[];
-}
-```
-
----
-
-## 5. UI / UX 및 컴포넌트 상세 명세 (shadcn/ui + TDS)
-
-### 5.1 프로필 헤더 (Profile Header)
-- **아바타:** 96x96px 원형, 부드러운 화이트 링 테두리 (`shadcn Avatar`)
-- **이름 & 직함:** Pretendard Bold 22px (`grey-900`), 직함 14px SemiBold (`#3182F6`)
-- **전문 바이오:** TDS `grey-700`, 14px, 깔끔한 2줄 요약
-- **공식 소셜 로고 버튼 바:** 비핸스, 링크드인, 깃허브, 인스타그램, 이메일 등 각 소셜의 공식 브랜드 벡터 로고가 삽입된 원형 아이콘 버튼 (`rounded-full w-10 h-10 border border-grey-200 bg-white hover:border-brand`)
-- **CTA 버튼:** `shadcn Button` - **[📄 Resume / 이력서 다운로드]** (Primary Outline 또는 Soft Blue)
-
-### 5.2 프로젝트 카테고리 필터 & 뷰 모드 토글 바
-- **좌측:** `All`, `UI/UX`, `Branding`, `Graphic`, `3D/Motion` 가로 스크롤 필터
-- **우측:** `그리드 뷰 (⊞)` ↔ `리스트 뷰 (☰)` 원클릭 아이콘 토글 스위치
-
-### 5.3 프로젝트 쇼케이스
-- **팀/개인 프로젝트 명시:** 각 프로젝트 카드에 '팀 프로젝트' / '개인 프로젝트' 뱃지 필수 표시
-- **그리드 뷰:** 2열 배치, 1:1 또는 4:3 비율의 고해상도 썸네일 + 하단 타이틀 & 카테고리 태그
-- **리스트 뷰:** 1열 와이드 카드, 좌측 썸네일(16:9) + 우측/하단 타이틀, 요약 설명, 사용 툴 뱃지
-- **터치 피드백:** 탭 시 `scale-[0.98]` 미세 축소 및 카드 섀도우 반응
-
-### 5.4 사용 도구 숙련도 프로그레스 바 (`ToolProficiencyBars`)
-- **배치 위치:** **프로젝트 쇼케이스 카드와 경력 및 활동 카드 사이**에 배치
-- **구성:** 뱃지 형태 대신 각 도구(Figma, Protopie, Adobe CC, Blender, React)의 공식 로고와 도구명을 좌측에 배치하고, 우측에 숙련도 퍼센트(%) 수치 및 부드러운 프로그레스 바(Progress Bar) 표시
-
-### 5.5 하이브리드 프로젝트 상세 모달 (`shadcn Dialog`)
-- **팀/개인 프로젝트 구분 및 기여도 표시:** 프로젝트 타입, 참여 기간, 기여도 칩
-- **스크롤바 없는 다이얼로그 설계:** 브라우저 기본 스크롤바를 완전히 숨김 처리(`scrollbar-none`)
-- **대체 스크롤 표현 인터랙션:**
-  1. 상단 미세 읽기 진행률(Progress Line)을 통해 현재 스크롤 위치 시각화
-  2. 하단 그라디언트 페이드 오버레이와 바운스 안내 힌트("아래로 스크롤하여 더 보기")를 제공하며, 최하단 도달 시 자연스럽게 소멸
-- 모달 하단 고정 액션: **[Figma 프로토타입 확인하기 ↗]**, **[Behance 케이스스터디 ↗]**
-
-### 5.6 경력 타임라인 (`shadcn Card`)
-- 미니멀 타임라인: 연도/기간, 소속 회사/프로젝트명, 역할 간단 설명
-
-### 5.7 작업물 링크 추가 다이얼로그 (`shadcn Dialog`)
-- **로컬 상태 기반 실시간 아카이빙:** 서버 연결 없이도 새로운 작업물/링크를 즉시 등록하고 목록 상단에 반영 (`localStorage` 동기화)
-- **폼 인터랙션 명세:**
-  1. **필수 입력값 검증:** 제목 및 한 줄 요약 미입력 시 인라인 에러 피드백
-  2. **카테고리 사용자 직접 추가:** 기본 카테고리 외 사용자가 다양한 디자인 분야(패션, 산업디자인, 일러스트 등)의 카테고리를 직접 추가 가능하며, 메인 페이지 필터 탭과 모달에 실시간 연동
-  3. **작업 구분 (개인 / 팀):** 세그먼트 버튼 원클릭 토글
-  4. **외부 링크(Figma/Behance 등) 연동 및 입력 검증:** 대상 URL과 유저 직접 입력 링크 버튼명(문구) 적용. 프로토콜(`https://`, `http://`) 및 도메인 유효성 검사, URL과 버튼 문구의 상호 필수 입력 검증, 오류 시 인라인 피드백 및 프로토콜 자동 보정 제공
-  5. **대표 썸네일 이미지:** 고정 추천 이미지 없이 사용자가 직접 로컬 기기 파일 업로드 또는 이미지 URL을 입력하여 등록 (실시간 미리보기 및 삭제 지원)
-  6. **도구(Tools) 동적 관리 및 추천:** 고정된 프리셋 도구 없이 유저가 직접 입력한 도구만 등록되며, 이전에 사용자가 등록했던 도구들을 다음 링크 추가 시 추천 칩으로 제공
-  7. **선택 상세 정보 확장:** 기간, 역할 및 기여도, 상세 케이스 스터디 내용 아코디언 확장 지원
-- **데이터 삭제 지원:** 상세 모달 내에서 개별 작업물 삭제 액션 제공
-
-
----
-
-## 6. 기술 스택 명세 (Tech Stack)
-
-| 구분 | 도입 기술 | 세부 사유 및 역할 |
-|---|---|---|
-| **디자인 시스템** | **shadcn/ui + TDS (Toss Design System)** | 컴포넌트 아키텍처 + `design.md`의 토스 디자인 토큰 완벽 융합 |
-| **프론트엔드 프레임워크** | **Next.js 16 (App Router)** | 빠른 SSR/ISR을 통한 프로필 로딩 최적화, Server Components |
-| **언어** | **TypeScript 5.x** | 포트폴리오 데이터 모델의 엄격한 타입 안정성 |
-| **스타일링** | **Tailwind CSS v4 + TDS Tokens** | 토스 블루(`#3182F6`), Grey-900, Grey-100 등 시맨틱 CSS 변수 연동 |
-| **아이콘 라이브러리** | **Lucide React** | Grid, List, Download, ExternalLink 등 공식 표준 아이콘 |
-| **클래스 병합 유틸** | **cn (`clsx` + `tailwind-merge`)** | 조건부 클래스네임 및 tailwind 중복 클래스 완벽 해결 |
-| **데이터 영속화 (Phase 1)** | **브라우저 LocalStorage** | 서버 없이 클라이언트 독립형으로 빠른 포트폴리오 렌더링 검증 |
-| **백엔드 (Phase 3 예정)** | **Supabase (PostgreSQL 15)** | Auth, Postgres DB, Storage (이미지/PDF 업로드) |
-
----
-
-## 7. 개발 실행 계획 (Phase 1 Action Items)
-
-1. **타입 정의 및 스토리지 유틸 (`src/types/portfolio.ts`, `src/lib/portfolioStorage.ts`)**
-   - DesignerProfileData, ProjectItem, CareerItem 인터페이스 정의
-   - 디자이너 전용 고품질 Mock 데이터(UI/UX, 브랜딩, 3D 프로젝트 4개 포함) 세팅
-2. **shadcn/ui 필수 컴포넌트 추가 (`dialog`, `badge`, `tabs`, `avatar`, `card`)**
-3. **포트폴리오 전용 컴포넌트 구현 (`src/components/portfolio/...`)**
-   - `ProfileHeader.tsx` (아바타, 직함, 소셜 텍스트 바, 이력서 다운로드 CTA)
-   - `SkillChips.tsx` (스킬 & 툴 뱃지 목록)
-   - `FilterAndToggleBar.tsx` (카테고리 탭 + 그리드/리스트 뷰 토글)
-   - `ProjectCard.tsx` (그리드/리스트 적응형 카드)
-   - `ProjectDetailModal.tsx` (하이브리드 상세 팝업 + 외부 원본 링크)
-   - `CareerTimeline.tsx` (경력 및 전시 이력)
-4. **포트폴리오 메인 페이지 조립 (`src/app/page.tsx`)**
-   - 모바일 & 데스크톱 완벽 반응형 뷰어 완성
-
----
-
-## 8. 모바일 / 웹 뷰포트 리사이징 및 Auto Layout 시스템 (Device Viewport & Auto Layout)
-
-- **배경 및 목적:** 사용자가 웹/모바일 환경에서 프로필과 링크 페이지가 어떻게 표시되는지 실시간으로 비교 검증하고, 어떤 해상도에서도 카드나 텍스트가 잘리거나 이탈하지 않도록 화면에 가득 채우는 Auto Layout 및 TDS 토큰 기반 디자인 시스템 적용.
-- **주요 기능:**
-  1. **모바일 버전 (390px):** 스마트폰 디바이스 프레임(`rounded-3xl`, `shadow-2xl`), 2열 콤팩트 카드 그리드, 세로 스택 레이아웃
-  2. **태블릿 버전 (768px):** 태블릿 규격 뷰(`rounded-2xl`, `shadow-xl`), 3열 프로젝트 카드 그리드
-  3. **웹/데스크톱 버전 (화면 가득 채움 / max-w-7xl):** 와이드 데스크톱 화면에 맞춰 컨테이너를 가득 채우며, 3~4열 동적 카드 그리드, 카테고리 필터와 검색 및 뷰 모드가 결합된 Auto Layout 툴바, 도구 숙련도 & 경력 타임라인 2열 병렬 배치
-  4. **자동 맞춤 (반응형 100%):** 브라우저 전체 창 너비에 맞춘 무한 유동 반응
-  5. **너비 미세 조정 슬라이더 (360px ~ 1440px):** 10px 단위 자유 리사이징
-  6. **Auto Layout 및 영역 이탈 방지:**
-     - 카드 상단 뱃지 겹침 방지 flex 레이아웃 및 텍스트 truncate
-     - 카테고리 탭 스크롤 격리(`min-w-0 flex-1`)
-     - 모바일 390px부터 웹 1440px+까지 일관된 거터(`px-4 sm:px-6 lg:px-8 xl:px-10`)
-- **적용 대상:** 메인 랜딩 페이지(`LandingHero`), 마이 링크 보드(`PortfolioBoard`), 공유된 링크 페이지(`/[handle]`) 전체 공통 적용.
+1. **3분 초간편 아카이빙:**
+   - 프로젝트 썸네일, 설명, 사용 툴(#Figma, #Blender 등) 태그 등록
+2. **그리드 & 리스트 듀얼 뷰:**
+   - 방문자 선호에 맞춘 썸네일 중심 그리드 뷰 ↔ 상세 설명 중심 리스트 뷰 실시간 전환
+3. **원스톱 뷰어 & 원클릭 이력서 연동:**
+   - 페이지 이탈 없는 프로젝트 상세 모달 확인
+   - 외부 Figma 프로토타입 원본 및 PDF 이력서 다운로드 다이렉트 연결

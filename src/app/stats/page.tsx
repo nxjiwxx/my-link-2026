@@ -36,7 +36,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 const CHART_COLORS = [
-  "#3182F6", // Toss Blue
+  "#FF5A36", // Toss Blue
   "#00C49F", // Teal
   "#FFBB28", // Amber
   "#FF8042", // Coral
@@ -144,7 +144,7 @@ export default function StatsPage() {
   const chartConfig = {
     clicks: {
       label: "클릭 수",
-      color: "#3182F6",
+      color: "#FF5A36",
     },
   } satisfies ChartConfig;
 
@@ -152,7 +152,7 @@ export default function StatsPage() {
   if (isAuthLoading || (!user && !isAuthLoading)) {
     return (
       <div className="min-h-screen w-full flex items-center justify-center bg-[#F9FAFB]">
-        <div className="w-5 h-5 border-2 border-[#3182F6]/30 border-t-[#3182F6] rounded-full animate-spin" />
+        <div className="w-5 h-5 border-2 border-[#FF5A36]/30 border-t-[#FF5A36] rounded-full animate-spin" />
       </div>
     );
   }
@@ -186,7 +186,7 @@ export default function StatsPage() {
             className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[#F2F4F6] text-[#6B7684] hover:text-[#191F28] transition-colors -mr-1"
           >
             <RefreshCw
-              className={`w-4 h-4 ${isLoadingData ? "animate-spin text-[#3182F6]" : ""}`}
+              className={`w-4 h-4 ${isLoadingData ? "animate-spin text-[#FF5A36]" : ""}`}
             />
           </button>
         </header>
@@ -195,7 +195,7 @@ export default function StatsPage() {
         <div className="p-4 sm:p-6 space-y-6">
           {/* 타이틀 및 소개 */}
           <div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-[#3182F6] mb-1">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[#FF5A36] mb-1">
               <TrendingUp className="w-3.5 h-3.5" />
               <span>방문자 유입 및 링크 분석</span>
             </div>
@@ -214,7 +214,7 @@ export default function StatsPage() {
             <div className="bg-[#F9FAFB] border border-[#E5E8EB] rounded-2xl p-3.5 flex flex-col justify-between">
               <div className="flex items-center justify-between text-[#8B95A1] mb-2">
                 <span className="text-[11px] font-semibold">총 클릭 수</span>
-                <Eye className="w-3.5 h-3.5 text-[#3182F6]" />
+                <Eye className="w-3.5 h-3.5 text-[#FF5A36]" />
               </div>
               <div>
                 <span className="text-2xl sm:text-3xl font-extrabold font-mono text-[#191F28] tracking-tight">
@@ -268,7 +268,7 @@ export default function StatsPage() {
                 <p className="text-xs sm:text-sm font-bold text-[#191F28] truncate">
                   {stats.topProject ? stats.topProject.title : "-"}
                 </p>
-                <p className="text-[11px] text-[#3182F6] font-semibold mt-0.5">
+                <p className="text-[11px] text-[#FF5A36] font-semibold mt-0.5">
                   {stats.topProject
                     ? `${(stats.topProject.clickCount || 0).toLocaleString()}회 클릭`
                     : "데이터 없음"}
@@ -288,7 +288,7 @@ export default function StatsPage() {
                   상위 프로젝트의 개별 누적 클릭수입니다
                 </p>
               </div>
-              <span className="text-[10px] font-medium text-[#3182F6] bg-[#3182F6]/10 px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-medium text-[#FF5A36] bg-[#FF5A36]/10 px-2 py-0.5 rounded-md">
                 상위 {barChartData.length}개
               </span>
             </div>
@@ -442,9 +442,9 @@ export default function StatsPage() {
                         <span
                           className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${
                             idx === 0
-                              ? "bg-[#3182F6] text-white"
+                              ? "bg-[#FF5A36] text-white"
                               : idx === 1
-                              ? "bg-[#E8F3FF] text-[#3182F6]"
+                              ? "bg-[#FFF2EE] text-[#FF5A36]"
                               : idx === 2
                               ? "bg-[#F2F4F6] text-[#4E5968]"
                               : "text-[#8B95A1]"
@@ -463,7 +463,7 @@ export default function StatsPage() {
                       </div>
 
                       <div className="flex items-center gap-1 shrink-0 font-mono text-xs font-bold text-[#191F28] bg-[#F2F4F6] px-2 py-0.5 rounded-md">
-                        <Eye className="w-3 h-3 text-[#3182F6]" />
+                        <Eye className="w-3 h-3 text-[#FF5A36]" />
                         <span>{(p.clickCount || 0).toLocaleString()}</span>
                       </div>
                     </div>
